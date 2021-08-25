@@ -1,4 +1,4 @@
-# Checlisten Monorepo
+# Checklisten Monorepo
 
 Beinhaltet ein Angular-Frontend und ein Quarkus-Backend für Winkels Checklisten
 
