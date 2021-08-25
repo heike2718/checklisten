@@ -4,7 +4,7 @@
 
 export const environment = {
 	production: false,
-	version: '7.0.0',
+	version: '7.2.0',
 	envName: 'DEV',
 	apiUrl: 'http://localhost:9300/checklisten-api',
 	authApiUrl: 'http://192.168.10.176:9000/authprovider',

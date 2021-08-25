@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-  envName: 'QS-a300',
-  version: '7.0.0',
+  envName: 'a300',
+  version: '7.2.0',
   assetsUrl: 'http://a300/checklistenapp/assets',
   apiUrl: 'http://a300/checklisten-api',
   profileUrl: 'http://a300/profil-app',
