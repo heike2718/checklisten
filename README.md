@@ -1,5 +1,6 @@
-# checklistenserver
-REST-API für Winkels Checklisten
+# Checlisten Monorepo
+
+Beinhaltet ein Angular-Frontend und ein Quarkus-Backend für Winkels Checklisten
 
 ## Development Server
 
