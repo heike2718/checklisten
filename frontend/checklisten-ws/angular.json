@@ -1,0 +1,159 @@
+{
+  "version": 1,
+  "projects": {
+    "checklistenapp": {
+      "projectType": "application",
+      "root": "apps/checklistenapp",
+      "sourceRoot": "apps/checklistenapp/src",
+      "prefix": "chl",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/apps/checklistenapp",
+            "index": "apps/checklistenapp/src/index.html",
+            "main": "apps/checklistenapp/src/main.ts",
+            "polyfills": "apps/checklistenapp/src/polyfills.ts",
+            "tsConfig": "apps/checklistenapp/tsconfig.app.json",
+            "assets": [
+              "apps/checklistenapp/src/favicon.ico",
+              "apps/checklistenapp/src/assets"
+            ],
+            "styles": [
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "node_modules/bootstrap/dist/css/bootstrap-grid.min.css",
+              "node_modules/font-awesome/css/font-awesome.min.css",
+              "apps/checklistenapp/src/styles.css"
+            ],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kb",
+                  "maximumError": "1mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kb",
+                  "maximumError": "4kb"
+                }
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "apps/checklistenapp/src/environments/environment.ts",
+                  "with": "apps/checklistenapp/src/environments/environment.prod.ts"
+                }
+              ],
+              "outputHashing": "all"
+            },
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "configurations": {
+            "production": {
+              "browserTarget": "checklistenapp:build:production"
+            },
+            "development": {
+              "browserTarget": "checklistenapp:build:development"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "checklistenapp:build"
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "apps/checklistenapp/src/**/*.ts",
+              "apps/checklistenapp/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/apps/checklistenapp"],
+          "options": {
+            "jestConfig": "apps/checklistenapp/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "checklistenapp-e2e": {
+      "root": "apps/checklistenapp-e2e",
+      "sourceRoot": "apps/checklistenapp-e2e/src",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/checklistenapp-e2e/cypress.json",
+            "tsConfig": "apps/checklistenapp-e2e/tsconfig.e2e.json",
+            "devServerTarget": "checklistenapp:serve:development"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "checklistenapp:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["apps/checklistenapp-e2e/**/*.{js,ts}"]
+          }
+        }
+      }
+    }
+  },
+  "cli": {
+    "defaultCollection": "@nrwl/angular"
+  },
+  "schematics": {
+    "@nrwl/angular": {
+      "application": {
+        "linter": "eslint"
+      },
+      "library": {
+        "linter": "eslint"
+      },
+      "storybook-configuration": {
+        "linter": "eslint"
+      }
+    },
+    "@nrwl/angular:application": {
+      "style": "css",
+      "linter": "eslint",
+      "unitTestRunner": "jest",
+      "e2eTestRunner": "cypress"
+    },
+    "@nrwl/angular:library": {
+      "style": "css",
+      "linter": "eslint",
+      "unitTestRunner": "jest"
+    },
+    "@nrwl/angular:component": {
+      "style": "css"
+    }
+  },
+  "defaultProject": "checklistenapp"
+}

@@ -1,0 +1,19 @@
+<div class="container-fluid">
+  <chl-navbar></chl-navbar>
+  <h1>Checklisten <img src="https://opa-wetterwachs.de/checklistenapp/assets/favicon-32x32.png" alt="Logo"></h1>
+  <!--<hewi-messages></hewi-messages>-->
+  <!--<chl-loading></chl-loading>-->
+
+  <main>
+    <div class="container-fluid">
+      <router-outlet #routerOutlet="outlet"></router-outlet>
+    </div>
+  </main>
+  <footer class="border-top">
+    <div class="row">
+      <div class="col-md-4 text-md-left">&copy; Heike Winkelvo&szlig;</div>
+      <div *ngIf="showEnv" class="col-md-4 text-xs-center">{{envName}}, API: {{api}}</div>
+      <div class="col-md-4 text-md-right">Version {{version}}</div>
+    </div>
+  </footer>
+</div>
