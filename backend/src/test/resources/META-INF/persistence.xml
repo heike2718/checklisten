@@ -9,7 +9,7 @@
 		<jta-data-source>jdbc/ChecklistenserviceDS</jta-data-source>
 
 		<class>de.egladil.web.checklistenserver.domain.Checkliste</class>
-		<class>de.egladil.web.checklistenserver.domain.Checklistenuser</class>
+		<class>de.egladil.web.checklistenserver.domain.auth.Checklistenuser</class>
 		<class>de.egladil.web.checklistenserver.domain.Pacemaker</class>
 		<exclude-unlisted-classes>true</exclude-unlisted-classes>
 

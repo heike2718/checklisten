@@ -14,7 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.egladil.web.checklistenserver.dao.IUserDao;
-import de.egladil.web.checklistenserver.domain.Checklistenuser;
+import de.egladil.web.checklistenserver.domain.auth.Checklistenuser;
 import de.egladil.web.commons_validation.payload.HateoasPayload;
 
 @RequestScoped

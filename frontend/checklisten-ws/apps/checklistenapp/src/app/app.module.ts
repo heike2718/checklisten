@@ -1,8 +1,12 @@
-import { NgModule, LOCALE_ID } from '@angular/core';
+import { NgModule, LOCALE_ID, ErrorHandler } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { StoreModule } from '@ngrx/store';
+import { reducers, metaReducers } from './reducers';
+import { EffectsModule } from '@ngrx/effects';
+import { RouterStateSerializer, StoreRouterConnectingModule, RouterState} from "@ngrx/router-store";
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
@@ -11,6 +15,11 @@ import { JokeComponent } from './joke/joke.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { SignUpComponent } from './sign-up/sign-up.component';
 import { AppRoutingModule } from './app-routing.module';
+import { StoreDevModules } from './store-config/store-devtools.prod';
+import { AuthModule } from './auth/auth.module';
+import { environment } from '../environments/environment';
+import { GlobalErrorHandlerService } from './infrastructure/global-error-handler.service';
+import { CustomRouterStateSerializer } from './shared/utils';
 
 @NgModule({
   declarations: [
@@ -21,13 +30,41 @@ import { AppRoutingModule } from './app-routing.module';
     NavbarComponent,
     SignUpComponent
   ],
-	imports: [
+  imports: [
     BrowserModule,
     HttpClientModule,
     FormsModule,
     NgbModule,
+	AuthModule.forRoot({
+		baseUrl: environment.apiUrl + '/auth/login',
+		production: environment.production,
+		storagePrefix: environment.storageKeyPrefix,
+		loginSuccessUrl: '/checklisten'
+	}),
+	StoreModule.forRoot(reducers, {
+			metaReducers,
+			runtimeChecks: {
+				strictStateImmutability: true,
+				strictActionImmutability: true,
+				strictActionSerializability: true,
+				strictStateSerializability: true,
+				strictActionWithinNgZone: true
+			}
+		}),
+	EffectsModule.forRoot([]),
+	StoreRouterConnectingModule.forRoot({
+			stateKey:'router',
+			routerState: RouterState.Minimal
+		}),
+	StoreDevModules,		
     AppRoutingModule
-	],  providers: [],
+	],
+  providers: [
+	GlobalErrorHandlerService,
+	{ provide: ErrorHandler, useClass: GlobalErrorHandlerService },
+	{ provide: RouterStateSerializer, useClass: CustomRouterStateSerializer },
+	{ provide: LOCALE_ID, useValue: "de-DE" },
+  ],
   bootstrap: [
     AppComponent
   ],

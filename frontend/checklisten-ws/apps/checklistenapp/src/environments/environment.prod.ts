@@ -1,6 +1,6 @@
 export const environment = {
-	production: false,
-	version: '7.2.0',
+	production: true,
+	version: '8.0.0',
 	envName: 'Production',
 	apiUrl: 'https://opa-wetterwachs.de/checklisten-api',
 	authApiUrl: 'https://opa-wetterwachs.de/authprovider',
@@ -10,6 +10,7 @@ export const environment = {
 	signupRedirectUrl: 'https://opa-wetterwachs.de/checklistenapp',
 	loginRedirectUrl: 'https://opa-wetterwachs.de/checklistenapp#/listen',
 	jokesAPI: 'https://official-joke-api.appspot.com/jokes/random',
+	storageKeyPrefix: 'chkl_',
 	consoleLogActive: false,
 	serverLogActive: true,
 	loglevel: 4

@@ -4,16 +4,17 @@
 
 export const environment = {
 	production: false,
-	version: '7.2.0',
+	version: '8.0.0',
 	envName: 'DEV',
 	apiUrl: 'http://localhost:9300/checklisten-api',
 	authApiUrl: 'http://192.168.10.176:9000/authprovider',
 	authUrl: 'http://192.168.10.176/auth-app',
 	profileUrl: 'http://192.168.10.176/profil-app',
-	assetsUrl: '/home/heike/git/checklisten/frontend/checklisten-ws/apps/checklistenapp/src/assets',
+	assetsUrl: 'https://opa-wetterwachs.de/checklistenapp/assets',
 	signupRedirectUrl: 'http://localhost:4200/checklistenapp',
 	loginRedirectUrl: 'http://localhost:4200/checklistenapp#/listen',
 	jokesAPI: 'https://official-joke-api.appspot.com/jokes/random',
+	storageKeyPrefix: 'chkl_',
 	consoleLogActive: true,
 	serverLogActive: false,
 	loglevel: 2

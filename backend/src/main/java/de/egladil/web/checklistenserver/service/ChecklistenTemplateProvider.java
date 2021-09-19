@@ -32,15 +32,15 @@ import org.slf4j.LoggerFactory;
 
 import de.egladil.web.checklistenserver.config.EinkaufslisteTemplate;
 import de.egladil.web.checklistenserver.config.PacklisteTemplate;
-import de.egladil.web.checklistenserver.dao.impl.UserDao;
 import de.egladil.web.checklistenserver.domain.ChecklisteDaten;
 import de.egladil.web.checklistenserver.domain.ChecklisteTemplate;
 import de.egladil.web.checklistenserver.domain.ChecklisteTemplateItem;
 import de.egladil.web.checklistenserver.domain.ChecklistenItem;
 import de.egladil.web.checklistenserver.domain.Checklistentyp;
-import de.egladil.web.checklistenserver.domain.Checklistenuser;
+import de.egladil.web.checklistenserver.domain.auth.Checklistenuser;
 import de.egladil.web.checklistenserver.error.ChecklistenRuntimeException;
 import de.egladil.web.checklistenserver.error.ConcurrentUpdateException;
+import de.egladil.web.checklistenserver.infrastructure.persistence.UserDao;
 import de.egladil.web.checklistenserver.sanitize.ChecklisteDatenSanitizer;
 import de.egladil.web.checklistenserver.sanitize.ChecklisteTemplateSanitizer;
 import de.egladil.web.commons_net.time.CommonTimeUtils;

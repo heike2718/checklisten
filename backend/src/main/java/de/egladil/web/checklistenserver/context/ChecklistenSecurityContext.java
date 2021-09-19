@@ -8,7 +8,7 @@ import java.security.Principal;
 
 import javax.ws.rs.core.SecurityContext;
 
-import de.egladil.web.checklistenserver.domain.UserSession;
+import de.egladil.web.checklistenserver.domain.auth.UserSession;
 
 /**
  * ChecklistenSecurityContext
