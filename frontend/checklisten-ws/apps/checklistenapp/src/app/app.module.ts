@@ -20,6 +20,7 @@ import { AuthModule } from './auth/auth.module';
 import { environment } from '../environments/environment';
 import { GlobalErrorHandlerService } from './infrastructure/global-error-handler.service';
 import { CustomRouterStateSerializer } from './shared/utils';
+import { LandingComponent } from './landing/landing.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { CustomRouterStateSerializer } from './shared/utils';
     AboutComponent,
     JokeComponent,
     NavbarComponent,
-    SignUpComponent
+    SignUpComponent,
+    LandingComponent
   ],
   imports: [
     BrowserModule,

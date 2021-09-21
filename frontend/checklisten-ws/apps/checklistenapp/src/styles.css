@@ -82,7 +82,12 @@
       position: fixed;
       left: -1000px;
   }
-  
+
+  .conditionally-bordered {
+    border: 0px solid gray;
+    border-radius: 4px;
+  }
+ 
   
   /* ===== small devices ==== */
   

@@ -1,6 +1,6 @@
 /*
    * Remove template code below
-   */
+  
 :host {
   display: block;
   font-family: sans-serif;
@@ -19,13 +19,12 @@ main {
   padding: 0 36px;
 }
 
-p {
-  text-align: center;
-}
+
 
 h1 {
-  text-align: center;
+  text-align: left;
   margin-left: 18px;
+  margin-top: 20px;
   font-size: 24px;
 }
 
@@ -38,3 +37,4 @@ h2 {
 .item-name {
   font-size: 14;
 }
+ */
