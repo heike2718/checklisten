@@ -19,7 +19,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 
-import de.egladil.web.checklistenserver.service.SignUpService;
+import de.egladil.web.checklistenserver.domain.auth.SignUpService;
 import de.egladil.web.commons_validation.payload.HateoasPayload;
 import de.egladil.web.commons_validation.payload.MessagePayload;
 import de.egladil.web.commons_validation.payload.ResponsePayload;

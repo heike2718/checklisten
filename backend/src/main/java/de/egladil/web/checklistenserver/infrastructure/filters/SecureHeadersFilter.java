@@ -16,7 +16,7 @@ import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.ext.Provider;
 
 import de.egladil.web.checklistenserver.ChecklistenServerApp;
-import de.egladil.web.checklistenserver.config.ConfigService;
+import de.egladil.web.checklistenserver.domain.config.ConfigService;
 
 /**
  * SecureHeadersFilter packt die SecureHeaders in den Response.

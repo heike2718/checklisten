@@ -12,9 +12,9 @@ import javax.persistence.TypedQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.egladil.web.checklistenserver.dao.IPacemakerDao;
 import de.egladil.web.checklistenserver.domain.Checklistenentity;
-import de.egladil.web.checklistenserver.domain.Pacemaker;
+import de.egladil.web.checklistenserver.domain.pacemaker.IPacemakerDao;
+import de.egladil.web.checklistenserver.domain.pacemaker.Pacemaker;
 
 /**
  * PacemakerDao

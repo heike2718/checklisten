@@ -22,8 +22,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.egladil.web.checklistenserver.config.ConfigService;
-import de.egladil.web.checklistenserver.error.AuthException;
+import de.egladil.web.checklistenserver.domain.config.ConfigService;
+import de.egladil.web.checklistenserver.domain.error.AuthException;
 import de.egladil.web.commons_net.utils.CommonHttpUtils;
 
 /**

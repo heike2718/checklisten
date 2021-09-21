@@ -8,9 +8,9 @@ package de.egladil.web.checklistenserver.infrastructure.persistence;
 import javax.enterprise.context.RequestScoped;
 import javax.persistence.EntityManager;
 
-import de.egladil.web.checklistenserver.dao.IUserDao;
 import de.egladil.web.checklistenserver.domain.Checklistenentity;
 import de.egladil.web.checklistenserver.domain.auth.Checklistenuser;
+import de.egladil.web.checklistenserver.domain.auth.IUserDao;
 
 /**
  * UserDao

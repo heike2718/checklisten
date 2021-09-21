@@ -31,10 +31,9 @@ import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 
 import de.egladil.web.checklistenserver.ChecklistenServerApp;
-import de.egladil.web.checklistenserver.error.AuthException;
-import de.egladil.web.checklistenserver.error.ChecklistenRuntimeException;
-import de.egladil.web.checklistenserver.error.LogmessagePrefixes;
-import de.egladil.web.checklistenserver.service.SignUpService;
+import de.egladil.web.checklistenserver.domain.error.AuthException;
+import de.egladil.web.checklistenserver.domain.error.ChecklistenRuntimeException;
+import de.egladil.web.checklistenserver.domain.error.LogmessagePrefixes;
 import de.egladil.web.commons_crypto.CryptoService;
 import de.egladil.web.commons_crypto.JWTService;
 import de.egladil.web.commons_net.exception.SessionExpiredException;

@@ -26,13 +26,13 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.egladil.web.checklistenserver.domain.ChecklisteTemplate;
 import de.egladil.web.checklistenserver.domain.Checklistentyp;
 import de.egladil.web.checklistenserver.domain.auth.UserSession;
-import de.egladil.web.checklistenserver.error.AuthException;
-import de.egladil.web.checklistenserver.error.ConcurrentUpdateException;
-import de.egladil.web.checklistenserver.sanitize.ChecklisteTemplateSanitizer;
-import de.egladil.web.checklistenserver.service.ChecklistenTemplateProvider;
+import de.egladil.web.checklistenserver.domain.error.AuthException;
+import de.egladil.web.checklistenserver.domain.error.ConcurrentUpdateException;
+import de.egladil.web.checklistenserver.domain.vorlagen.ChecklisteTemplate;
+import de.egladil.web.checklistenserver.domain.vorlagen.ChecklisteTemplateSanitizer;
+import de.egladil.web.checklistenserver.domain.vorlagen.ChecklistenTemplateProvider;
 import de.egladil.web.commons_validation.ValidationDelegate;
 import de.egladil.web.commons_validation.payload.MessagePayload;
 import de.egladil.web.commons_validation.payload.ResponsePayload;

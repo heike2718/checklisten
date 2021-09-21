@@ -29,7 +29,7 @@ import de.egladil.web.checklistenserver.domain.auth.ChecklistenSessionService;
 import de.egladil.web.checklistenserver.domain.auth.TokenExchangeService;
 import de.egladil.web.checklistenserver.domain.auth.UserSession;
 import de.egladil.web.checklistenserver.domain.auth.client.ClientAccessTokenService;
-import de.egladil.web.checklistenserver.error.AuthException;
+import de.egladil.web.checklistenserver.domain.error.AuthException;
 import de.egladil.web.commons_net.utils.CommonHttpUtils;
 import de.egladil.web.commons_validation.payload.MessagePayload;
 import de.egladil.web.commons_validation.payload.ResponsePayload;

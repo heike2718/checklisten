@@ -25,11 +25,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.egladil.web.checklistenserver.ChecklistenServerApp;
-import de.egladil.web.checklistenserver.config.ConfigService;
-import de.egladil.web.checklistenserver.context.ChecklistenSecurityContext;
 import de.egladil.web.checklistenserver.domain.auth.ChecklistenSessionService;
 import de.egladil.web.checklistenserver.domain.auth.UserSession;
-import de.egladil.web.checklistenserver.error.AuthException;
+import de.egladil.web.checklistenserver.domain.config.ConfigService;
+import de.egladil.web.checklistenserver.domain.error.AuthException;
 import de.egladil.web.commons_net.exception.SessionExpiredException;
 import de.egladil.web.commons_net.utils.CommonHttpUtils;
 

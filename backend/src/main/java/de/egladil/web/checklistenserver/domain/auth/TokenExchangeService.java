@@ -19,10 +19,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.egladil.web.checklistenserver.domain.auth.client.TokenExchangeRestClient;
-import de.egladil.web.checklistenserver.error.ChecklistenRuntimeException;
-import de.egladil.web.checklistenserver.error.ClientAuthException;
-import de.egladil.web.checklistenserver.error.InaccessableEndpointException;
-import de.egladil.web.checklistenserver.error.LogmessagePrefixes;
+import de.egladil.web.checklistenserver.domain.error.ChecklistenRuntimeException;
+import de.egladil.web.checklistenserver.domain.error.ClientAuthException;
+import de.egladil.web.checklistenserver.domain.error.InaccessableEndpointException;
+import de.egladil.web.checklistenserver.domain.error.LogmessagePrefixes;
 import de.egladil.web.commons_validation.payload.MessagePayload;
 import de.egladil.web.commons_validation.payload.OAuthClientCredentials;
 import de.egladil.web.commons_validation.payload.ResponsePayload;

@@ -20,10 +20,10 @@ import org.slf4j.LoggerFactory;
 
 import de.egladil.web.checklistenserver.ChecklistenServerApp;
 import de.egladil.web.checklistenserver.domain.auth.UserSession;
-import de.egladil.web.checklistenserver.error.AuthException;
-import de.egladil.web.checklistenserver.error.ChecklistenRuntimeException;
-import de.egladil.web.checklistenserver.error.ClientAuthException;
-import de.egladil.web.checklistenserver.error.ConcurrentUpdateException;
+import de.egladil.web.checklistenserver.domain.error.AuthException;
+import de.egladil.web.checklistenserver.domain.error.ChecklistenRuntimeException;
+import de.egladil.web.checklistenserver.domain.error.ClientAuthException;
+import de.egladil.web.checklistenserver.domain.error.ConcurrentUpdateException;
 import de.egladil.web.commons_net.exception.SessionExpiredException;
 import de.egladil.web.commons_net.utils.CommonHttpUtils;
 import de.egladil.web.commons_validation.exception.InvalidInputException;

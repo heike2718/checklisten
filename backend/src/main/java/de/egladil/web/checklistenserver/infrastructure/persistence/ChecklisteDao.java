@@ -16,10 +16,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.egladil.web.checklistenserver.dao.IChecklisteDao;
-import de.egladil.web.checklistenserver.domain.Checkliste;
 import de.egladil.web.checklistenserver.domain.Checklistenentity;
-import de.egladil.web.checklistenserver.error.ChecklistenRuntimeException;
+import de.egladil.web.checklistenserver.domain.error.ChecklistenRuntimeException;
+import de.egladil.web.checklistenserver.domain.listen.Checkliste;
+import de.egladil.web.checklistenserver.domain.listen.IChecklisteDao;
 
 /**
  * ChecklisteDao

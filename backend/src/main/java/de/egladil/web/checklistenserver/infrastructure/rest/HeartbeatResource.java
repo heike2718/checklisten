@@ -19,8 +19,8 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.egladil.web.checklistenserver.error.LogmessagePrefixes;
-import de.egladil.web.checklistenserver.service.HeartbeatService;
+import de.egladil.web.checklistenserver.domain.error.LogmessagePrefixes;
+import de.egladil.web.checklistenserver.domain.pacemaker.HeartbeatService;
 import de.egladil.web.commons_validation.payload.MessagePayload;
 import de.egladil.web.commons_validation.payload.ResponsePayload;
 
