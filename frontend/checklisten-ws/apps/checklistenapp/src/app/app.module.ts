@@ -19,6 +19,7 @@ import { environment } from '../environments/environment';
 import { GlobalErrorHandlerService } from './infrastructure/global-error-handler.service';
 import { CustomRouterStateSerializer } from './shared/utils';
 import { LandingComponent } from './landing/landing.component';
+import { ListenModule } from './listen/listen.module';
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import { LandingComponent } from './landing/landing.component';
 		production: environment.production,
 		loginSuccessUrl: '/checklisten'
 	}),
+	ListenModule,
 	StoreModule.forRoot(reducers, {
 			metaReducers,
 			runtimeChecks: {

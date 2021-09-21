@@ -4,6 +4,8 @@ import { ChecklistenListeComponent } from './checklisten-liste/checklisten-liste
 import { ChecklisteComponent } from './checkliste/checkliste.component';
 import { ChecklisteDetailsComponent } from './checkliste-details/checkliste-details.component';
 import { ListenRoutingModule } from './listen-routing.module';
+import { StoreModule } from '@ngrx/store';
+import * as ListenReducer from './+state/listen.reducer';
 
 
 
@@ -15,7 +17,8 @@ import { ListenRoutingModule } from './listen-routing.module';
   ],
   imports: [
     CommonModule,
-    ListenRoutingModule
+    ListenRoutingModule,
+    StoreModule.forFeature(ListenReducer.listenFeatureKey, ListenReducer.reducer)
   ],
   exports: [
     ChecklistenListeComponent

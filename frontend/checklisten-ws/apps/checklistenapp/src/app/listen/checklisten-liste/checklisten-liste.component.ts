@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { environment } from 'apps/checklistenapp/src/environments/environment';
+import { ListenFacade } from '../listen.facade';
 
 @Component({
   selector: 'chl-checklisten-liste',
@@ -7,9 +9,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ChecklistenListeComponent implements OnInit {
 
-  constructor() { }
+  showFilename = !environment.production;
+
+  constructor(public listenFacade: ListenFacade) { }
 
   ngOnInit(): void {
+
+    this.listenFacade.loadChecklisten();
   }
 
 }

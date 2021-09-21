@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { environment } from '../environments/environment';
 import { AuthService } from './auth/auth.service';
 import { LogService } from './infrastructure/logging/log.service';
+import { ListenFacade } from './listen/listen.facade';
 
 @Component({
   selector: 'chl-root',

@@ -23,13 +23,13 @@ export interface ChecklistenItem {
 }
 
 export interface ChecklisteDaten {
-	kuerzel?: string;
-	name?: string;
+	kuerzel: string;
+	name: string;
 	typ: string;
 	gruppe?: string;
 	items: ChecklistenItem[];
 	version: number;
-	modus?: string;
+	modus: string;
 }
 
 export interface Filterkriterium {
