@@ -74,6 +74,7 @@ public class UserSession implements Principal, Serializable {
 	}
 
 	@Override
+	@JsonIgnore
 	public String getName() {
 
 		return this.uuid;

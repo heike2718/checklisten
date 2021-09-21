@@ -2,7 +2,7 @@ import { Injectable, Inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import * as AuthActions from './auth.actions';
 import { tap } from 'rxjs/operators';
-import { STORAGE_KEY_DEV_SESSION_ID, STORAGE_KEY_ID_REFERENCE, STORAGE_KEY_SESSION_EXPIRES_AT } from '../../shared/domain/user';
+import { STORAGE_KEY_USER_SESSION } from '../../shared/domain/user';
 import { AuthConfig, AuthConfigService } from '../configuration/auth.config';
 
 
@@ -15,16 +15,9 @@ export class AuthEffects {
 				ofType(AuthActions.login),
 				tap(action => {
 
-					const sessionId = action.session.sessionId;
-					if (sessionId) {
-						localStorage.setItem(this.config.storagePrefix + STORAGE_KEY_ID_REFERENCE,
-							JSON.stringify(action.session.idReference));
-
-						if (action.session.sessionId) {
-							localStorage.setItem(this.config.storagePrefix + STORAGE_KEY_DEV_SESSION_ID, action.session.sessionId)
-						}
-
-						localStorage.setItem(this.config.storagePrefix + STORAGE_KEY_SESSION_EXPIRES_AT, JSON.stringify(action.session.expiresAt))
+					if (action.session) {
+						localStorage.setItem(STORAGE_KEY_USER_SESSION,
+							JSON.stringify(action.session));
 					}
 
 				})
@@ -37,10 +30,7 @@ export class AuthEffects {
 			.pipe(
 				ofType(AuthActions.logout),
 				tap(_action => {
-					localStorage.removeItem(this.config.storagePrefix + STORAGE_KEY_DEV_SESSION_ID);
-					localStorage.removeItem(this.config.storagePrefix + STORAGE_KEY_ID_REFERENCE);
-					localStorage.removeItem(this.config.storagePrefix + STORAGE_KEY_SESSION_EXPIRES_AT);
-
+					localStorage.removeItem(STORAGE_KEY_USER_SESSION);
 				})
 			)
 		, { dispatch: false });

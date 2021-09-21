@@ -3,7 +3,6 @@ import { NgbCollapse } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { AuthService } from '../auth/auth.service';
-import { STORAGE_KEY_ID_REFERENCE } from '../shared/domain/user';
 import { LogoutService } from './logout.service';
 
 @Component({

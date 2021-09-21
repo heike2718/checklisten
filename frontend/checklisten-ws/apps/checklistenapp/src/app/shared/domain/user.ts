@@ -1,8 +1,4 @@
-export const STORAGE_KEY_ID_REFERENCE = 'chl_id_reference';
-export const STORAGE_KEY_SESSION_EXPIRES_AT = 'chl_session_expires_at';
-export const STORAGE_KEY_DEV_SESSION_ID = 'chl_dev_session_id';
-export const STORAGE_KEY_AUTH_STATE = 'chl_auth_state';
-export const STORAGE_KEY_INVALID_SESSION = 'sessionInvalidated';
+export const STORAGE_KEY_USER_SESSION = 'chkl_user_session';
 
 export interface UserSession {
 	sessionId?: string;
@@ -15,6 +11,7 @@ export interface AuthResult {
 	state?: string;
 	nonce?: string;
 	idToken: string;
+	oauthFlowType?: string;
 }
 
 

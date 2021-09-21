@@ -15,7 +15,7 @@ import { JokeComponent } from './joke/joke.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { SignUpComponent } from './sign-up/sign-up.component';
 import { AppRoutingModule } from './app-routing.module';
-import { StoreDevModules } from './store-config/store-devtools.prod';
+import { StoreDevModules } from './store-config/store-devtools';
 import { AuthModule } from './auth/auth.module';
 import { environment } from '../environments/environment';
 import { GlobalErrorHandlerService } from './infrastructure/global-error-handler.service';
@@ -38,7 +38,6 @@ import { CustomRouterStateSerializer } from './shared/utils';
 	AuthModule.forRoot({
 		baseUrl: environment.apiUrl + '/auth/login',
 		production: environment.production,
-		storagePrefix: environment.storageKeyPrefix,
 		loginSuccessUrl: '/checklisten'
 	}),
 	StoreModule.forRoot(reducers, {

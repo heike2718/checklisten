@@ -6,7 +6,7 @@ import { Message } from '../shared/messages/messages.model';
 import { environment } from '../../environments/environment';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { STORAGE_KEY_ID_REFERENCE, STORAGE_KEY_INVALID_SESSION } from '../shared/domain/user';
+import { STORAGE_KEY_USER_SESSION, UserSession } from '../shared/domain/user';
 import { LogPublishersService } from './logging/log-publishers.service';
 
 @Injectable(
@@ -56,10 +56,13 @@ export class GlobalErrorHandlerService implements ErrorHandler {
 			}
 			let msg = 'mkv-app: Unerwarteter Fehler: ' + error.message;
 
-			const idReference = localStorage.getItem(environment.storageKeyPrefix + STORAGE_KEY_ID_REFERENCE);
+			const sessionSerialized = localStorage.getItem(STORAGE_KEY_USER_SESSION);
 
-			if (idReference) {
-				msg += ' user=' + idReference;
+			if (sessionSerialized) {
+
+				const session: UserSession = JSON.parse(sessionSerialized);
+				
+				msg += ' idReference=' + session.idReference;
 			}
 
 
@@ -77,12 +80,10 @@ export class GlobalErrorHandlerService implements ErrorHandler {
 		} else {
 			switch (httpError.status) {
 				case 403:
-					localStorage.setItem(STORAGE_KEY_INVALID_SESSION, JSON.stringify({ level: 'ERROR', message: 'Sie haben keine Berechtigung, diese Resource aufzurufen.' }));
 					this.router.navigateByUrl('/timeout');
 					break;
 				case 401:
 				case 908:
-					localStorage.setItem(STORAGE_KEY_INVALID_SESSION, JSON.stringify({ level: 'WARN', message: 'Ihre Session ist abgelaufen. Bitte loggen Sie sich erneut ein.' }));
 					this.router.navigateByUrl('/timeout');
 					break;
 				case 503:

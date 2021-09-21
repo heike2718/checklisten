@@ -2,7 +2,7 @@ import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent } from '@angular/c
 import { Observable } from 'rxjs';
 import { Inject, Injectable } from '@angular/core';
 import { AuthConfig, AuthConfigService } from './configuration/auth.config';
-import { STORAGE_KEY_DEV_SESSION_ID } from '../shared/domain/user';
+import { STORAGE_KEY_USER_SESSION, UserSession } from '../shared/domain/user';
 
 
 @Injectable({
@@ -20,13 +20,18 @@ export class AuthInterceptor implements HttpInterceptor {
 
 		// da auf localhost das cookie nicht in den Browser gesetzt und folglich zurückgesendet werden kann,
 		// machen wir hier den Umweg über localstorage.
-		const sessionId = localStorage.getItem(this.config.storagePrefix + STORAGE_KEY_DEV_SESSION_ID);
-		if (sessionId) {
-			const cloned = req.clone({
-				headers: req.headers.set('X-SESSIONID', sessionId)
-			});
-			return next.handle(cloned);
+		const sessionSerialized = localStorage.getItem(STORAGE_KEY_USER_SESSION);
+		if (sessionSerialized) {
+			const session: UserSession = JSON.parse(sessionSerialized);
+			if (session.sessionId) {
+				const cloned = req.clone({
+					headers: req.headers.set('X-SESSIONID', session.sessionId)
+				});
 
+				return next.handle(cloned);
+			} else {
+				return next.handle(req);
+			}
 		} else {
 			return next.handle(req);
 		}

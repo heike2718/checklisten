@@ -14,10 +14,9 @@ export const environment = {
 	signupRedirectUrl: 'http://localhost:4200/checklistenapp',
 	loginRedirectUrl: 'http://localhost:4200/checklistenapp#/listen',
 	jokesAPI: 'https://official-joke-api.appspot.com/jokes/random',
-	storageKeyPrefix: 'chkl_',
 	consoleLogActive: true,
 	serverLogActive: false,
-	loglevel: 2
+	loglevel: 1
 };
 
 /*
