@@ -2,9 +2,11 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AboutComponent } from './about/about.component';
 import { LandingComponent } from './landing/landing.component';
+import { NotAuthorizedComponent } from './not-authorized/not-authorized.component';
 
 const routes: Routes = [
 	{ path: 'landing', component: LandingComponent },
+	{ path: 'forbidden', component: NotAuthorizedComponent },
 	{ path: 'about', component: AboutComponent },
 	{ path: 'listen', loadChildren: () => import('./listen/listen.module').then(m => m.ListenModule)},
 	{ path: '', pathMatch: 'full', component: LandingComponent },

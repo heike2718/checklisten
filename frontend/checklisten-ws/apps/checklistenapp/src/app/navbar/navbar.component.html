@@ -28,9 +28,9 @@
           </ul>
       </div>
       
-      <div class="navbar-collapse w-100 order-2 dual-collapse2">
+      <div class="navbar-collapse w-100 order-2 dual-collapse2 justify-content-end">
   
-        <ul class="nav navbar-nav navbar-right">
+        <ul class="navbar-nav ml-auto">
                 
           <li *ngIf="authService.isLoggedIn$ | async" routerLinkActive="active"><a routerLink="/listen" (click)="collapseNav()"
             class="nav-link" title="Meine Checklisten"><span class="fa fa-list-alt fa-1x" aria-hidden="true"> </span> alle
@@ -41,10 +41,10 @@
         
           <li *ngIf="authService.isLoggedOut$ | async" routerLinkActive="active">
                   <a class="nav-link" (click)="logIn()" href="#"><span class="fa fa-sign-in fa-1x" aria-hidden="true"></span>
-                    Einloggen <span class="sr-only">(current)</span></a></li>
+                    einloggen <span class="sr-only">(current)</span></a></li>
 
           <li *ngIf="authService.isLoggedIn$ | async" routerLinkActive="active"><a (click)="logOut()" class="nav-link" href="#"><span
-              class="fa fa-sign-out fa-1x" aria-hidden="true"></span> logout</a></li>
+              class="fa fa-sign-out fa-1x" aria-hidden="true"></span> ausloggen</a></li>
         </ul>
       </div>
 

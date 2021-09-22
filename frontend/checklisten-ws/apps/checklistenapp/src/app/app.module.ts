@@ -20,6 +20,7 @@ import { GlobalErrorHandlerService } from './infrastructure/global-error-handler
 import { CustomRouterStateSerializer } from './shared/utils';
 import { LandingComponent } from './landing/landing.component';
 import { ListenModule } from './listen/listen.module';
+import { NotAuthorizedComponent } from './not-authorized/not-authorized.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { ListenModule } from './listen/listen.module';
     AboutComponent,
     JokeComponent,
     NavbarComponent,
-    LandingComponent
+    LandingComponent,
+    NotAuthorizedComponent
   ],
   imports: [
     BrowserModule,

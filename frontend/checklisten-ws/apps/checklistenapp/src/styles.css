@@ -1,95 +1,98 @@
 * {
-    /** box content wird automatisch so berechnet, dass width und height konstant bleiben */
-    box-sizing: border-box;
-  }
-  
-  html,
-  body {
-    height: 100%;
-  }
-  
-  body {
-    margin: 0;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 1.1rem;
-  }
-  
-  footer {
-    position: relative;
-    margin-top: 150px;
-    background-color: #d5d9dd;
-    padding: 5px 10px 5px 10px;
-  }
-  
-  
-  /* === Hintergrundfarben für Checklistentypen === */
-  .typ-einkaufsliste {
-    background-color: bisque;
-  }
-  
-  .typ-packliste {
-    background-color: lavender;
-  }
-  
-  .typ-todos {
-    background-color: aqua;
-  }
-  
-  /* === Tabellen === */
-  table {
-    margin: 20px  10px 20px 10px;
-  }
-  
-  td {
-      margin-bottom: 10px;
-  }
-  
-  td, th {
-      padding: 10px 0.75em;
-      margin: 3px 0 0;
-      border: 1px solid #666;
-      /*background-color: #f9f9f9;*/
-      text-align: center;
-  }
-  
-  .item-btn {
-    cursor: pointer;
-  }
-  
-  .dialog {
-    border: 1px solid gray;
-    border-radius: 4px;
-    background: white;
-    box-shadow: 0 1px 16px 0 rgba(0, 0, 0, 0.2), 0 2px 8px 0 rgba(0, 0, 0, 0.14), 0 4px 8px -1px rgba(0, 0, 0, 0.12);
-  }
-  
-  .btn-container {
-    margin: 10px 0 10px 0;
-  }
-  
-  .btn-wrapper  {
-      margin-bottom: 10px;
-  }
-  
-  .btn {
-    border: 1pt solid gray;
-    padding-top: 15px;
-    padding-bottom: 15px;
-  }
-  
-  
-  .kleber {
-      position: fixed;
-      left: -1000px;
-  }
+  /** box content wird automatisch so berechnet, dass width und height konstant bleiben */
+  box-sizing: border-box;
+}
 
-  .conditionally-bordered {
-    border: 0px solid gray;
-    border-radius: 4px;
-  }
+html,
+body {
+  height: 100%;
+  width: 90%;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 1.1rem;
+}
+
+.flex {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+  
+footer {
+  position: relative;
+  margin-top: 150px;
+  background-color: #d5d9dd;
+  padding: 5px 10px 5px 10px;
+}
+  
+.chl-container-elevated {
+  border: 1px solid gray;
+  border-radius: 4px;
+  background: white;
+  box-shadow: 0 1px 16px 0 rgba(0, 0, 0, 0.2), 0 2px 8px 0 rgba(0, 0, 0, 0.14), 0 4px 8px -1px rgba(0, 0, 0, 0.12);
+}
+  
+.chl-container {
+  margin-top: 10px;
+  align-content: center;
+}
+  
+/* === Hintergrundfarben für Checklistentypen === */
+.typ-einkaufsliste {
+  background-color: bisque;
+}
+  
+.typ-packliste {
+  background-color: lavender;
+}
+  
+.typ-todos {
+  background-color: aqua;
+}
+  
+/* === Tabellen === */
+table {
+  margin: 20px  10px 20px 10px;
+}
+  
+td {
+  margin-bottom: 10px;
+}
+  
+td, th {
+  padding: 10px 0.75em;
+  margin: 3px 0 0;
+  border: 1px solid #666;
+  /*background-color: #f9f9f9;*/
+  text-align: center;
+}
+  
+.item-btn {
+  cursor: pointer;
+}
+  
+.dialog {
+  border: 1px solid gray;
+  border-radius: 4px;
+  background: white;
+  box-shadow: 0 1px 16px 0 rgba(0, 0, 0, 0.2), 0 2px 8px 0 rgba(0, 0, 0, 0.14), 0 4px 8px -1px rgba(0, 0, 0, 0.12);
+}
+  
+.kleber {
+  position: fixed;
+  left: -1000px;
+}
+
+.conditionally-bordered {
+  border: 0px solid gray;
+  border-radius: 4px;
+}
  
   
-  /* ===== small devices ==== */
+/* ===== small devices ==== */
   
   @media (max-width: 768px) {
   
