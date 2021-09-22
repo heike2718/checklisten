@@ -1,6 +1,8 @@
 import { createReducer, Action, on } from '@ngrx/store';
-import { ChecklisteDaten } from '../../shared/domain/checkliste';
-import { ChecklistenMap, ChecklisteWithID } from '../listen.model';
+import { throwError } from 'rxjs';
+import { Filterkriterium } from '../../shared/domain/checkliste';
+import { filterChecklisteItems } from '../../shared/utils';
+import { Checkliste, ChecklisteAppearence, ChecklisteWithID } from '../listen.model';
 import * as ListenActions from './listen.actions';
 
 export const listenFeatureKey = 'checklistenapp-listen';
@@ -9,8 +11,8 @@ export interface ListenState {
     readonly loading: boolean;
     readonly checklistenLoaded: boolean;
     readonly checklistenMap: ChecklisteWithID[];
-    readonly selectedCheckliste: ChecklisteDaten | undefined;    
-}
+    readonly selectedCheckliste: Checkliste | undefined;    
+};
 
 const initialListenState: ListenState = {
     loading: false,
@@ -28,7 +30,36 @@ const listenReducer = createReducer(initialListenState,
     on(ListenActions.checklistenLoaded, (state, action) => {
 
         const map: ChecklisteWithID[] = [];
-        action.checklisten.forEach(item => map.push({kuerzel: item.kuerzel, checkliste: item}));
+        action.checklisten.forEach(item => {
+
+            let color = '';
+            switch(item.typ) {
+                case 'EINKAUFSLISTE': color = 'bisque'; break;
+                case 'PACKLISTE': color = 'lavender'; break;
+                default: color = '#c6ffb3';
+            }
+
+            const kriterium: Filterkriterium = {
+                modus: 'EXECUTION',
+                semantik: 'VORSCHLAGSLISTE'
+            };
+    
+            const anzahlItems = filterChecklisteItems(item.items, kriterium).length;
+
+            const checklisteAppearence: ChecklisteAppearence = {
+                anzahlItems: anzahlItems,
+                color: color
+            };
+
+            const thCheckliste: Checkliste = {
+                checkisteDaten: item,
+                appearence: checklisteAppearence
+            };
+
+            map.push({kuerzel: item.kuerzel, checkliste: thCheckliste})
+
+
+        });
         return {...state, loading: false, checklistenMap: map, checklistenLoaded: true};
     }),
 

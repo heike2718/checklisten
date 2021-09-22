@@ -1,12 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
-import { AppState } from '../reducers';
-import { ChecklisteDaten } from '../shared/domain/checkliste';
 import { ResponsePayload } from '../shared/messages/messages.model';
+import { ChecklisteDaten } from './listen.model';
 
 
 @Injectable({ providedIn: 'root' })

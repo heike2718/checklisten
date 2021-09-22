@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { ChecklisteDaten } from '../../shared/domain/checkliste';
+import { ChecklisteDaten } from '../listen.model';
 
 
 export const startLoading = createAction(

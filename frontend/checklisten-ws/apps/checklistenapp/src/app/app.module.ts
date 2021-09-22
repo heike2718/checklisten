@@ -41,7 +41,7 @@ import { NotAuthorizedComponent } from './not-authorized/not-authorized.componen
 		production: environment.production,
 		loginSuccessUrl: '/checklisten'
 	}),
-	ListenModule,
+	ListenModule,	
 	StoreModule.forRoot(reducers, {
 			metaReducers,
 			runtimeChecks: {

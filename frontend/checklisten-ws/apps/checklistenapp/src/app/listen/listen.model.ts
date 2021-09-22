@@ -1,45 +1,57 @@
-export const EINKAUFSLISTE = 'EINKAUFSLISTE';
-export const PACKLISTE = 'PACKLISTE';
-export const TODOS = 'TODOS';
+import { ChecklistenItem, Checklistentyp, Modus } from "../shared/domain/checkliste";
 
-export const MODUS_SCHROEDINGER = 'schroedinger';
-export const MODUS_CONFIG = 'configuration';
-export const MODUS_EXEC = 'execution';
-
-export type Modus = 'schroedinger' | 'configuration' | 'execution';
-export type Checklistentyp = 'EINKAUFSLISTE' | 'PACKLISTE' | 'TODOS';
-
-export const LISTE_VORSCHLAEGE = 'vorschlagsliste';
-
-export const LISTE_AUSGEWAEHLT = 'ausgewaehlt';
-
-
-export interface ChecklistenItem {
-	name: string;
-	markiert: boolean;
-	optional: boolean;
-	erledigt: boolean;
-	kommentar?: string;
-};
 
 export interface ChecklisteDaten {
 	kuerzel: string;
 	name: string;
-	typ: string;
+	typ: Checklistentyp;
 	gruppe?: string;
 	items: ChecklistenItem[];
 	version: number;
-	modus: string;
+	modus: Modus;
+};
+
+export interface ChecklisteAppearence {
+    readonly anzahlItems: number;
+    readonly color: string;
+};
+
+export interface Checkliste {
+    checkisteDaten: ChecklisteDaten;
+    appearence: ChecklisteAppearence;
 };
 
 export interface ChecklisteWithID {
     readonly kuerzel: string;
-    readonly checkliste: ChecklisteDaten;
+    readonly checkliste: Checkliste;
 };
+
+
+const initialChecklisteAppearence: ChecklisteAppearence = {
+    anzahlItems: 0,
+    color: 'bisque'
+};
+
+const initialChecklisteDaten: ChecklisteDaten = {
+    kuerzel: '',
+    name: '',
+    typ: 'EINKAUFSLISTE',
+    gruppe: undefined,
+    items: [],
+    version: 0,
+    modus: 'SCHROEDINGER'
+};
+
+
+export const initialCheckliste: Checkliste = {
+    checkisteDaten: initialChecklisteDaten,
+    appearence: initialChecklisteAppearence
+};
+
 
 export class ChecklistenMap {
 
-    private checklisten: Map<string, ChecklisteDaten> = new Map();
+    private checklisten: Map<string, Checkliste> = new Map();
 
     constructor(readonly items: ChecklisteWithID[]) {
 
@@ -55,30 +67,30 @@ export class ChecklistenMap {
 		return this.checklisten.has(kuerzel);
 	}
 
-    public get(kuerzel: string): ChecklisteDaten | undefined {
+    public get(kuerzel: string): Checkliste | undefined {
 
         return this.checklisten.get(kuerzel);
     }
 
-    public toArray(): ChecklisteDaten[] {
+    public toArray(): Checkliste[] {
 
         return [...this.checklisten.values()];
     }
 
-    public merge(checkliste: ChecklisteDaten): ChecklisteWithID[]  {
+    public merge(checkliste: Checkliste): ChecklisteWithID[]  {
 
         const result: ChecklisteWithID[] = [];
 
-        if (!this.has(checkliste.kuerzel)) {
-            result.push({kuerzel: checkliste.kuerzel, checkliste: checkliste});
+        if (!this.has(checkliste.checkisteDaten.kuerzel)) {
+            result.push({kuerzel: checkliste.checkisteDaten.kuerzel, checkliste: checkliste});
         }
 
         for (const item of this.items) {
 
-            if (item.kuerzel !== checkliste.kuerzel) {
+            if (item.kuerzel !== checkliste.checkisteDaten.kuerzel) {
                 result.push(item);
             } else {
-                result.push({kuerzel: checkliste.kuerzel, checkliste: checkliste});
+                result.push({kuerzel: checkliste.checkisteDaten.kuerzel, checkliste: checkliste});
             }
         }
 
@@ -104,7 +116,7 @@ export class ChecklistenMap {
     }
 
     private compareChecklistenWithID(checkliste1: ChecklisteWithID, checkliste2: ChecklisteWithID) : number {
-        return checkliste1.checkliste.name.localeCompare(checkliste2.checkliste.name);
+        return checkliste1.checkliste.checkisteDaten.name.localeCompare(checkliste2.checkliste.checkisteDaten.name);
     }
 
 };

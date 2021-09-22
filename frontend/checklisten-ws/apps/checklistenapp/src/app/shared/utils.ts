@@ -1,5 +1,6 @@
 import { RouterReducerState,RouterStateSerializer } from '@ngrx/router-store';
 import { RouterStateSnapshot, Params } from '@angular/router';
+import { ChecklistenItem, Checklistentyp, Filterkriterium, ListeSemantik } from './domain/checkliste';
 
 
 export interface RouterStateUrl {
@@ -26,4 +27,60 @@ export class CustomRouterStateSerializer implements RouterStateSerializer<Router
 
     return { url, params, queryParams };
   }
+};
+
+export function getBackgroundColorByChecklistentyp(typ: Checklistentyp) {
+	switch (typ) {
+		case 'EINKAUFSLISTE':
+			return 'bisque';
+		case 'PACKLISTE':
+			return 'lavender';
+		case 'TODOS':
+			// return 'aqua';
+			return '#c6ffb3';
+	}
+
+	return 'aqua';
+};
+
+export function filterChecklisteItems(items: ChecklistenItem[], filterkriterium: Filterkriterium): ChecklistenItem[] {
+
+	switch (filterkriterium.modus) {
+		case 'CONFIGURATION':
+			return getListeConfiguration(items, filterkriterium.semantik);
+		case 'EXECUTION':
+			return getListeExecution(items, filterkriterium.semantik);
+		default: return [];
+	}
 }
+
+// === private functions ==/
+function getListeConfiguration(items: ChecklistenItem[], semantik: ListeSemantik): ChecklistenItem[] {
+
+	if (!semantik) {
+		return [];
+	}
+
+	switch (semantik) {
+		case 'VORSCHLAGSLISTE':
+			return items.filter(it => !it.markiert);
+		case 'AUSGEWAEHLT':
+			return items.filter(it => it.markiert);
+		default: return [];
+	}
+}
+
+function getListeExecution(items: ChecklistenItem[], semantik: ListeSemantik): ChecklistenItem[] {
+	if (!semantik) {
+		return [];
+	}
+	switch (semantik) {
+		case 'VORSCHLAGSLISTE':
+			return items.filter(it => it.markiert && !it.erledigt);
+		case 'AUSGEWAEHLT':
+			return items.filter(it => it.markiert && it.erledigt);
+		default: return [];
+	}
+}
+
+

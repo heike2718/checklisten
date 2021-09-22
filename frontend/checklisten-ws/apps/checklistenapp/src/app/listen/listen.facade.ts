@@ -5,7 +5,7 @@ import { AppState } from '../reducers';
 import { ListenService } from './listen.service';
 import * as ListenActions from './+state/listen.actions';
 import * as ListenSelectors from './+state/listen.selectors';
-import { ChecklistenMap } from './listen.model';
+import { ChecklisteDaten, ChecklistenMap } from './listen.model';
 import { GlobalErrorHandlerService } from '../infrastructure/global-error-handler.service';
 
 @Injectable({ providedIn: 'root' })
@@ -42,5 +42,9 @@ export class ListenFacade {
 				})
             );
         }
+    }
+
+    public deleteCheckliste(checkliste: ChecklisteDaten): void {
+        
     }
 }

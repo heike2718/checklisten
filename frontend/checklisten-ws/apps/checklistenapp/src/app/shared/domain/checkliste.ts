@@ -1,17 +1,6 @@
-export const EINKAUFSLISTE = 'EINKAUFSLISTE';
-export const PACKLISTE = 'PACKLISTE';
-export const TODOS = 'TODOS';
-
-export const MODUS_SCHROEDINGER = 'schroedinger';
-export const MODUS_CONFIG = 'configuration';
-export const MODUS_EXEC = 'execution';
-
-export type Modus = 'schroedinger' | 'configuration' | 'execution';
 export type Checklistentyp = 'EINKAUFSLISTE' | 'PACKLISTE' | 'TODOS';
-
-export const LISTE_VORSCHLAEGE = 'vorschlagsliste';
-
-export const LISTE_AUSGEWAEHLT = 'ausgewaehlt';
+export type Modus = 'SCHROEDINGER' | 'CONFIGURATION' | 'EXECUTION';
+export type ListeSemantik = 'VORSCHLAGSLISTE' | 'AUSGEWAEHLT';
 
 
 export interface ChecklistenItem {
@@ -20,22 +9,7 @@ export interface ChecklistenItem {
 	optional: boolean;
 	erledigt: boolean;
 	kommentar?: string;
-}
-
-export interface ChecklisteDaten {
-	kuerzel: string;
-	name: string;
-	typ: string;
-	gruppe?: string;
-	items: ChecklistenItem[];
-	version: number;
-	modus: string;
-}
-
-export interface Filterkriterium {
-	modus: string;
-	semantik: string;
-}
+};
 
 export interface ChecklisteTemplateItem {
 	typ: string;
@@ -46,6 +20,13 @@ export interface ChecklisteTemplate {
 	typ: string;
 	items: ChecklisteTemplateItem[];
 	readTime: number;
+}
+
+
+
+export interface Filterkriterium {
+	modus: Modus;
+	semantik: ListeSemantik;
 }
 
 
