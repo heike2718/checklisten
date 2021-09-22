@@ -1,16 +1,16 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { environment } from '../environments/environment';
 import { AboutComponent } from './about/about.component';
-import { HomeComponent } from './home/home.component';
-import { SignUpComponent } from './sign-up/sign-up.component';
+import { LandingComponent } from './landing/landing.component';
+import { NotAuthorizedComponent } from './not-authorized/not-authorized.component';
 
 const routes: Routes = [
-	{ path: 'home', component: HomeComponent },
+	{ path: 'landing', component: LandingComponent },
+	{ path: 'forbidden', component: NotAuthorizedComponent },
 	{ path: 'about', component: AboutComponent },
-	{ path: 'signup', component: SignUpComponent },
-	{ path: '', pathMatch: 'full', component: HomeComponent },
-	{ path: '**', component: HomeComponent },
+	{ path: 'listen', loadChildren: () => import('./listen/listen.module').then(m => m.ListenModule)},
+	{ path: '', pathMatch: 'full', component: LandingComponent },
+	{ path: '**', component: LandingComponent },
 ];
 
 @NgModule({

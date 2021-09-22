@@ -1,0 +1,22 @@
+<div class="card mb-3" [ngStyle]="getStyles()">
+    <div class="card-header">
+        <div #trashButton class="trash" title="löschen">
+          <i class="fa fa-trash"></i>
+        </div>
+    </div>
+    <div class="card-body">
+        <h4 class="card-title">{{checkliste.checkisteDaten.name}}
+           <span class="ml-1 badge bg-dark">{{checkliste.appearence.anzahlItems}}</span>
+        </h4>
+        <p class="card-text">{{checkliste.checkisteDaten.typ}}</p>
+        <p *ngIf="showFilename">checkliste.component.ts (Input: checkliste)</p>
+    </div>
+    <div class="card-footer">
+        <div class="btn-group d-flex" role="group">
+            <button class="btn-default btn-block w-100 m-1" (click)="configure()" title="konfigurieren">conf</button>
+
+            <button class="btn-default btn-block w-100 m-1"
+                  (click)="execute()" title="abarbeiten">exec</button>
+        </div>
+    </div>
+</div>
