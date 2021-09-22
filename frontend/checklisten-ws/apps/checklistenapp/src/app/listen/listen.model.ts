@@ -7,13 +7,13 @@ export interface ChecklisteDaten {
 	typ: Checklistentyp;
 	gruppe?: string;
 	items: ChecklistenItem[];
-	version: number;
-	modus: Modus;
+	version: number;	
 };
 
 export interface ChecklisteAppearence {
     readonly anzahlItems: number;
     readonly color: string;
+    readonly modus: Modus;
 };
 
 export interface Checkliste {
@@ -29,7 +29,8 @@ export interface ChecklisteWithID {
 
 const initialChecklisteAppearence: ChecklisteAppearence = {
     anzahlItems: 0,
-    color: 'bisque'
+    color: 'bisque',
+    modus: 'SCHROEDINGER'
 };
 
 const initialChecklisteDaten: ChecklisteDaten = {
@@ -38,8 +39,7 @@ const initialChecklisteDaten: ChecklisteDaten = {
     typ: 'EINKAUFSLISTE',
     gruppe: undefined,
     items: [],
-    version: 0,
-    modus: 'SCHROEDINGER'
+    version: 0
 };
 
 

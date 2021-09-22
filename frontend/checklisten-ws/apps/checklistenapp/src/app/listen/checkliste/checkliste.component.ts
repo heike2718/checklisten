@@ -1,8 +1,6 @@
 import { Component, Input, ModuleWithComponentFactories, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { environment } from 'apps/checklistenapp/src/environments/environment';
-import { Filterkriterium } from '../../shared/domain/checkliste';
-import { filterChecklisteItems } from '../../shared/utils';
 import { ListenFacade } from '../listen.facade';
 import { Checkliste, initialCheckliste } from '../listen.model';
 
@@ -24,10 +22,10 @@ export class ChecklisteComponent implements OnInit {
   ngOnInit(): void { }
 
 	configure() {
-		this.router.navigateByUrl('/checkliste/configuration/' + this.checkliste.checkisteDaten.kuerzel);
+		this.listenFacade.startConfigureCheckliste(this.checkliste);
 	}
 	execute() {
-		this.router.navigateByUrl('/checkliste/execution/' + this.checkliste.checkisteDaten.kuerzel);
+		this.listenFacade.startExecuteCheckliste(this.checkliste);
 	}
 
 	delete() {

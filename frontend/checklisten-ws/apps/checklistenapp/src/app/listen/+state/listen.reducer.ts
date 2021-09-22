@@ -48,7 +48,8 @@ const listenReducer = createReducer(initialListenState,
 
             const checklisteAppearence: ChecklisteAppearence = {
                 anzahlItems: anzahlItems,
-                color: color
+                color: color,
+                modus: 'SCHROEDINGER'
             };
 
             const thCheckliste: Checkliste = {
@@ -61,6 +62,12 @@ const listenReducer = createReducer(initialListenState,
 
         });
         return {...state, loading: false, checklistenMap: map, checklistenLoaded: true};
+    }),
+
+    on(ListenActions.selectCheckliste, (state, action) => {
+
+        const liste: Checkliste = {...action.checkliste, appearence: {...action.checkliste.appearence, modus: action.modus}};
+        return {...state, selectedCheckliste: liste};
     }),
 
     on(ListenActions.loadChecklistenFailed, (state, _action) => {

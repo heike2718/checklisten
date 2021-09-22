@@ -5,8 +5,10 @@ import { AppState } from '../reducers';
 import { ListenService } from './listen.service';
 import * as ListenActions from './+state/listen.actions';
 import * as ListenSelectors from './+state/listen.selectors';
-import { ChecklisteDaten, ChecklistenMap } from './listen.model';
+import { Checkliste, ChecklisteDaten, ChecklistenMap } from './listen.model';
 import { GlobalErrorHandlerService } from '../infrastructure/global-error-handler.service';
+import { Modus } from '../shared/domain/checkliste';
+import { Router } from '@angular/router';
 
 @Injectable({ providedIn: 'root' })
 export class ListenFacade {
@@ -17,6 +19,7 @@ export class ListenFacade {
 
     constructor(private listenService: ListenService
         , private store: Store<AppState>
+        , private router: Router
         , private errorHandler: GlobalErrorHandlerService) {
 
 
@@ -44,7 +47,21 @@ export class ListenFacade {
         }
     }
 
+    public startConfigureCheckliste(checkliste: Checkliste): void {
+
+        this.store.dispatch(ListenActions.selectCheckliste({checkliste: checkliste, modus: 'CONFIGURATION'}));
+        this.router.navigateByUrl('/checkliste/configuration/' + checkliste.checkisteDaten.kuerzel);
+
+    }
+
+    public startExecuteCheckliste(checkliste: Checkliste): void {
+
+        this.store.dispatch(ListenActions.selectCheckliste({checkliste: checkliste, modus: 'EXECUTION'}));
+        this.router.navigateByUrl('/checkliste/execution/' + checkliste.checkisteDaten.kuerzel);
+
+    }
+
     public deleteCheckliste(checkliste: ChecklisteDaten): void {
-        
+
     }
 }

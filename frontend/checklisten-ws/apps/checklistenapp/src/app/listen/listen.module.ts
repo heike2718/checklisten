@@ -2,10 +2,10 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ChecklistenListComponent } from './checklisten-list/checklisten-list.component';
 import { ChecklisteComponent } from './checkliste/checkliste.component';
-import { ChecklisteDetailsComponent } from './checkliste-details/checkliste-details.component';
 import { ListenRoutingModule } from './listen-routing.module';
 import { StoreModule } from '@ngrx/store';
 import * as ListenReducer from './+state/listen.reducer';
+import { ConfigureChecklisteComponent } from './checkliste-details/configure-checkliste/configure-checkliste.component';
 
 
 
@@ -13,7 +13,7 @@ import * as ListenReducer from './+state/listen.reducer';
   declarations: [
     ChecklistenListComponent,
     ChecklisteComponent,
-    ChecklisteDetailsComponent
+    ConfigureChecklisteComponent
   ],
   imports: [
     CommonModule,
