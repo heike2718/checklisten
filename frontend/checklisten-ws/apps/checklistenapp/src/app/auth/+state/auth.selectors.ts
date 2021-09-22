@@ -11,3 +11,5 @@ export const isLoggedIn = createSelector(session, s => s.sessionId ? true : fals
 export const onLoggingOut = createSelector(selectAuthState, s => s.loggingOut);
 export const isLoggedOut = createSelector(isLoggedIn, loggedIn => !loggedIn);
 
+export const isAuthorized = createSelector(onLoggingOut, selectAuthState, (loggingOut, s) => !loggingOut && s.session.idReference !== undefined)
+

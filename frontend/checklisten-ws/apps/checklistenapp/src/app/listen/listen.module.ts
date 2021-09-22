@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ChecklistenListeComponent } from './checklisten-liste/checklisten-liste.component';
+import { ChecklistenListComponent } from './checklisten-list/checklisten-list.component';
 import { ChecklisteComponent } from './checkliste/checkliste.component';
 import { ChecklisteDetailsComponent } from './checkliste-details/checkliste-details.component';
 import { ListenRoutingModule } from './listen-routing.module';
@@ -11,7 +11,7 @@ import * as ListenReducer from './+state/listen.reducer';
 
 @NgModule({
   declarations: [
-    ChecklistenListeComponent,
+    ChecklistenListComponent,
     ChecklisteComponent,
     ChecklisteDetailsComponent
   ],
@@ -21,7 +21,6 @@ import * as ListenReducer from './+state/listen.reducer';
     StoreModule.forFeature(ListenReducer.listenFeatureKey, ListenReducer.reducer)
   ],
   exports: [
-    ChecklistenListeComponent
   ]
 })
 export class ListenModule { }
