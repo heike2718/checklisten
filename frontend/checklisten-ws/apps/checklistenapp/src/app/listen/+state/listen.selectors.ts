@@ -8,3 +8,5 @@ export const checklistenLoaded = createSelector(listenState, s => s.checklistenL
 export const checklistenMap = createSelector(listenState, s => new ChecklistenMap(s.checklistenMap));
 export const checklisten = createSelector(checklistenMap, m => m.toArray());
 
+export const selectedCheckliste = createSelector(listenState, s => s.selectedCheckliste);
+

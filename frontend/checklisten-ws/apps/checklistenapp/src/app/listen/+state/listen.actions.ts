@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { Modus } from '../../shared/domain/checkliste';
+import { ChecklistenItemClickedPayload, Modus } from '../../shared/domain/checkliste';
 import { Checkliste, ChecklisteDaten } from '../listen.model';
 
 
@@ -19,6 +19,16 @@ export const loadChecklistenFailed = createAction(
 export const selectCheckliste = createAction(
     '[ListenFacade] executeCheckliste | configureCheckliste',
     props<{checkliste: Checkliste, modus: Modus}>()
+);
+
+export const checklisteItemClickedOnConfiguration = createAction(
+    '[ListenFacade] handleChecklisteItemClicked modus CONFIGURATION',
+    props<{clickPayload: ChecklistenItemClickedPayload}>()
+);
+
+export const checklisteItemClickedOnExecution = createAction(
+    '[ListenFacade] handleChecklisteItemClicked modus EXECUTION',
+    props<{clickPayload: ChecklistenItemClickedPayload}>()
 );
 
 export const resetModule = createAction(

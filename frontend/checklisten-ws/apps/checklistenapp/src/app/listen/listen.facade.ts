@@ -7,13 +7,14 @@ import * as ListenActions from './+state/listen.actions';
 import * as ListenSelectors from './+state/listen.selectors';
 import { Checkliste, ChecklisteDaten, ChecklistenMap } from './listen.model';
 import { GlobalErrorHandlerService } from '../infrastructure/global-error-handler.service';
-import { Modus } from '../shared/domain/checkliste';
+import { ChecklistenItemClickedPayload, Modus } from '../shared/domain/checkliste';
 import { Router } from '@angular/router';
 
 @Injectable({ providedIn: 'root' })
 export class ListenFacade {
 
     public checklisten$ = this.store.select(ListenSelectors.checklisten);
+    public selectedCheckliste$ = this.store.select(ListenSelectors.selectedCheckliste);
 
     private checklistenLoaded: boolean = false;
 
@@ -61,7 +62,17 @@ export class ListenFacade {
 
     }
 
+    public handleChecklisteItemClicked(modus: Modus, payload: ChecklistenItemClickedPayload): void {
+
+        switch(modus) {
+            case 'CONFIGURATION': this.store.dispatch(ListenActions.checklisteItemClickedOnConfiguration({clickPayload: payload})); break;
+            case 'EXECUTION': this.store.dispatch(ListenActions.checklisteItemClickedOnExecution({clickPayload: payload})); break;
+        }
+    }
+
     public deleteCheckliste(checkliste: ChecklisteDaten): void {
 
     }
+
+
 }

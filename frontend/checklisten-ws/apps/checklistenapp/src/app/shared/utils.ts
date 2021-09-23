@@ -1,6 +1,6 @@
 import { RouterReducerState,RouterStateSerializer } from '@ngrx/router-store';
 import { RouterStateSnapshot, Params } from '@angular/router';
-import { ChecklistenItem, Checklistentyp, Filterkriterium, ListeSemantik } from './domain/checkliste';
+import { ChecklistenItem, Checklistentyp, Filterkriterium, ItemPosition, Modus } from './domain/checkliste';
 
 
 export interface RouterStateUrl {
@@ -43,26 +43,66 @@ export function getBackgroundColorByChecklistentyp(typ: Checklistentyp) {
 	return 'aqua';
 };
 
+export function getItemsOben(items: ChecklistenItem[], modus: Modus): ChecklistenItem[] {
+
+	switch(modus) {
+		case 'CONFIGURATION':
+			return getItemsObenFuerKonfiguration(items);
+	    case 'EXECUTION':
+			return getItemsObenFuerAbarbeitung(items);
+	}
+	return [];
+}
+
+export function getItemsUnten(items: ChecklistenItem[], modus: Modus): ChecklistenItem[] {
+
+	switch(modus) {
+		case 'CONFIGURATION':
+			return getItemsUntenFuerKonfiguration(items);
+	    case 'EXECUTION':
+			return getItemsUntenFuerAbarbeitung(items);
+	}
+	return [];
+}
+
 export function filterChecklisteItems(items: ChecklistenItem[], filterkriterium: Filterkriterium): ChecklistenItem[] {
 
 	switch (filterkriterium.modus) {
 		case 'CONFIGURATION':
-			return getListeConfiguration(items, filterkriterium.semantik);
+			return getListeConfiguration(items, filterkriterium.position);
 		case 'EXECUTION':
-			return getListeExecution(items, filterkriterium.semantik);
+			return getListeExecution(items, filterkriterium.position);
 		default: return [];
 	}
 }
 
 // === private functions ==/
-function getListeConfiguration(items: ChecklistenItem[], semantik: ListeSemantik): ChecklistenItem[] {
+function getItemsObenFuerKonfiguration(items: ChecklistenItem[]): ChecklistenItem[] {
+	return items.filter(it => !it.markiert);
+}
 
-	if (!semantik) {
+function getItemsObenFuerAbarbeitung(items: ChecklistenItem[]): ChecklistenItem[] {
+	return items.filter(it => it.markiert);
+}
+
+function getItemsUntenFuerKonfiguration(items: ChecklistenItem[]): ChecklistenItem[] {
+	return items.filter(it => it.markiert && !it.erledigt);
+}
+
+function getItemsUntenFuerAbarbeitung(items: ChecklistenItem[]): ChecklistenItem[] {
+	return items.filter(it => it.markiert && it.erledigt);
+}
+
+
+
+function getListeConfiguration(items: ChecklistenItem[], position: ItemPosition): ChecklistenItem[] {
+
+	if (!position) {
 		return [];
 	}
 
-	switch (semantik) {
-		case 'VORSCHLAGSLISTE':
+	switch (position) {
+		case 'VORSCHLAG':
 			return items.filter(it => !it.markiert);
 		case 'AUSGEWAEHLT':
 			return items.filter(it => it.markiert);
@@ -70,12 +110,12 @@ function getListeConfiguration(items: ChecklistenItem[], semantik: ListeSemantik
 	}
 }
 
-function getListeExecution(items: ChecklistenItem[], semantik: ListeSemantik): ChecklistenItem[] {
-	if (!semantik) {
+function getListeExecution(items: ChecklistenItem[], position: ItemPosition): ChecklistenItem[] {
+	if (!position) {
 		return [];
 	}
-	switch (semantik) {
-		case 'VORSCHLAGSLISTE':
+	switch (position) {
+		case 'VORSCHLAG':
 			return items.filter(it => it.markiert && !it.erledigt);
 		case 'AUSGEWAEHLT':
 			return items.filter(it => it.markiert && it.erledigt);

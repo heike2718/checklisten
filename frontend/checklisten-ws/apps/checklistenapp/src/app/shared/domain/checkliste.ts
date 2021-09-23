@@ -1,6 +1,6 @@
 export type Checklistentyp = 'EINKAUFSLISTE' | 'PACKLISTE' | 'TODOS';
 export type Modus = 'SCHROEDINGER' | 'CONFIGURATION' | 'EXECUTION';
-export type ListeSemantik = 'VORSCHLAGSLISTE' | 'AUSGEWAEHLT';
+export type ItemPosition = 'VORSCHLAG' | 'AUSGEWAEHLT';
 
 
 export interface ChecklistenItem {
@@ -14,19 +14,31 @@ export interface ChecklistenItem {
 export interface ChecklisteTemplateItem {
 	typ: string;
 	name: string;
-}
+};
 
 export interface ChecklisteTemplate {
 	typ: string;
 	items: ChecklisteTemplateItem[];
 	readTime: number;
-}
+};
 
+export interface ChecklistenItemClickedPayload {
+	readonly checklistenItem:ChecklistenItem;
+	readonly position: ItemPosition;
+};
 
 
 export interface Filterkriterium {
 	modus: Modus;
-	semantik: ListeSemantik;
-}
+	position: ItemPosition;
+};
+
+export const initialChecklistenItem: ChecklistenItem = {
+	name: '',
+	markiert: false,
+	optional: false,
+	erledigt: false,
+	kommentar: ''
+};
 
 

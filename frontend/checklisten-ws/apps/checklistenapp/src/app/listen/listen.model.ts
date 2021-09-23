@@ -14,6 +14,8 @@ export interface ChecklisteAppearence {
     readonly anzahlItems: number;
     readonly color: string;
     readonly modus: Modus;
+    readonly itemsOben: ChecklistenItem[];
+    readonly itemsUnten: ChecklistenItem[];
 };
 
 export interface Checkliste {
@@ -27,10 +29,12 @@ export interface ChecklisteWithID {
 };
 
 
-const initialChecklisteAppearence: ChecklisteAppearence = {
+export const initialChecklisteAppearence: ChecklisteAppearence = {
     anzahlItems: 0,
     color: 'bisque',
-    modus: 'SCHROEDINGER'
+    modus: 'SCHROEDINGER',
+    itemsOben: [],
+    itemsUnten: []
 };
 
 const initialChecklisteDaten: ChecklisteDaten = {
