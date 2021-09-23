@@ -68,7 +68,8 @@ const listenReducer = createReducer(initialListenState,
         const itemsUnten = [...getItemsUnten(liste.checkisteDaten.items, modus)];
 
         liste = {...action.checkliste, appearence: {...action.checkliste.appearence, modus: action.modus, itemsOben: itemsOben, itemsUnten: itemsUnten}};
-        return {...state, selectedCheckliste: liste};
+        const checklistenMap: ChecklisteWithID[] = new ChecklistenMap(state.checklistenMap).merge(liste);
+        return {...state, selectedCheckliste: liste, checklistenMap: checklistenMap};
     }),
 
     on(ListenActions.checklisteItemClickedOnConfiguration, (state, action) => {
@@ -95,12 +96,11 @@ const listenReducer = createReducer(initialListenState,
                }
            }
 
-           const changedChecklisteDaten = {...state.selectedCheckliste.checkisteDaten, items: neueItems};
+           const changedChecklisteDaten = {...state.selectedCheckliste.checkisteDaten, items: neueItems, name: action.checklisteName};
            const itemsOben = [...getItemsOben(changedChecklisteDaten.items, modus)];
-           const itemsUnten = [...getItemsUnten(changedChecklisteDaten.items, modus)];
-           
+           const itemsUnten = [...getItemsUnten(changedChecklisteDaten.items, modus)];           
            const appearence: ChecklisteAppearence = {...state.selectedCheckliste.appearence, itemsOben: itemsOben, itemsUnten:itemsUnten};
-           const neueCheckliste = {...state.selectedCheckliste, appearence: appearence, changedChecklisteDaten: changedChecklisteDaten};
+           const neueCheckliste: Checkliste = {checkisteDaten: changedChecklisteDaten, appearence: appearence};
            const checklistenMap: ChecklisteWithID[] = new ChecklistenMap(state.checklistenMap).merge(neueCheckliste);
            return {...state, selectedCheckliste: neueCheckliste, checklistenMap: checklistenMap};
         } 

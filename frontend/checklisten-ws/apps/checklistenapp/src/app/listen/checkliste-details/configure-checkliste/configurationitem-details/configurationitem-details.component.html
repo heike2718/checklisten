@@ -6,3 +6,9 @@
       <p class="card-text"> {{checklistenItem.name}}</p>
     </div>
 </div>
+
+<div *ngIf="position==='AUSGEWAEHLT'" class="card mb-3" [ngStyle]="getStyles()" (click)="onClickEvent()">
+  <div class="card-body">
+    <p class="card-text"> {{checklistenItem.name}}</p>
+  </div>
+</div>

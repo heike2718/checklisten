@@ -12,6 +12,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import de.egladil.web.checklistenserver.domain.Checklistentyp;
 import de.egladil.web.commons_validation.annotations.StringLatin;
 import de.egladil.web.commons_validation.annotations.UuidString;
@@ -38,6 +40,7 @@ public class ChecklisteDaten {
 
 	private int version;
 
+	@JsonIgnore
 	private int anzahlErledigt;
 
 	@Size(max = 999)

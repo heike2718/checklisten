@@ -23,12 +23,12 @@ export const selectCheckliste = createAction(
 
 export const checklisteItemClickedOnConfiguration = createAction(
     '[ListenFacade] handleChecklisteItemClicked modus CONFIGURATION',
-    props<{clickPayload: ChecklistenItemClickedPayload}>()
+    props<{checklisteName: string, clickPayload: ChecklistenItemClickedPayload}>()
 );
 
 export const checklisteItemClickedOnExecution = createAction(
     '[ListenFacade] handleChecklisteItemClicked modus EXECUTION',
-    props<{clickPayload: ChecklistenItemClickedPayload}>()
+    props<{checklisteName: string, clickPayload: ChecklistenItemClickedPayload}>()
 );
 
 export const resetModule = createAction(

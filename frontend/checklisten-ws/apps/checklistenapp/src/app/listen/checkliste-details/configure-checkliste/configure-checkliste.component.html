@@ -7,10 +7,10 @@
     <form id="nameForm">
         <label for="nameChecklisteInput">Name*:</label>
         <input type="text" class="form-control" id="nameChecklisteInput" name="nameChecklisteInput"
-            [(ngModel)]="checkliste.checkisteDaten.name" required />
+            [(ngModel)]="checklisteName" required />
     </form>
 
-    <h5 class="mt-2">Vorschläge:</h5>
+    <h5 class="mt-2">Vorschläge ({{checkliste.appearence.itemsOben.length}}):</h5>
 
     <div class="row">
 
@@ -20,11 +20,14 @@
         </div>
     </div>
 
+    <h5 class="mt-2">*vorgemerkt ({{checkliste.appearence.itemsUnten.length}}):</h5>
 
-
-
-    <h5 class="mt-2">*vorgemerkt:</h5>
-
+    <div class="row">
+        <div *ngFor="let item of checkliste.appearence.itemsUnten" class="col-sm-12 col-md-4 col-lg-3">
+            <chl-configurationitem-details [backgroundColor]="checkliste.appearence.color" [checklistenItem]="item" [position]="'AUSGEWAEHLT'"
+            (itemClicked)="onItemClicked($event)"></chl-configurationitem-details>
+        </div>
+    </div>
 </div>
 
 <ng-template #loading>
