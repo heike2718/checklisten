@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ModalDismissReasons, NgbModal, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 import { environment } from 'apps/checklistenapp/src/environments/environment';
 import { Subscription } from 'rxjs';
 import { LogService } from '../../../infrastructure/logging/log.service';
@@ -12,6 +12,8 @@ import { ListenFacade } from '../../listen.facade';
   styleUrls: ['./configure-checkliste.component.css']
 })
 export class ConfigureChecklisteComponent implements OnInit, OnDestroy {
+
+  public unsavedChanges: boolean = false;
 
   // das ! verhindert, dass eine sofortige Initialisierung verlangt wird, denn die ist hier nicht sinnvoll.
   @ViewChild('dialogEditItem')
@@ -27,6 +29,12 @@ export class ConfigureChecklisteComponent implements OnInit, OnDestroy {
   itemName: string = '';
   itemKommentar: string = '';
   itemOptional: boolean = false;
+
+  private modalOptions:NgbModalOptions = {
+    backdrop:'static',
+    centered:true,
+    ariaLabelledBy: 'modal-basic-title'
+  };
 
   private checklisteSubscription: Subscription = new Subscription();
 
@@ -61,7 +69,7 @@ export class ConfigureChecklisteComponent implements OnInit, OnDestroy {
     this.logger.debug(JSON.stringify(payload));
 
     switch(payload.action) {
-      case 'TOGGLE': this.listenFacade.handleChecklisteItemClicked(this.checklisteName.trim(), 'CONFIGURATION', payload); break;
+      case 'TOGGLE': this.unsavedChanges = true; this.listenFacade.handleChecklisteItemClicked(this.checklisteName.trim(), 'CONFIGURATION', payload); break;
       case 'EDIT': this.openDialogEditItem({...payload.checklisteItem}); break;
     }    
   }
@@ -72,16 +80,23 @@ export class ConfigureChecklisteComponent implements OnInit, OnDestroy {
     this.openDialogNewItem();
   }
 
+  handleUnsavedChanges(): boolean {
+    this.logger.debug('Jetzt Warndialog ungespeicherte Änderungen anzeigen.');
+    this.unsavedChanges = false;
+    return this.unsavedChanges;
+  }
+
   openDialogNewItem(): void {
 
     this.dialogTitle = 'Neues Teil';
 
-    this.modalService.open(this.dialogEditItem, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
+    this.modalService.open(this.dialogEditItem, this.modalOptions).result.then((result) => {
 
       this.dialogNewItemVisible = !this.dialogNewItemVisible;
       this.dialogTitle = '';
 
 			if (result === 'OK') {
+        this.unsavedChanges = true;
 				this.saveChanges(true);
 			}
 
@@ -89,7 +104,7 @@ export class ConfigureChecklisteComponent implements OnInit, OnDestroy {
         this.resetDialogModel();
       }
 		});
-  }
+  }  
 
   private openDialogEditItem(checklisteItem: ChecklisteItem): void {
 
@@ -99,10 +114,11 @@ export class ConfigureChecklisteComponent implements OnInit, OnDestroy {
     this.itemOptional = checklisteItem.optional;
     this.itemKommentar = checklisteItem.kommentar ? checklisteItem.kommentar : '';
 
-    this.modalService.open(this.dialogEditItem, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
+    this.modalService.open(this.dialogEditItem, this.modalOptions).result.then((result) => {
 
       this.dialogTitle = '';
 			if (result === 'OK') {
+        this.unsavedChanges = true;
 				this.saveChanges(false);
 			} 
 

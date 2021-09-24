@@ -9,6 +9,7 @@ import { ConfigureChecklisteComponent } from './checkliste-details/configure-che
 import { FormsModule } from '@angular/forms';
 import { ConfigurationitemDetailsComponent } from './checkliste-details/configure-checkliste/configurationitem-details/configurationitem-details.component';
 import { ExecutionitemDetailsComponent } from './checkliste-details/execute-checkliste/executionitem-details/executionitem-details.component';
+import { DeactivateConfigurationNavigationGuard } from './checkliste-details/configure-checkliste/deactivate-configuration-navigation.guard';
 
 
 
@@ -27,6 +28,9 @@ import { ExecutionitemDetailsComponent } from './checkliste-details/execute-chec
     StoreModule.forFeature(ListenReducer.listenFeatureKey, ListenReducer.reducer)
   ],
   exports: [
+  ],
+  providers: [
+    DeactivateConfigurationNavigationGuard
   ]
 })
 export class ListenModule { }
