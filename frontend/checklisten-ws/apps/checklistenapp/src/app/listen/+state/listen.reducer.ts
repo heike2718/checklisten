@@ -1,8 +1,8 @@
 import { createReducer, Action, on } from '@ngrx/store';
-import { ChecklistenItem, ChecklistenItemClickedPayload, Filterkriterium, initialChecklistenItem, Modus } from '../../shared/domain/checkliste';
+import { ChecklisteItem, ChecklisteItemClickedPayload, Filterkriterium, initialChecklisteItem, Modus } from '../../shared/domain/checkliste';
 import { SignUpPayload } from '../../shared/domain/signup-payload';
 import { filterChecklisteItems, getItemsOben, getItemsUnten } from '../../shared/utils';
-import { Checkliste, ChecklisteAppearence, ChecklistenMap, ChecklisteWithID, initialCheckliste, initialChecklisteAppearence } from '../listen.model';
+import { Checkliste, ChecklisteAppearence, ChecklisteItemMerger, ChecklistenMap, ChecklisteWithID, initialCheckliste, initialChecklisteAppearence } from '../listen.model';
 import * as ListenActions from './listen.actions';
 
 export const listenFeatureKey = 'checklistenapp-listen';
@@ -74,38 +74,28 @@ const listenReducer = createReducer(initialListenState,
 
     on(ListenActions.checklisteItemClickedOnConfiguration, (state, action) => {
 
-        const modus: Modus = 'CONFIGURATION';
         if (state.selectedCheckliste) {
-
            
-           const payload: ChecklistenItemClickedPayload = action.clickPayload;           
-           let changedItem: ChecklistenItem = initialChecklistenItem;
+           const payload: ChecklisteItemClickedPayload = action.clickPayload;           
+           let changedItem: ChecklisteItem = initialChecklisteItem;
 
            switch(payload.position) {
-               case 'VORSCHLAG': changedItem = {...payload.checklistenItem, markiert: true}; break;
-               case 'AUSGEWAEHLT': changedItem = {...payload.checklistenItem, markiert: false}; break;
+               case 'VORSCHLAG': changedItem = {...payload.checklisteItem, markiert: true}; break;
+               case 'AUSGEWAEHLT': changedItem = {...payload.checklisteItem, markiert: false}; break;
            }
 
-           let neueItems: ChecklistenItem[] = [];
-
-           for (const item of state.selectedCheckliste.checkisteDaten.items) {
-               if (item.name === payload.checklistenItem.name) {
-                   neueItems.push(changedItem);
-               } else {
-                   neueItems.push({...item});
-               }
-           }
-
-           const changedChecklisteDaten = {...state.selectedCheckliste.checkisteDaten, items: neueItems, name: action.checklisteName};
-           const itemsOben = [...getItemsOben(changedChecklisteDaten.items, modus)];
-           const itemsUnten = [...getItemsUnten(changedChecklisteDaten.items, modus)];           
-           const appearence: ChecklisteAppearence = {...state.selectedCheckliste.appearence, itemsOben: itemsOben, itemsUnten:itemsUnten};
-           const neueCheckliste: Checkliste = {checkisteDaten: changedChecklisteDaten, appearence: appearence};
-           const checklistenMap: ChecklisteWithID[] = new ChecklistenMap(state.checklistenMap).merge(neueCheckliste);
-           return {...state, selectedCheckliste: neueCheckliste, checklistenMap: checklistenMap};
+           return new ChecklisteItemMerger().mergeChecklisteItems(state, changedItem, action.checklisteName, false);
         } 
         
         return {...state};
+    }),
+
+    on(ListenActions.checklisteItemAdded, (state, action) => {
+        return new ChecklisteItemMerger().mergeChecklisteItems(state, action.checklisteItem, action.checklisteName, true);
+    }),
+
+    on(ListenActions.checklisteItemChanged, (state, action) => {
+        return new ChecklisteItemMerger().mergeChecklisteItems(state, action.checklisteItem, action.checklisteName, false);
     }),
 
     on(ListenActions.loadChecklistenFailed, (state, _action) => {

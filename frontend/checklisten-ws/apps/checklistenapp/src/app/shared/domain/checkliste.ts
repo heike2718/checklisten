@@ -1,9 +1,10 @@
 export type Checklistentyp = 'EINKAUFSLISTE' | 'PACKLISTE' | 'TODOS';
 export type Modus = 'SCHROEDINGER' | 'CONFIGURATION' | 'EXECUTION';
 export type ItemPosition = 'VORSCHLAG' | 'AUSGEWAEHLT';
+export type ItemAction = 'EDIT' | 'TOGGLE';
 
 
-export interface ChecklistenItem {
+export interface ChecklisteItem {
 	name: string;
 	markiert: boolean;
 	optional: boolean;
@@ -22,9 +23,10 @@ export interface ChecklisteTemplate {
 	readTime: number;
 };
 
-export interface ChecklistenItemClickedPayload {
-	readonly checklistenItem:ChecklistenItem;
+export interface ChecklisteItemClickedPayload {
+	readonly checklisteItem: ChecklisteItem;
 	readonly position: ItemPosition;
+	readonly action: ItemAction;
 };
 
 
@@ -33,7 +35,7 @@ export interface Filterkriterium {
 	position: ItemPosition;
 };
 
-export const initialChecklistenItem: ChecklistenItem = {
+export const initialChecklisteItem: ChecklisteItem = {
 	name: '',
 	markiert: false,
 	optional: false,

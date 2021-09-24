@@ -1,5 +1,5 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { ChecklistenItem, ChecklistenItemClickedPayload, initialChecklistenItem, ItemPosition } from 'apps/checklistenapp/src/app/shared/domain/checkliste';
+import { Component, EmbeddedViewRef, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
+import { ChecklisteItem, ChecklisteItemClickedPayload, initialChecklisteItem, ItemPosition } from 'apps/checklistenapp/src/app/shared/domain/checkliste';
 import { environment } from 'apps/checklistenapp/src/environments/environment';
 
 @Component({
@@ -10,7 +10,7 @@ import { environment } from 'apps/checklistenapp/src/environments/environment';
 export class ConfigurationitemDetailsComponent implements OnInit {
 
   @Input()
-  checklistenItem: ChecklistenItem = initialChecklistenItem;
+  checklisteItem: ChecklisteItem = initialChecklisteItem;
 
   @Input()
   position: ItemPosition = 'VORSCHLAG';
@@ -19,7 +19,7 @@ export class ConfigurationitemDetailsComponent implements OnInit {
   backgroundColor: string = 'red';
 
   @Output()
-  itemClicked: EventEmitter<ChecklistenItemClickedPayload> = new EventEmitter<ChecklistenItemClickedPayload>();
+  itemClicked: EventEmitter<ChecklisteItemClickedPayload> = new EventEmitter<ChecklisteItemClickedPayload>();  
 
   showFilename = !environment.production;
 
@@ -28,8 +28,12 @@ export class ConfigurationitemDetailsComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  onClickEvent(): void {
-    this.itemClicked.emit({checklistenItem: this.checklistenItem, position: this.position});
+  togglePosition(): void {
+    this.itemClicked.emit({checklisteItem: this.checklisteItem, position: this.position, action: 'TOGGLE'});
+  }
+
+  editItem(): void {
+    this.itemClicked.emit({checklisteItem: this.checklisteItem, position: this.position, action: 'EDIT'});
   }
 
   getStyles() {

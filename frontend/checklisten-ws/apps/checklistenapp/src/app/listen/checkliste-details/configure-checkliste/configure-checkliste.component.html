@@ -10,25 +10,62 @@
             [(ngModel)]="checklisteName" required />
     </form>
 
+
     <h5 class="mt-2">Vorschläge ({{checkliste.appearence.itemsOben.length}}):</h5>
 
     <div class="row">
 
         <div *ngFor="let item of checkliste.appearence.itemsOben" class="col-sm-12 col-md-4 col-lg-3">
-            <chl-configurationitem-details [backgroundColor]="checkliste.appearence.color" [checklistenItem]="item" [position]="'VORSCHLAG'"
+            <chl-configurationitem-details [backgroundColor]="checkliste.appearence.color" [checklisteItem]="item" [position]="'VORSCHLAG'"
             (itemClicked)="onItemClicked($event)"></chl-configurationitem-details>
         </div>
+    </div>
+
+    <div *ngIf="!dialogNewItemVisible" class="row">
+        <div class="col-md-4">
+            <button class="col-md-12 btn btn-outline-dark" (click)="toggleDialogNewItemVisible()">
+              <i class="fa fa-plus"></i> neues Teil </button>
+          </div>
     </div>
 
     <h5 class="mt-2">*vorgemerkt ({{checkliste.appearence.itemsUnten.length}}):</h5>
 
     <div class="row">
         <div *ngFor="let item of checkliste.appearence.itemsUnten" class="col-sm-12 col-md-4 col-lg-3">
-            <chl-configurationitem-details [backgroundColor]="checkliste.appearence.color" [checklistenItem]="item" [position]="'AUSGEWAEHLT'"
+            <chl-configurationitem-details [backgroundColor]="checkliste.appearence.color" [checklisteItem]="item" [position]="'AUSGEWAEHLT'"
             (itemClicked)="onItemClicked($event)"></chl-configurationitem-details>
         </div>
     </div>
 </div>
+
+<ng-template #dialogEditItem let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">{{dialogTitle}}</h4>
+    </div>
+    <div class="modal-body">
+        <form id="editItemForm">
+            <div class="group">
+                <label for="inputItemName">Name*:</label>
+                <input type="text" class="form-control" id="inputItemName" name="inputItemName" required
+                  [(ngModel)]="itemName" required aria-describedby="itemKommentarHelp" placeholder="Name">
+              </div>
+              <div class="group">
+              <label for="inputItemKommentar">Kommentar:</label>
+              <input type="text" class="form-control" id="inputItemKommentar" name="inputItemKommentar"
+                [(ngModel)]="itemKommentar" required aria-describedby="itemKommentarHelp" placeholder="Kommentar">
+            </div>
+            <div class="group">
+              <input type="checkbox" class="form-check-inline" id="inputItemOptional" name="inputItemOptional"
+                [(ngModel)]="itemOptional" required aria-describedby="itemKommentarOptional">
+              <label for="inputItemOptional">optional</label>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" [disabled]="formDisabled()" (click)="modal.close('OK')">OK</button>
+        <button type="button" class="btn btn-outline-secondary" (click)="modal.close('NO')">doch nicht</button>
+    </div>
+</ng-template>
 
 <ng-template #loading>
 	Lade Checkliste... <i class="fa fa-spinner fa-2x fa-spin" aria-hidden="true"></i>

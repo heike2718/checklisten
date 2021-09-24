@@ -1,4 +1,6 @@
-import { ChecklistenItem, Checklistentyp, Modus } from "../shared/domain/checkliste";
+import { ChecklisteItem, Checklistentyp, Modus } from "../shared/domain/checkliste";
+import { getItemsOben, getItemsUnten } from "../shared/utils";
+import { ListenState } from "./+state/listen.reducer";
 
 
 export interface ChecklisteDaten {
@@ -6,7 +8,7 @@ export interface ChecklisteDaten {
 	name: string;
 	typ: Checklistentyp;
 	gruppe?: string;
-	items: ChecklistenItem[];
+	items: ChecklisteItem[];
 	version: number;	
 };
 
@@ -14,8 +16,8 @@ export interface ChecklisteAppearence {
     readonly anzahlItems: number;
     readonly color: string;
     readonly modus: Modus;
-    readonly itemsOben: ChecklistenItem[];
-    readonly itemsUnten: ChecklistenItem[];
+    readonly itemsOben: ChecklisteItem[];
+    readonly itemsUnten: ChecklisteItem[];
 };
 
 export interface Checkliste {
@@ -124,4 +126,47 @@ export class ChecklistenMap {
     }
 
 };
+
+export class ChecklisteItemMerger {
+
+    public mergeChecklisteItems(state: ListenState, checklisteItem: ChecklisteItem, checklisteName: string, add: boolean): ListenState {
+
+        if (state.selectedCheckliste) {
+
+            const modus: Modus = 'CONFIGURATION';
+
+            let neueItems: ChecklisteItem[] = [];
+
+            if (add) {
+
+                const vorhandene: ChecklisteItem[] = state.selectedCheckliste.checkisteDaten.items.filter(item => item.name.toLocaleLowerCase() === checklisteItem.name.toLocaleLowerCase());
+
+                if (vorhandene.length === 0) {
+                    neueItems.push(checklisteItem);
+                }            
+    
+            }
+
+            for (const item of state.selectedCheckliste.checkisteDaten.items) {
+                if (item.name.toLocaleLowerCase() === checklisteItem.name.toLocaleLowerCase()) {
+                    neueItems.push(checklisteItem);
+                } else {
+                    neueItems.push({...item});
+                }
+            }
+
+            const changedChecklisteDaten = {...state.selectedCheckliste.checkisteDaten, items: neueItems, name: checklisteName};
+            const itemsOben = [...getItemsOben(changedChecklisteDaten.items, modus)];
+            const itemsUnten = [...getItemsUnten(changedChecklisteDaten.items, modus)];           
+            const appearence: ChecklisteAppearence = {...state.selectedCheckliste.appearence, itemsOben: itemsOben, itemsUnten:itemsUnten, anzahlItems: itemsUnten.length};
+            const neueCheckliste: Checkliste = {checkisteDaten: changedChecklisteDaten, appearence: appearence};
+            const checklistenMap: ChecklisteWithID[] = new ChecklistenMap(state.checklistenMap).merge(neueCheckliste);
+            return {...state, selectedCheckliste: neueCheckliste, checklistenMap: checklistenMap};
+ 
+        }
+
+        return {...state};
+    }
+
+}
 

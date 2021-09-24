@@ -1,13 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
 import { AppState } from '../reducers';
 import { ListenService } from './listen.service';
 import * as ListenActions from './+state/listen.actions';
 import * as ListenSelectors from './+state/listen.selectors';
 import { Checkliste, ChecklisteDaten, ChecklistenMap } from './listen.model';
 import { GlobalErrorHandlerService } from '../infrastructure/global-error-handler.service';
-import { ChecklistenItemClickedPayload, Modus } from '../shared/domain/checkliste';
+import { ChecklisteItem, ChecklisteItemClickedPayload, Modus } from '../shared/domain/checkliste';
 import { Router } from '@angular/router';
 
 @Injectable({ providedIn: 'root' })
@@ -62,12 +61,20 @@ export class ListenFacade {
 
     }
 
-    public handleChecklisteItemClicked(checklisteName: string, modus: Modus, payload: ChecklistenItemClickedPayload): void {
+    public handleChecklisteItemClicked(checklisteName: string, modus: Modus, payload: ChecklisteItemClickedPayload): void {
 
         switch(modus) {
             case 'CONFIGURATION': this.store.dispatch(ListenActions.checklisteItemClickedOnConfiguration({checklisteName: checklisteName, clickPayload: payload})); break;
             case 'EXECUTION': this.store.dispatch(ListenActions.checklisteItemClickedOnExecution({checklisteName: checklisteName, clickPayload: payload})); break;
         }
+    }
+
+    public addItem(checklisteName: string, checklisteItem: ChecklisteItem): void {
+        this.store.dispatch(ListenActions.checklisteItemAdded({checklisteName: checklisteName, checklisteItem: checklisteItem}));
+    }
+
+    public changeItem(checklisteName: string, checklisteItem: ChecklisteItem): void {
+        this.store.dispatch(ListenActions.checklisteItemChanged({checklisteName: checklisteName, checklisteItem: checklisteItem}));
     }
 
     public deleteCheckliste(checkliste: ChecklisteDaten): void {

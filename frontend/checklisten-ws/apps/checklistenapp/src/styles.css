@@ -73,6 +73,18 @@ td, th {
 .item-btn {
   cursor: pointer;
 }
+
+.btn-trash {
+  font-size: 2rem;
+  text-align: right;
+  cursor: pointer;
+}
+
+.btn-edit {
+  font-size: 2rem;
+  text-align: left;
+  cursor: pointer;
+}
   
 .dialog {
   border: 1px solid gray;
