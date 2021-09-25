@@ -1,10 +1,11 @@
 import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { ModalDismissReasons, NgbModal, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 import { environment } from 'apps/checklistenapp/src/environments/environment';
-import { Subscription } from 'rxjs';
+import { Observable, of, Subscription } from 'rxjs';
 import { LogService } from '../../../infrastructure/logging/log.service';
 import { ChecklisteItem, ChecklisteItemClickedPayload } from '../../../shared/domain/checkliste';
 import { ListenFacade } from '../../listen.facade';
+import { Checkliste, ChecklisteAppearence, initialCheckliste } from '../../listen.model';
 
 @Component({
   selector: 'chl-configure',
@@ -13,11 +14,15 @@ import { ListenFacade } from '../../listen.facade';
 })
 export class ConfigureChecklisteComponent implements OnInit, OnDestroy {
 
-  public unsavedChanges: boolean = false;
+  public unsavedChanges!: boolean;
 
   // das ! verhindert, dass eine sofortige Initialisierung verlangt wird, denn die ist hier nicht sinnvoll.
   @ViewChild('dialogEditItem')
 	dialogEditItem!: TemplateRef<HTMLElement>;
+
+  // das ! verhindert, dass eine sofortige Initialisierung verlangt wird, denn die ist hier nicht sinnvoll.
+  @ViewChild('dialogUnsavedChanges')
+	dialogUnsavedChanges!: TemplateRef<HTMLElement>;
 
   checklisteName: string = '';
 
@@ -30,6 +35,8 @@ export class ConfigureChecklisteComponent implements OnInit, OnDestroy {
   itemKommentar: string = '';
   itemOptional: boolean = false;
 
+  private checkliste!: Checkliste;
+
   private modalOptions:NgbModalOptions = {
     backdrop:'static',
     centered:true,
@@ -37,6 +44,7 @@ export class ConfigureChecklisteComponent implements OnInit, OnDestroy {
   };
 
   private checklisteSubscription: Subscription = new Subscription();
+  private unsavedChangesSubsciption: Subscription = new Subscription();
 
   constructor(public listenFacade: ListenFacade
     , private modalService: NgbModal
@@ -48,15 +56,17 @@ export class ConfigureChecklisteComponent implements OnInit, OnDestroy {
       liste => {
         if (liste) {
           this.checklisteName = liste.checkisteDaten.name;
+          this.checkliste = {...liste};
         }
       }
     );
+
+    this.unsavedChangesSubsciption = this.listenFacade.unsavedChanges$.subscribe ( changes => this.unsavedChanges = changes);
   }
 
   ngOnDestroy(): void {
-    if (this.checklisteSubscription) {
-      this.checklisteSubscription.unsubscribe();
-    }
+    this.checklisteSubscription.unsubscribe();
+    this.unsavedChangesSubsciption.unsubscribe();
   }
 
   formDisabled(): boolean {
@@ -69,7 +79,7 @@ export class ConfigureChecklisteComponent implements OnInit, OnDestroy {
     this.logger.debug(JSON.stringify(payload));
 
     switch(payload.action) {
-      case 'TOGGLE': this.unsavedChanges = true; this.listenFacade.handleChecklisteItemClicked(this.checklisteName.trim(), 'CONFIGURATION', payload); break;
+      case 'TOGGLE': this.listenFacade.handleChecklisteItemClicked(this.checklisteName.trim(), 'CONFIGURATION', payload); break;
       case 'EDIT': this.openDialogEditItem({...payload.checklisteItem}); break;
     }    
   }
@@ -80,10 +90,16 @@ export class ConfigureChecklisteComponent implements OnInit, OnDestroy {
     this.openDialogNewItem();
   }
 
-  handleUnsavedChanges(): boolean {
-    this.logger.debug('Jetzt Warndialog ungespeicherte Änderungen anzeigen.');
-    this.unsavedChanges = false;
-    return this.unsavedChanges;
+  handleUnsavedChanges(): void {
+    
+    this.modalService.open(this.dialogUnsavedChanges, this.modalOptions).result.then((result) => {
+
+      if (result === 'SAVE') {
+        this.saveCheckliste();
+      }
+
+      this.discardChanges();
+    });
   }
 
   openDialogNewItem(): void {
@@ -96,8 +112,7 @@ export class ConfigureChecklisteComponent implements OnInit, OnDestroy {
       this.dialogTitle = '';
 
 			if (result === 'OK') {
-        this.unsavedChanges = true;
-				this.saveChanges(true);
+        this.saveItem(true);
 			}
 
       if (result === 'NO') {
@@ -118,8 +133,7 @@ export class ConfigureChecklisteComponent implements OnInit, OnDestroy {
 
       this.dialogTitle = '';
 			if (result === 'OK') {
-        this.unsavedChanges = true;
-				this.saveChanges(false);
+        this.saveItem(false);
 			} 
 
       if (result === 'NO') {
@@ -128,7 +142,19 @@ export class ConfigureChecklisteComponent implements OnInit, OnDestroy {
 		});
   }
 
-  private saveChanges(neuesItem: boolean): void {
+  private saveCheckliste(): void {
+
+    this.listenFacade.saveCheckliste(this.checkliste);
+
+  }
+
+  private discardChanges(): void {
+
+    this.listenFacade.discardChanges();
+
+  }
+
+  private saveItem(neuesItem: boolean): void {
 
     // TODO: hier trim() nicht vergessen!
     const neues: ChecklisteItem = {

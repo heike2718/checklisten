@@ -1,5 +1,5 @@
-import { ChecklisteItem, Checklistentyp, Modus } from "../shared/domain/checkliste";
-import { getItemsOben, getItemsUnten } from "../shared/utils";
+import { ChecklisteItem, Checklistentyp, Filterkriterium, Modus } from "../shared/domain/checkliste";
+import { filterChecklisteItems, getItemsOben, getItemsUnten } from "../shared/utils";
 import { ListenState } from "./+state/listen.reducer";
 
 
@@ -28,6 +28,13 @@ export interface Checkliste {
 export interface ChecklisteWithID {
     readonly kuerzel: string;
     readonly checkliste: Checkliste;
+};
+
+export interface SaveChecklisteContext {
+    readonly checklisteDaten: ChecklisteDaten,
+    readonly modus: Modus,
+    readonly closeEditor: boolean,
+    readonly neueCheckliste: boolean
 };
 
 
@@ -127,7 +134,7 @@ export class ChecklistenMap {
 
 };
 
-export class ChecklisteItemMerger {
+export class ChecklisteMerger {
 
     public mergeChecklisteItems(state: ListenState, checklisteItem: ChecklisteItem, checklisteName: string, add: boolean): ListenState {
 
@@ -161,12 +168,34 @@ export class ChecklisteItemMerger {
             const appearence: ChecklisteAppearence = {...state.selectedCheckliste.appearence, itemsOben: itemsOben, itemsUnten:itemsUnten, anzahlItems: itemsUnten.length};
             const neueCheckliste: Checkliste = {checkisteDaten: changedChecklisteDaten, appearence: appearence};
             const checklistenMap: ChecklisteWithID[] = new ChecklistenMap(state.checklistenMap).merge(neueCheckliste);
-            return {...state, selectedCheckliste: neueCheckliste, checklistenMap: checklistenMap};
+            return {...state, selectedCheckliste: neueCheckliste, checklistenMap: checklistenMap, unsavedChanges: true};
  
         }
 
         return {...state};
     }
 
+    public mapToCheckliste(checklisteDaten: ChecklisteDaten): Checkliste {
+
+        let color = '';
+            switch(checklisteDaten.typ) {
+                case 'EINKAUFSLISTE': color = 'bisque'; break;
+                case 'PACKLISTE': color = 'lavender'; break;
+                default: color = '#c6ffb3';
+            }
+
+            const kriterium: Filterkriterium = {
+                modus: 'EXECUTION',
+                position: 'VORSCHLAG'
+            };
+    
+            const anzahlItems = filterChecklisteItems(checklisteDaten.items, kriterium).length;
+            const checklisteAppearence: ChecklisteAppearence = {...initialChecklisteAppearence, modus: 'SCHROEDINGER', anzahlItems: anzahlItems};
+
+            return {
+                checkisteDaten: checklisteDaten,
+                appearence: checklisteAppearence
+            };
+    }
 }
 

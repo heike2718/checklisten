@@ -1,6 +1,6 @@
 import { createAction, props } from '@ngrx/store';
 import { ChecklisteItem, ChecklisteItemClickedPayload, Modus } from '../../shared/domain/checkliste';
-import { Checkliste, ChecklisteDaten } from '../listen.model';
+import { Checkliste, ChecklisteDaten, SaveChecklisteContext } from '../listen.model';
 
 
 export const startLoading = createAction(
@@ -39,6 +39,19 @@ export const checklisteItemAdded = createAction(
 export const checklisteItemChanged = createAction(
     '[ListenFacade] changeItem',
     props<{checklisteName: string, checklisteItem: ChecklisteItem}>()
+);
+
+export const checklisteSaved = createAction(
+    '[ListenFacade] saveCheckliste success',
+    props<{saveChecklisteContext: SaveChecklisteContext}>()
+);
+
+export const errorOnSaveCheckliste = createAction(
+    '[ListenFacade] saveCheckliste error'
+);
+
+export const changesDiscarded = createAction(
+    '[ListenFacade] discardChanges'
 );
 
 export const resetModule = createAction(

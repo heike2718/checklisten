@@ -67,6 +67,19 @@
     </div>
 </ng-template>
 
+<ng-template #dialogUnsavedChanges let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Du hast noch nicht gespeichert</h4>
+    </div>
+    <div class="modal-body">
+        <p>Die Maske enthält ungespeicherte Änderungen. Du kannst jetzt speichern oder Änderungen verwerfen.</p>        
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" (click)="modal.close('SAVE')">speichern</button>
+        <button type="button" class="btn btn-outline-secondary" (click)="modal.close('DISCARD')">verwerfen</button>
+    </div>
+</ng-template>
+
 <ng-template #loading>
 	Lade Checkliste... <i class="fa fa-spinner fa-2x fa-spin" aria-hidden="true"></i>
 </ng-template>

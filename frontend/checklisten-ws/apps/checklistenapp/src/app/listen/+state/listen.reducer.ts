@@ -2,23 +2,28 @@ import { createReducer, Action, on } from '@ngrx/store';
 import { ChecklisteItem, ChecklisteItemClickedPayload, Filterkriterium, initialChecklisteItem, Modus } from '../../shared/domain/checkliste';
 import { SignUpPayload } from '../../shared/domain/signup-payload';
 import { filterChecklisteItems, getItemsOben, getItemsUnten } from '../../shared/utils';
-import { Checkliste, ChecklisteAppearence, ChecklisteItemMerger, ChecklistenMap, ChecklisteWithID, initialCheckliste, initialChecklisteAppearence } from '../listen.model';
+import { Checkliste, ChecklisteAppearence, ChecklisteMerger, ChecklistenMap, ChecklisteWithID, initialCheckliste, initialChecklisteAppearence } from '../listen.model';
 import * as ListenActions from './listen.actions';
+import { selectedCheckliste } from './listen.selectors';
 
 export const listenFeatureKey = 'checklistenapp-listen';
 
 export interface ListenState {
     readonly loading: boolean;
     readonly checklistenLoaded: boolean;
+    readonly unsavedChanges: boolean;
     readonly checklistenMap: ChecklisteWithID[];
-    readonly selectedCheckliste: Checkliste | undefined;    
+    readonly selectedCheckliste: Checkliste | undefined;
+    readonly checklisteCache: Checkliste | undefined;  
 };
 
 const initialListenState: ListenState = {
     loading: false,
     checklistenLoaded: false,
+    unsavedChanges: false,
     checklistenMap: [],
-    selectedCheckliste: undefined
+    selectedCheckliste: undefined,
+    checklisteCache: undefined
 };
 
 const listenReducer = createReducer(initialListenState, 
@@ -32,29 +37,8 @@ const listenReducer = createReducer(initialListenState,
         const map: ChecklisteWithID[] = [];
         action.checklisten.forEach(item => {
 
-            let color = '';
-            switch(item.typ) {
-                case 'EINKAUFSLISTE': color = 'bisque'; break;
-                case 'PACKLISTE': color = 'lavender'; break;
-                default: color = '#c6ffb3';
-            }
-
-            const kriterium: Filterkriterium = {
-                modus: 'EXECUTION',
-                position: 'VORSCHLAG'
-            };
-    
-            const anzahlItems = filterChecklisteItems(item.items, kriterium).length;
-            const checklisteAppearence: ChecklisteAppearence = {...initialChecklisteAppearence, modus: 'SCHROEDINGER', anzahlItems: anzahlItems};
-
-            const thCheckliste: Checkliste = {
-                checkisteDaten: item,
-                appearence: checklisteAppearence
-            };
-
-            map.push({kuerzel: item.kuerzel, checkliste: thCheckliste})
-
-
+            const thCheckliste = new ChecklisteMerger().mapToCheckliste(item);
+            map.push({kuerzel: item.kuerzel, checkliste: thCheckliste});
         });
         return {...state, loading: false, checklistenMap: map, checklistenLoaded: true};
     }),
@@ -69,7 +53,7 @@ const listenReducer = createReducer(initialListenState,
 
         liste = {...action.checkliste, appearence: {...action.checkliste.appearence, modus: action.modus, itemsOben: itemsOben, itemsUnten: itemsUnten}};
         const checklistenMap: ChecklisteWithID[] = new ChecklistenMap(state.checklistenMap).merge(liste);
-        return {...state, selectedCheckliste: liste, checklistenMap: checklistenMap};
+        return {...state, selectedCheckliste: liste, checklisteCache: {...liste}, checklistenMap: checklistenMap};
     }),
 
     on(ListenActions.checklisteItemClickedOnConfiguration, (state, action) => {
@@ -84,18 +68,49 @@ const listenReducer = createReducer(initialListenState,
                case 'AUSGEWAEHLT': changedItem = {...payload.checklisteItem, markiert: false}; break;
            }
 
-           return new ChecklisteItemMerger().mergeChecklisteItems(state, changedItem, action.checklisteName, false);
+           return new ChecklisteMerger().mergeChecklisteItems(state, changedItem, action.checklisteName, false);
         } 
         
         return {...state};
     }),
 
+    on(ListenActions.checklisteSaved, (state, action) => {
+
+        let checkliste = new ChecklisteMerger().mapToCheckliste(action.saveChecklisteContext.checklisteDaten);
+        if (!action.saveChecklisteContext.closeEditor) {
+            checkliste = {...checkliste, appearence: {...checkliste.appearence, modus: action.saveChecklisteContext.modus}};
+        }    
+
+        const neueMap: ChecklisteWithID[] = new ChecklistenMap(state.checklistenMap).merge(checkliste); 
+        
+        if (action.saveChecklisteContext.closeEditor) {
+            return {...state, checklisteCache: {...checkliste}, unsavedChanges: false, loading: false, checklistenMap: neueMap, selectedCheckliste: undefined};
+        }
+
+        return {...state, checklisteCache: {...checkliste}, unsavedChanges: false, loading: false, checklistenMap: neueMap, selectedCheckliste: checkliste};
+
+    }),
+
+    on(ListenActions.errorOnSaveCheckliste, (state, _action) => {
+
+        // TODO
+
+        return {...state, loading: false};
+    }),
+
+    on(ListenActions.changesDiscarded, (state, _action) => {
+
+        // TODO
+
+        return {...state, loading: false};
+    }),
+
     on(ListenActions.checklisteItemAdded, (state, action) => {
-        return new ChecklisteItemMerger().mergeChecklisteItems(state, action.checklisteItem, action.checklisteName, true);
+        return new ChecklisteMerger().mergeChecklisteItems(state, action.checklisteItem, action.checklisteName, true);
     }),
 
     on(ListenActions.checklisteItemChanged, (state, action) => {
-        return new ChecklisteItemMerger().mergeChecklisteItems(state, action.checklisteItem, action.checklisteName, false);
+        return new ChecklisteMerger().mergeChecklisteItems(state, action.checklisteItem, action.checklisteName, false);
     }),
 
     on(ListenActions.loadChecklistenFailed, (state, _action) => {

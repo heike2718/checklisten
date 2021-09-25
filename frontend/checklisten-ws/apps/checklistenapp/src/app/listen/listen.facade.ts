@@ -4,7 +4,7 @@ import { AppState } from '../reducers';
 import { ListenService } from './listen.service';
 import * as ListenActions from './+state/listen.actions';
 import * as ListenSelectors from './+state/listen.selectors';
-import { Checkliste, ChecklisteDaten, ChecklistenMap } from './listen.model';
+import { Checkliste, ChecklisteDaten } from './listen.model';
 import { GlobalErrorHandlerService } from '../infrastructure/global-error-handler.service';
 import { ChecklisteItem, ChecklisteItemClickedPayload, Modus } from '../shared/domain/checkliste';
 import { Router } from '@angular/router';
@@ -14,6 +14,7 @@ export class ListenFacade {
 
     public checklisten$ = this.store.select(ListenSelectors.checklisten);
     public selectedCheckliste$ = this.store.select(ListenSelectors.selectedCheckliste);
+    public unsavedChanges$ = this.store.select(ListenSelectors.unsavedChanges);
 
     private checklistenLoaded: boolean = false;
 
@@ -77,7 +78,18 @@ export class ListenFacade {
         this.store.dispatch(ListenActions.checklisteItemChanged({checklisteName: checklisteName, checklisteItem: checklisteItem}));
     }
 
+    public saveCheckliste(checkliste:Checkliste): void {
+        // TODO
+        
+    }
+
+    public discardChanges(): void {
+       this.store.dispatch(ListenActions.changesDiscarded());
+    }
+
     public deleteCheckliste(checkliste: ChecklisteDaten): void {
+
+        // TODO
 
     }
 
