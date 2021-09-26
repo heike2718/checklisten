@@ -15,7 +15,6 @@ export class ChecklistenListComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.listenFacade.loadChecklisten();
+    this.listenFacade.loadChecklisten();    
   }
-
 }

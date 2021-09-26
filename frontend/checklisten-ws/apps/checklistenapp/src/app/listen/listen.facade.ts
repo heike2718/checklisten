@@ -4,7 +4,7 @@ import { AppState } from '../reducers';
 import { ListenService } from './listen.service';
 import * as ListenActions from './+state/listen.actions';
 import * as ListenSelectors from './+state/listen.selectors';
-import { Checkliste, ChecklisteDaten } from './listen.model';
+import { Checkliste, ChecklisteDaten, SaveChecklisteContext } from './listen.model';
 import { GlobalErrorHandlerService } from '../infrastructure/global-error-handler.service';
 import { ChecklisteItem, ChecklisteItemClickedPayload, Modus } from '../shared/domain/checkliste';
 import { Router } from '@angular/router';
@@ -15,6 +15,7 @@ export class ListenFacade {
     public checklisten$ = this.store.select(ListenSelectors.checklisten);
     public selectedCheckliste$ = this.store.select(ListenSelectors.selectedCheckliste);
     public unsavedChanges$ = this.store.select(ListenSelectors.unsavedChanges);
+    public cachedChecklistenname$ = this.store.select(ListenSelectors.cachedChecklistenname);
 
     private checklistenLoaded: boolean = false;
 
@@ -27,8 +28,7 @@ export class ListenFacade {
             this.store.select(ListenSelectors.checklistenLoaded).subscribe(
                 loaded => this.checklistenLoaded = loaded
             );
-        }
-
+    }
     
     public loadChecklisten(): void {
 
@@ -46,6 +46,7 @@ export class ListenFacade {
 				})
             );
         }
+        this.deselectCheckliste();
     }
 
     public startConfigureCheckliste(checkliste: Checkliste): void {
@@ -78,9 +79,9 @@ export class ListenFacade {
         this.store.dispatch(ListenActions.checklisteItemChanged({checklisteName: checklisteName, checklisteItem: checklisteItem}));
     }
 
-    public saveCheckliste(checkliste:Checkliste): void {
+    public saveCheckliste(context: SaveChecklisteContext): void {
         // TODO
-        
+        this.store.dispatch(ListenActions.checklisteSaved({saveChecklisteContext: context}));        
     }
 
     public discardChanges(): void {
@@ -91,6 +92,17 @@ export class ListenFacade {
 
         // TODO
 
+    }
+
+    public reset(): void {
+        this.store.dispatch(ListenActions.resetModule());
+    }
+
+// //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// PRIVATE MEMBERS
+
+    private deselectCheckliste(): void {
+        this.store.dispatch(ListenActions.deselectCheckliste());
     }
 
 

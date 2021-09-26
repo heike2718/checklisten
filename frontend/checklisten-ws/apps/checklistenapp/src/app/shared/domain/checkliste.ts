@@ -43,4 +43,41 @@ export const initialChecklisteItem: ChecklisteItem = {
 	kommentar: ''
 };
 
+export function itemsEquals(item1: ChecklisteItem, item2: ChecklisteItem): boolean {
+
+	if (!item1 && !item2) {
+		return true;
+	}
+
+	if (!item1 && item2) {
+		return false;
+	}
+
+	if (item1 && !item2) {
+		return false;
+	}
+
+	if (item1.name !== item2.name) {
+		return false;	
+	}
+
+	if (item1.kommentar !== item2.kommentar) {
+		return false;
+	}
+
+	if (item1.erledigt !== item2.erledigt) {
+		return false;
+	}
+
+	if (item1.markiert !== item2.markiert) {
+		return false;
+	}
+
+	if (item1.optional !== item2.optional) {
+		return false;
+	}
+	return true;
+
+}
+
 

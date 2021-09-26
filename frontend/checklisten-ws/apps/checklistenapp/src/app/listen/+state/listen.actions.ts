@@ -21,6 +21,10 @@ export const selectCheckliste = createAction(
     props<{checkliste: Checkliste, modus: Modus}>()
 );
 
+export const deselectCheckliste = createAction(
+    '[ListenFacade] deselectCheckliste'
+);
+
 export const checklisteItemClickedOnConfiguration = createAction(
     '[ListenFacade] handleChecklisteItemClicked modus CONFIGURATION',
     props<{checklisteName: string, clickPayload: ChecklisteItemClickedPayload}>()

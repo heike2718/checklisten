@@ -31,9 +31,9 @@ export interface ChecklisteWithID {
 };
 
 export interface SaveChecklisteContext {
-    readonly checklisteDaten: ChecklisteDaten,
+    readonly checkliste: Checkliste,
     readonly modus: Modus,
-    readonly closeEditor: boolean,
+    readonly deselectCheckliste: boolean,
     readonly neueCheckliste: boolean
 };
 
@@ -168,7 +168,7 @@ export class ChecklisteMerger {
             const appearence: ChecklisteAppearence = {...state.selectedCheckliste.appearence, itemsOben: itemsOben, itemsUnten:itemsUnten, anzahlItems: itemsUnten.length};
             const neueCheckliste: Checkliste = {checkisteDaten: changedChecklisteDaten, appearence: appearence};
             const checklistenMap: ChecklisteWithID[] = new ChecklistenMap(state.checklistenMap).merge(neueCheckliste);
-            return {...state, selectedCheckliste: neueCheckliste, checklistenMap: checklistenMap, unsavedChanges: true};
+            return {...state, selectedCheckliste: neueCheckliste, checklistenMap: checklistenMap};
  
         }
 

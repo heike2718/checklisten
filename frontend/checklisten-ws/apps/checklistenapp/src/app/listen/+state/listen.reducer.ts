@@ -11,7 +11,7 @@ export const listenFeatureKey = 'checklistenapp-listen';
 export interface ListenState {
     readonly loading: boolean;
     readonly checklistenLoaded: boolean;
-    readonly unsavedChanges: boolean;
+    // readonly unsavedChanges: boolean;
     readonly checklistenMap: ChecklisteWithID[];
     readonly selectedCheckliste: Checkliste | undefined;
     readonly checklisteCache: Checkliste | undefined;  
@@ -20,7 +20,7 @@ export interface ListenState {
 const initialListenState: ListenState = {
     loading: false,
     checklistenLoaded: false,
-    unsavedChanges: false,
+    // unsavedChanges: false,
     checklistenMap: [],
     selectedCheckliste: undefined,
     checklisteCache: undefined
@@ -56,6 +56,11 @@ const listenReducer = createReducer(initialListenState,
         return {...state, selectedCheckliste: liste, checklisteCache: {...liste}, checklistenMap: checklistenMap};
     }),
 
+    on(ListenActions.deselectCheckliste, (state, _action) => {
+
+       return {...state, selectedCheckliste: undefined, checklisteCache: undefined};
+    }),
+
     on(ListenActions.checklisteItemClickedOnConfiguration, (state, action) => {
 
         if (state.selectedCheckliste) {
@@ -76,18 +81,18 @@ const listenReducer = createReducer(initialListenState,
 
     on(ListenActions.checklisteSaved, (state, action) => {
 
-        let checkliste = new ChecklisteMerger().mapToCheckliste(action.saveChecklisteContext.checklisteDaten);
-        if (!action.saveChecklisteContext.closeEditor) {
+        let checkliste = new ChecklisteMerger().mapToCheckliste(action.saveChecklisteContext.checkliste.checkisteDaten);
+        if (!action.saveChecklisteContext.deselectCheckliste) {
             checkliste = {...checkliste, appearence: {...checkliste.appearence, modus: action.saveChecklisteContext.modus}};
         }    
 
         const neueMap: ChecklisteWithID[] = new ChecklistenMap(state.checklistenMap).merge(checkliste); 
         
-        if (action.saveChecklisteContext.closeEditor) {
-            return {...state, checklisteCache: {...checkliste}, unsavedChanges: false, loading: false, checklistenMap: neueMap, selectedCheckliste: undefined};
+        if (action.saveChecklisteContext.deselectCheckliste) {
+            return {...state, checklisteCache: undefined, loading: false, checklistenMap: neueMap, selectedCheckliste: undefined};
         }
 
-        return {...state, checklisteCache: {...checkliste}, unsavedChanges: false, loading: false, checklistenMap: neueMap, selectedCheckliste: checkliste};
+        return {...state, checklisteCache: {...checkliste}, loading: false, checklistenMap: neueMap, selectedCheckliste: checkliste};
 
     }),
 
@@ -102,7 +107,7 @@ const listenReducer = createReducer(initialListenState,
 
         // TODO
 
-        return {...state, loading: false};
+        return {...state};
     }),
 
     on(ListenActions.checklisteItemAdded, (state, action) => {
