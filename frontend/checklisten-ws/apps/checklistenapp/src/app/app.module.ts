@@ -21,6 +21,7 @@ import { CustomRouterStateSerializer } from './shared/utils';
 import { LandingComponent } from './landing/landing.component';
 import { ListenModule } from './listen/listen.module';
 import { NotAuthorizedComponent } from './not-authorized/not-authorized.component';
+import { MessagesComponent } from './shared/messages/message.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { NotAuthorizedComponent } from './not-authorized/not-authorized.componen
     JokeComponent,
     NavbarComponent,
     LandingComponent,
-    NotAuthorizedComponent
+    NotAuthorizedComponent,
+    MessagesComponent
   ],
   imports: [
     BrowserModule,

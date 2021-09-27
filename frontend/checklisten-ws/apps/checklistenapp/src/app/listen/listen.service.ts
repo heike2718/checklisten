@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { ResponsePayload } from '../shared/messages/messages.model';
@@ -19,6 +19,14 @@ export class ListenService {
         return this.http.get(url).pipe(
             map(body => body as ResponsePayload),
             map(rp => rp.data)
+        );
+    }
+
+    public saveCheckliste(checkliste: ChecklisteDaten): Observable<ResponsePayload> {
+
+        const url = environment.apiUrl + '/checklisten/checkliste/' + checkliste.kuerzel;
+        return this.http.put(url, checkliste).pipe(
+            map(res => res as ResponsePayload)
         );
     }
 }

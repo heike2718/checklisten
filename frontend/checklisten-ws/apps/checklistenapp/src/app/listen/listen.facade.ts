@@ -8,6 +8,7 @@ import { Checkliste, ChecklisteDaten, SaveChecklisteContext } from './listen.mod
 import { GlobalErrorHandlerService } from '../infrastructure/global-error-handler.service';
 import { ChecklisteItem, ChecklisteItemClickedPayload, Modus } from '../shared/domain/checkliste';
 import { Router } from '@angular/router';
+import { MessageService } from '../shared/messages/message.service';
 
 @Injectable({ providedIn: 'root' })
 export class ListenFacade {
@@ -22,6 +23,7 @@ export class ListenFacade {
     constructor(private listenService: ListenService
         , private store: Store<AppState>
         , private router: Router
+        , private messageService: MessageService
         , private errorHandler: GlobalErrorHandlerService) {
 
 
@@ -80,8 +82,26 @@ export class ListenFacade {
     }
 
     public saveCheckliste(context: SaveChecklisteContext): void {
-        // TODO
-        this.store.dispatch(ListenActions.checklisteSaved({saveChecklisteContext: context}));        
+
+        this.store.dispatch(ListenActions.startLoading());
+
+        this.listenService.saveCheckliste(context.checkliste.checkisteDaten).subscribe(
+
+            responsePayload => {
+
+                const data: ChecklisteDaten = responsePayload.data;
+                const savedCheckliste: Checkliste = {...context.checkliste, checkisteDaten: data};
+                const neuerSaveContext: SaveChecklisteContext = {...context, checkliste: savedCheckliste};
+                this.store.dispatch(ListenActions.checklisteSaved({saveChecklisteContext: neuerSaveContext}));
+
+                this.messageService.showMessage(responsePayload.message);                
+            },
+			(error => {
+				this.store.dispatch(ListenActions.errorOnSaveCheckliste());
+				this.errorHandler.handleError(error);
+			})
+        );
+                
     }
 
     public discardChanges(): void {

@@ -28,14 +28,31 @@
           </div>
     </div>
 
-    <h5 class="mt-2">*vorgemerkt ({{checkliste.appearence.itemsUnten.length}}):</h5>
+    <h5 class="mt-2">vorgemerkt ({{checkliste.appearence.itemsUnten.length}}):</h5>
 
     <div class="row">
         <div *ngFor="let item of checkliste.appearence.itemsUnten" class="col-sm-12 col-md-4 col-lg-3">
             <chl-configurationitem-details [backgroundColor]="checkliste.appearence.color" [checklisteItem]="item" [position]="'AUSGEWAEHLT'"
             (itemClicked)="onItemClicked($event)"></chl-configurationitem-details>
         </div>
+    </div>   
+
+    <div class="d-none d-md-block">
+        <div class="d-flex flex-row hidden-xs" role="group">
+            <button class="btn btn-primary w-100 m-1" [disabled]="saveDisabled()" (click)="submit()" title="Änderungen speichern">speichern</button>
+            <button class="btn btn-primary w-100 m-1" [disabled]="undoDisabled()" (click)="undo()" title="Änderungen verwerfen">verwerfen</button>
+            <button class="btn btn-primary w-100 m-1" (click)="gotoListen()" title="zurück zu den Listen">alle Listen</button>
+        </div>
     </div>
+
+    <div class="d-md-none d-lg-none d-xl-none">
+        <div class="btn-group d-inline" role="group">
+            <button class="btn btn-primary w-100 m-1" [disabled]="saveDisabled()" (click)="submit()" title="Änderungen speichern">speichern</button>
+            <button class="btn btn-primary w-100 m-1" [disabled]="undoDisabled()" (click)="undo()" title="Änderungen verwerfen">verwerfen</button>
+            <button class="btn btn-primary w-100 m-1" (click)="gotoListen()" title="zurück zu den Listen">alle Listen</button>
+        </div>
+    </div>
+
 </div>
 
 <ng-template #dialogEditItem let-modal>

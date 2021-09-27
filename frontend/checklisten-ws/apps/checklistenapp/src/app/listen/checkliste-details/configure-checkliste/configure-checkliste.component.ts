@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import { ModalDismissReasons, NgbModal, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 import { environment } from 'apps/checklistenapp/src/environments/environment';
 import { Observable, of, Subscription } from 'rxjs';
@@ -53,10 +54,14 @@ export class ConfigureChecklisteComponent implements OnInit, OnDestroy {
   private cachedNameSubscription: Subscription = new Subscription();
 
   constructor(public listenFacade: ListenFacade
+    , private router: Router
     , private modalService: NgbModal
     , private logger: LogService) { }
 
   ngOnInit(): void {
+
+    this.cancelClicked = false;
+    this.saveClicked = false;
 
     this.checklisteSubscription = this.listenFacade.selectedCheckliste$.subscribe(
       liste => {
@@ -137,6 +142,47 @@ export class ConfigureChecklisteComponent implements OnInit, OnDestroy {
 		});
   }  
 
+  submit(): void {
+    this.saveClicked = true;    
+    const context: SaveChecklisteContext = {
+      checkliste: {...this.checkliste, checkisteDaten: {...this.checkliste.checkisteDaten, name: this.checklisteName}},
+      modus: 'CONFIGURATION',
+      neueCheckliste: this.checkliste.checkisteDaten.kuerzel === 'neu'
+    }    
+    this.listenFacade.saveCheckliste(context);
+    this.saveClicked = false;
+  }
+
+  undo(): void {
+    this.cancelClicked = true;
+    this.listenFacade.discardChanges();
+    this.cancelClicked = false;
+  }
+
+  gotoListen(): void {
+    this.router.navigateByUrl('/listen');
+  }
+
+  saveDisabled(): boolean {
+
+    if (this.saveClicked) {
+      return true;
+    }
+
+    if (this.checklisteName.trim().length === 0) {
+      return true;
+    }
+
+    return false;
+  }
+
+  undoDisabled(): boolean {
+    return !this.unsavedChanges;
+  }
+
+// ///////////////////////////////////////////////////////////////////////////////////////
+// private members
+
   private openDialogEditItem(checklisteItem: ChecklisteItem): void {
 
     this.dialogTitle = 'Teil ändern';
@@ -156,23 +202,6 @@ export class ConfigureChecklisteComponent implements OnInit, OnDestroy {
 				this.resetDialogModel();
 			}
 		});
-  }
-
-  private saveCheckliste(closeComponent: boolean): void {
-    
-    const context: SaveChecklisteContext = {
-      checkliste: this.checkliste,
-      deselectCheckliste: closeComponent,
-      modus: 'CONFIGURATION',
-      neueCheckliste: this.checkliste.checkisteDaten.kuerzel === 'neu'
-    }
-
-    this.listenFacade.saveCheckliste(context);
-
-  }
-
-  discardChanges(): void {
-    this.listenFacade.discardChanges();
   }
 
   private saveItem(neuesItem: boolean): void {

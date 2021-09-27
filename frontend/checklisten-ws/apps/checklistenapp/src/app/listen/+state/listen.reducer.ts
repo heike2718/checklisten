@@ -53,7 +53,7 @@ const listenReducer = createReducer(initialListenState,
 
         liste = {...action.checkliste, appearence: {...action.checkliste.appearence, modus: action.modus, itemsOben: itemsOben, itemsUnten: itemsUnten}};
         const checklistenMap: ChecklisteWithID[] = new ChecklistenMap(state.checklistenMap).merge(liste);
-        return {...state, selectedCheckliste: liste, checklisteCache: {...liste}, checklistenMap: checklistenMap};
+        return {...state, selectedCheckliste: liste, checklisteCache: {...liste}, checklistenMap: checklistenMap, changesDiscarded: false};
     }),
 
     on(ListenActions.deselectCheckliste, (state, _action) => {
@@ -86,16 +86,12 @@ const listenReducer = createReducer(initialListenState,
     on(ListenActions.checklisteSaved, (state, action) => {
 
         let checkliste = new ChecklisteMerger().mapToCheckliste(action.saveChecklisteContext.checkliste.checkisteDaten);
-        if (!action.saveChecklisteContext.deselectCheckliste) {
-            checkliste = {...checkliste, appearence: {...checkliste.appearence, modus: action.saveChecklisteContext.modus}};
-        }    
+        const modus = action.saveChecklisteContext.modus;
+        const itemsOben = [...getItemsOben(checkliste.checkisteDaten.items, modus)];
+        const itemsUnten = [...getItemsUnten(checkliste.checkisteDaten.items, modus)];
+        checkliste = {...checkliste, appearence: {...checkliste.appearence, modus: modus, itemsOben: itemsOben, itemsUnten: itemsUnten}};  
 
-        const neueMap: ChecklisteWithID[] = new ChecklistenMap(state.checklistenMap).merge(checkliste); 
-        
-        if (action.saveChecklisteContext.deselectCheckliste) {
-            return {...state, checklisteCache: undefined, loading: false, checklistenMap: neueMap, selectedCheckliste: undefined};
-        }
-
+        const neueMap: ChecklisteWithID[] = new ChecklistenMap(state.checklistenMap).merge(checkliste);
         return {...state, checklisteCache: {...checkliste}, loading: false, checklistenMap: neueMap, selectedCheckliste: checkliste};
 
     }),
@@ -107,8 +103,8 @@ const listenReducer = createReducer(initialListenState,
         return {...state, loading: false};
     }),
 
-    on(ListenActions.changesDiscarded, (state, _action) => {        
-        return {...state, changesDiscarded: true};
+    on(ListenActions.changesDiscarded, (state, _action) => { 
+        return new ChecklisteMerger().undoChanges(state);
     }),
 
     on(ListenActions.checklisteItemAdded, (state, action) => {

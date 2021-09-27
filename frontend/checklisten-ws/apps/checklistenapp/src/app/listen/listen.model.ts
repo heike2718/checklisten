@@ -33,7 +33,6 @@ export interface ChecklisteWithID {
 export interface SaveChecklisteContext {
     readonly checkliste: Checkliste,
     readonly modus: Modus,
-    readonly deselectCheckliste: boolean,
     readonly neueCheckliste: boolean
 };
 
@@ -203,7 +202,7 @@ export class ChecklisteMerger {
         if (state.selectedCheckliste && state.checklisteCache) {
             
             const neueMap = new ChecklistenMap(state.checklistenMap).merge(state.checklisteCache);
-            return {...state, checklistenMap: neueMap, changesDiscarded: false};            
+            return {...state, checklistenMap: neueMap, changesDiscarded: false, selectedCheckliste: {...state.checklisteCache}};            
         }
 
         return {...state, changesDiscarded: false};
