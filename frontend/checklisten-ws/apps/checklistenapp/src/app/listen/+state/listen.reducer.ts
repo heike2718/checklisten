@@ -11,7 +11,7 @@ export const listenFeatureKey = 'checklistenapp-listen';
 export interface ListenState {
     readonly loading: boolean;
     readonly checklistenLoaded: boolean;
-    // readonly unsavedChanges: boolean;
+    readonly changesDiscarded: boolean;
     readonly checklistenMap: ChecklisteWithID[];
     readonly selectedCheckliste: Checkliste | undefined;
     readonly checklisteCache: Checkliste | undefined;  
@@ -20,7 +20,7 @@ export interface ListenState {
 const initialListenState: ListenState = {
     loading: false,
     checklistenLoaded: false,
-    // unsavedChanges: false,
+    changesDiscarded: false,
     checklistenMap: [],
     selectedCheckliste: undefined,
     checklisteCache: undefined
@@ -58,7 +58,11 @@ const listenReducer = createReducer(initialListenState,
 
     on(ListenActions.deselectCheckliste, (state, _action) => {
 
-       return {...state, selectedCheckliste: undefined, checklisteCache: undefined};
+        if (state.changesDiscarded) {
+            return new ChecklisteMerger().undoChanges(state);
+        }
+
+       return {...state, selectedCheckliste: undefined, checklisteCache: undefined, changesDiscarded: false};
     }),
 
     on(ListenActions.checklisteItemClickedOnConfiguration, (state, action) => {
@@ -103,11 +107,8 @@ const listenReducer = createReducer(initialListenState,
         return {...state, loading: false};
     }),
 
-    on(ListenActions.changesDiscarded, (state, _action) => {
-
-        // TODO
-
-        return {...state};
+    on(ListenActions.changesDiscarded, (state, _action) => {        
+        return {...state, changesDiscarded: true};
     }),
 
     on(ListenActions.checklisteItemAdded, (state, action) => {

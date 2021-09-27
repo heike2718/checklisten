@@ -111,6 +111,10 @@ export class ConfigureChecklisteComponent implements OnInit, OnDestroy {
     const modalRef = this.modalService.open(this.dialogUnsavedChanges, this.modalOptions);
     const response = await modalRef.result;
 
+    if (response === 'DISCARD') {
+      this.listenFacade.discardChanges();
+    }
+
     return response === 'DISCARD';
   }  
 

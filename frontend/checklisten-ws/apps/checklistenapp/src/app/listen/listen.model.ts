@@ -197,5 +197,17 @@ export class ChecklisteMerger {
                 appearence: checklisteAppearence
             };
     }
+
+    public undoChanges(state: ListenState): ListenState {
+
+        if (state.selectedCheckliste && state.checklisteCache) {
+            
+            const neueMap = new ChecklistenMap(state.checklistenMap).merge(state.checklisteCache);
+            return {...state, checklistenMap: neueMap, changesDiscarded: false};            
+        }
+
+        return {...state, changesDiscarded: false};
+
+    }
 }
 
