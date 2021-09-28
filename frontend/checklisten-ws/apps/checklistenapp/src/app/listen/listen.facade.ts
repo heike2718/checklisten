@@ -6,9 +6,10 @@ import * as ListenActions from './+state/listen.actions';
 import * as ListenSelectors from './+state/listen.selectors';
 import { Checkliste, ChecklisteDaten, SaveChecklisteContext } from './listen.model';
 import { GlobalErrorHandlerService } from '../infrastructure/global-error-handler.service';
-import { ChecklisteItem, ChecklisteItemClickedPayload, Modus } from '../shared/domain/checkliste';
+import { ChecklisteItem, ChecklisteItemClickedPayload, Checklistentyp, Modus } from '../shared/domain/checkliste';
 import { Router } from '@angular/router';
 import { MessageService } from '../shared/messages/message.service';
+import { getBackgroundColorByChecklistentyp } from '../shared/utils';
 
 @Injectable({ providedIn: 'root' })
 export class ListenFacade {
@@ -79,6 +80,45 @@ export class ListenFacade {
 
     public changeItem(checklisteName: string, checklisteItem: ChecklisteItem): void {
         this.store.dispatch(ListenActions.checklisteItemChanged({checklisteName: checklisteName, checklisteItem: checklisteItem}));
+    }
+
+    public addCheckliste(name: string, typ: Checklistentyp): void {
+
+        const checkliste: ChecklisteDaten = {
+			kuerzel: 'neu',
+			name: name,
+			items: [],
+			typ,
+			version: 0
+		};
+
+        const color = getBackgroundColorByChecklistentyp(typ);
+
+        this.store.dispatch(ListenActions.startLoading());
+
+        this.listenService.createNewCheckliste(checkliste).subscribe(
+            responsePayload => {
+
+                const data: ChecklisteDaten = responsePayload.data;
+                
+                const savedCheckliste: Checkliste = {
+                    checkisteDaten: data,
+                    appearence: {anzahlItems: 0, color: color, itemsOben: [], itemsUnten: [], modus: 'SCHROEDINGER'}
+                };
+                
+                const neuerSaveContext: SaveChecklisteContext = {
+                    checkliste: savedCheckliste,
+                    modus: 'SCHROEDINGER',
+                    neueCheckliste: true
+                };
+
+                this.store.dispatch(ListenActions.checklisteSaved({saveChecklisteContext: neuerSaveContext}));
+            },
+			(error => {
+				this.store.dispatch(ListenActions.errorOnSaveCheckliste());
+				this.errorHandler.handleError(error);
+			})
+        );
     }
 
     public saveCheckliste(context: SaveChecklisteContext): void {

@@ -29,4 +29,13 @@ export class ListenService {
             map(res => res as ResponsePayload)
         );
     }
+
+    public createNewCheckliste(checkliste: ChecklisteDaten): Observable<ResponsePayload> {
+
+        const url = environment.apiUrl + '/checklisten';
+
+        return this.http.post(url, checkliste).pipe(
+			map(res => res as ResponsePayload)
+		);
+    }
 }

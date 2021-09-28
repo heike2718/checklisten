@@ -177,24 +177,25 @@ export class ChecklisteMerger {
     public mapToCheckliste(checklisteDaten: ChecklisteDaten): Checkliste {
 
         let color = '';
-            switch(checklisteDaten.typ) {
-                case 'EINKAUFSLISTE': color = 'bisque'; break;
-                case 'PACKLISTE': color = 'lavender'; break;
-                default: color = '#c6ffb3';
-            }
+        
+        switch(checklisteDaten.typ) {
+            case 'EINKAUFSLISTE': color = 'bisque'; break;
+            case 'PACKLISTE': color = 'lavender'; break;
+            default: color = '#c6ffb3';
+        }
 
-            const kriterium: Filterkriterium = {
-                modus: 'EXECUTION',
-                position: 'VORSCHLAG'
-            };
+        const kriterium: Filterkriterium = {
+            modus: 'EXECUTION',
+            position: 'VORSCHLAG'
+        };
     
-            const anzahlItems = filterChecklisteItems(checklisteDaten.items, kriterium).length;
-            const checklisteAppearence: ChecklisteAppearence = {...initialChecklisteAppearence, modus: 'SCHROEDINGER', anzahlItems: anzahlItems};
+        const anzahlItems = filterChecklisteItems(checklisteDaten.items, kriterium).length;
+        const checklisteAppearence: ChecklisteAppearence = {...initialChecklisteAppearence, modus: 'SCHROEDINGER', anzahlItems: anzahlItems, color: color};
 
-            return {
-                checkisteDaten: checklisteDaten,
-                appearence: checklisteAppearence
-            };
+        return {
+            checkisteDaten: checklisteDaten,
+            appearence: checklisteAppearence
+        };
     }
 
     public undoChanges(state: ListenState): ListenState {
