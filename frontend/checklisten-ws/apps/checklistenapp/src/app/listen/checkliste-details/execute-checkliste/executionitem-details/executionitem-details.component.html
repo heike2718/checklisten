@@ -1,1 +1,6 @@
-<p>executionitem-details works!</p>
+<div class="row row-cols-2" (click)="togglePosition()">
+   <div class="item-btn col" [ngStyle]="getStyles()">{{checklisteItem.name}} <span *ngIf="checklisteItem.optional" class="badge bg-dark">optional</span></div>
+   <div class="item-btn col">{{checklisteItem.kommentar}}</div>
+</div>
+
+

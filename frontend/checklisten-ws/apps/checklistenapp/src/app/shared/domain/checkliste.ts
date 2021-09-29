@@ -27,6 +27,7 @@ export interface ChecklisteItemClickedPayload {
 	readonly checklisteItem: ChecklisteItem;
 	readonly position: ItemPosition;
 	readonly action: ItemAction;
+	readonly modus: Modus;
 };
 
 

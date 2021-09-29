@@ -13,7 +13,6 @@ export const environment = {
 	assetsUrl: 'https://opa-wetterwachs.de/checklistenapp/assets',
 	signupRedirectUrl: 'http://localhost:4200/checklistenapp',
 	loginRedirectUrl: 'http://localhost:4200/checklistenapp#/listen',
-	jokesAPI: 'https://official-joke-api.appspot.com/jokes/random',
 	consoleLogActive: true,
 	serverLogActive: false,
 	loglevel: 1

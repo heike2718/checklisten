@@ -139,7 +139,7 @@ export class ChecklisteMerger {
 
         if (state.selectedCheckliste) {
 
-            const modus: Modus = 'CONFIGURATION';
+            const modus: Modus = state.selectedCheckliste.appearence.modus;
 
             let neueItems: ChecklisteItem[] = [];
 
@@ -167,8 +167,7 @@ export class ChecklisteMerger {
             const appearence: ChecklisteAppearence = {...state.selectedCheckliste.appearence, itemsOben: itemsOben, itemsUnten:itemsUnten, anzahlItems: itemsUnten.length};
             const neueCheckliste: Checkliste = {checkisteDaten: changedChecklisteDaten, appearence: appearence};
             const checklistenMap: ChecklisteWithID[] = new ChecklistenMap(state.checklistenMap).merge(neueCheckliste);
-            return {...state, selectedCheckliste: neueCheckliste, checklistenMap: checklistenMap};
- 
+            return {...state, selectedCheckliste: neueCheckliste, checklistenMap: checklistenMap}; 
         }
 
         return {...state};

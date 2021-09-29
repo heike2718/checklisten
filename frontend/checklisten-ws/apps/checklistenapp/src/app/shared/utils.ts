@@ -1,6 +1,7 @@
 import { RouterReducerState,RouterStateSerializer } from '@ngrx/router-store';
 import { RouterStateSnapshot, Params } from '@angular/router';
 import { ChecklisteItem, Checklistentyp, Filterkriterium, ItemPosition, Modus } from './domain/checkliste';
+import { NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 
 
 export interface RouterStateUrl {
@@ -12,6 +13,12 @@ export interface RouterStateUrl {
 export interface State {
   router: RouterReducerState<RouterStateUrl>;
 }
+
+export const modalOptions: NgbModalOptions = {
+    backdrop:'static',
+    centered:true,
+    ariaLabelledBy: 'modal-basic-title'
+};
 
 export class CustomRouterStateSerializer implements RouterStateSerializer<RouterStateUrl> {
   serialize(routerState: RouterStateSnapshot): RouterStateUrl {
@@ -82,7 +89,7 @@ function getItemsObenFuerKonfiguration(items: ChecklisteItem[]): ChecklisteItem[
 }
 
 function getItemsObenFuerAbarbeitung(items: ChecklisteItem[]): ChecklisteItem[] {
-	return items.filter(it => it.markiert);
+	return items.filter(it => it.markiert && !it.erledigt);
 }
 
 function getItemsUntenFuerKonfiguration(items: ChecklisteItem[]): ChecklisteItem[] {
@@ -92,8 +99,6 @@ function getItemsUntenFuerKonfiguration(items: ChecklisteItem[]): ChecklisteItem
 function getItemsUntenFuerAbarbeitung(items: ChecklisteItem[]): ChecklisteItem[] {
 	return items.filter(it => it.markiert && it.erledigt);
 }
-
-
 
 function getListeConfiguration(items: ChecklisteItem[], position: ItemPosition): ChecklisteItem[] {
 

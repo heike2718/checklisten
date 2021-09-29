@@ -12,7 +12,6 @@ export const environment = {
 	authUrl: 'http://a300/auth-app',
 	signupRedirectUrl: 'http://a300/checklistenapp',
 	loginRedirectUrl: 'http://a300/checklistenapp#/listen',
-	jokesAPI: 'https://official-joke-api.appspot.com/jokes/random',
 	consoleLogActive: true,
 	serverLogActive: false,
 	loglevel: 2

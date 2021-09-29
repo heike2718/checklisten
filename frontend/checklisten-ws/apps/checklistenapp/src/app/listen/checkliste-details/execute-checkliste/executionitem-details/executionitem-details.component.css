@@ -1,0 +1,7 @@
+.row-fixed {
+    border: solid 1pt gray;
+}
+
+.row-fixed > .col-fixed {
+    flex: 0 0 344px;
+}

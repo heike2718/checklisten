@@ -66,9 +66,9 @@ export class ListenFacade {
 
     }
 
-    public handleChecklisteItemClicked(checklisteName: string, modus: Modus, payload: ChecklisteItemClickedPayload): void {
+    public handleChecklisteItemClicked(checklisteName: string, payload: ChecklisteItemClickedPayload): void {
 
-        switch(modus) {
+        switch(payload.modus) {
             case 'CONFIGURATION': this.store.dispatch(ListenActions.checklisteItemClickedOnConfiguration({checklisteName: checklisteName, clickPayload: payload})); break;
             case 'EXECUTION': this.store.dispatch(ListenActions.checklisteItemClickedOnExecution({checklisteName: checklisteName, clickPayload: payload})); break;
         }

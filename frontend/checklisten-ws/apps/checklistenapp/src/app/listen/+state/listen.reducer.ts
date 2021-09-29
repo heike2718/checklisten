@@ -85,6 +85,24 @@ const listenReducer = createReducer(initialListenState,
         return {...state};
     }),
 
+    on(ListenActions.checklisteItemClickedOnExecution, (state, action) => {
+
+        if (state.selectedCheckliste) {
+           
+           const payload: ChecklisteItemClickedPayload = action.clickPayload;           
+           let changedItem: ChecklisteItem = initialChecklisteItem;
+
+           switch(payload.position) {
+               case 'VORSCHLAG': changedItem = {...payload.checklisteItem, erledigt: true}; break;
+               case 'AUSGEWAEHLT': changedItem = {...payload.checklisteItem, erledigt: false}; break;
+           }
+
+           return new ChecklisteMerger().mergeChecklisteItems(state, changedItem, action.checklisteName, false);
+        } 
+        
+        return {...state};
+    }),
+
     on(ListenActions.checklisteSaved, (state, action) => {
 
         let checkliste = new ChecklisteMerger().mapToCheckliste(action.saveChecklisteContext.checkliste.checkisteDaten);

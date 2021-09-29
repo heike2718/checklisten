@@ -52,22 +52,23 @@ footer {
 .typ-todos {
   background-color: aqua;
 }
-  
-/* === Tabellen === */
-table {
-  margin: 20px  10px 20px 10px;
+
+.btn-checkliste-E {
+  border: black 1pt solid;
+  cursor: pointer;
+  background-color: bisque;
 }
-  
-td {
-  margin-bottom: 10px;
+
+.btn-checkliste-P {
+  border: black 1pt solid;
+  cursor: pointer;
+  background-color: lavender;
 }
-  
-td, th {
-  padding: 10px 0.75em;
-  margin: 3px 0 0;
-  border: 1px solid #666;
-  /*background-color: #f9f9f9;*/
-  text-align: center;
+
+.btn-checkliste-T {
+  border: black 1pt solid;
+  cursor: pointer;
+  background-color: #c6ffb3;
 }
   
 .item-btn {

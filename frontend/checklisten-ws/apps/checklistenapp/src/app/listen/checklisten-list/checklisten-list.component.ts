@@ -3,6 +3,7 @@ import { NgbModal, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 import { environment } from 'apps/checklistenapp/src/environments/environment';
 import { ListenFacade } from '../listen.facade';
 import { Checklistentyp } from '../../shared/domain/checkliste';
+import { MessageService } from '../../shared/messages/message.service';
 
 @Component({
   selector: 'chl-checklisten-list',
@@ -27,11 +28,14 @@ export class ChecklistenListComponent implements OnInit {
   };
 
   constructor(public listenFacade: ListenFacade
+    , private messageService: MessageService
     , private modalService: NgbModal) { }
 
   ngOnInit(): void {
 
-    this.listenFacade.loadChecklisten();    
+    this.messageService.clear();
+    this.listenFacade.loadChecklisten();
+        
   }
 
   showDialogNeueChecklisteVisible(): void {
