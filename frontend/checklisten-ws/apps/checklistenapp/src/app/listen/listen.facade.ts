@@ -150,7 +150,18 @@ export class ListenFacade {
 
     public deleteCheckliste(checkliste: ChecklisteDaten): void {
 
-        // TODO
+        this.store.dispatch(ListenActions.startLoading());
+
+        this.listenService.deleteCheckliste(checkliste).subscribe(
+
+            message => {
+                this.store.dispatch(ListenActions.checklisteDeleted({checkliste: checkliste}));
+            },
+			(error => {
+				this.store.dispatch(ListenActions.errorOnDeleteCheckliste());
+				this.errorHandler.handleError(error);
+			})
+        )
 
     }
 

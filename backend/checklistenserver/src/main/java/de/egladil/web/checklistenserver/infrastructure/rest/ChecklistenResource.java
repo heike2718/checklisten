@@ -86,7 +86,7 @@ public class ChecklistenResource {
 		ResponsePayload payload = new ResponsePayload(MessagePayload.info("OK: Anzahl Checklisten: " + sanitized.size()),
 			sanitized);
 
-		LOG.info("{}: checklisten geladen", getStringAbbreviated(userSession.getUuid()));
+		LOG.debug("{}: checklisten geladen", getStringAbbreviated(userSession.getUuid()));
 
 		return Response.ok().entity(payload).build();
 		// return Response.status(500).entity(ResponsePayload.messageOnly(MessagePayload.error("Das ist ein Testfehler"))).build();

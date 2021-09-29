@@ -102,10 +102,18 @@ const listenReducer = createReducer(initialListenState,
 
     }),
 
+    on(ListenActions.checklisteDeleted, (state, action) => {
+
+        const neueMap: ChecklisteWithID[] = new ChecklistenMap(state.checklistenMap).remove(action.checkliste.kuerzel);
+        return {...state, loading: false, checklistenMap: neueMap };
+
+    }),
+
     on(ListenActions.errorOnSaveCheckliste, (state, _action) => {
+        return {...state, loading: false};
+    }),
 
-        // TODO
-
+    on(ListenActions.errorOnDeleteCheckliste, (state, _action) => {
         return {...state, loading: false};
     }),
 

@@ -3,6 +3,7 @@ import { environment } from '../environments/environment';
 import { AuthService } from './auth/auth.service';
 import { LogService } from './infrastructure/logging/log.service';
 import { ListenFacade } from './listen/listen.facade';
+import { MessageService } from './shared/messages/message.service';
 
 @Component({
   selector: 'chl-root',
@@ -16,7 +17,7 @@ export class AppComponent implements OnInit {
 	envName = environment.envName;
 	showEnv = !environment.production;
 	api = environment.apiUrl;
-	logo = environment.assetsUrl + '/favicon-32x32.png';
+	logo = environment.assetsUrl + '/favicon-32x32.png'; 
 
   constructor(private authService: AuthService
     , private logger: LogService) {

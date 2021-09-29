@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { Message } from './messages.model';
 import { Subscription } from 'rxjs';
 import { MessageService } from './message.service';
+import { ListenFacade } from '../../listen/listen.facade';
 
 @Component({
   selector: 'chl-msg',

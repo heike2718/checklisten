@@ -54,6 +54,15 @@ export const errorOnSaveCheckliste = createAction(
     '[ListenFacade] saveCheckliste error'
 );
 
+export const checklisteDeleted = createAction(
+    '[ListenFacade] deleteCheckliste success',
+    props<{checkliste: ChecklisteDaten}>()
+);
+
+export const errorOnDeleteCheckliste = createAction(
+    '[ListenFacade] deleteCheckliste error'
+);
+
 export const changesDiscarded = createAction(
     '[ListenFacade] discardChanges'
 );
