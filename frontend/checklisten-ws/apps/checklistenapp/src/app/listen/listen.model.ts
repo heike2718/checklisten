@@ -1,4 +1,6 @@
-import { ChecklistenItem, Checklistentyp, Modus } from "../shared/domain/checkliste";
+import { ChecklisteItem, Checklistentyp, Filterkriterium, Modus } from "../shared/domain/checkliste";
+import { filterChecklisteItems, getItemsOben, getItemsUnten } from "../shared/utils";
+import { ListenState } from "./+state/listen.reducer";
 
 
 export interface ChecklisteDaten {
@@ -6,7 +8,7 @@ export interface ChecklisteDaten {
 	name: string;
 	typ: Checklistentyp;
 	gruppe?: string;
-	items: ChecklistenItem[];
+	items: ChecklisteItem[];
 	version: number;	
 };
 
@@ -14,8 +16,8 @@ export interface ChecklisteAppearence {
     readonly anzahlItems: number;
     readonly color: string;
     readonly modus: Modus;
-    readonly itemsOben: ChecklistenItem[];
-    readonly itemsUnten: ChecklistenItem[];
+    readonly itemsOben: ChecklisteItem[];
+    readonly itemsUnten: ChecklisteItem[];
 };
 
 export interface Checkliste {
@@ -26,6 +28,12 @@ export interface Checkliste {
 export interface ChecklisteWithID {
     readonly kuerzel: string;
     readonly checkliste: Checkliste;
+};
+
+export interface SaveChecklisteContext {
+    readonly checkliste: Checkliste,
+    readonly modus: Modus,
+    readonly neueCheckliste: boolean
 };
 
 
@@ -124,4 +132,82 @@ export class ChecklistenMap {
     }
 
 };
+
+export class ChecklisteMerger {
+
+    public mergeChecklisteItems(state: ListenState, checklisteItem: ChecklisteItem, checklisteName: string, add: boolean): ListenState {
+
+        if (state.selectedCheckliste) {
+
+            const modus: Modus = 'CONFIGURATION';
+
+            let neueItems: ChecklisteItem[] = [];
+
+            if (add) {
+
+                const vorhandene: ChecklisteItem[] = state.selectedCheckliste.checkisteDaten.items.filter(item => item.name.toLocaleLowerCase() === checklisteItem.name.toLocaleLowerCase());
+
+                if (vorhandene.length === 0) {
+                    neueItems.push(checklisteItem);
+                }            
+    
+            }
+
+            for (const item of state.selectedCheckliste.checkisteDaten.items) {
+                if (item.name.toLocaleLowerCase() === checklisteItem.name.toLocaleLowerCase()) {
+                    neueItems.push(checklisteItem);
+                } else {
+                    neueItems.push({...item});
+                }
+            }
+
+            const changedChecklisteDaten = {...state.selectedCheckliste.checkisteDaten, items: neueItems, name: checklisteName};
+            const itemsOben = [...getItemsOben(changedChecklisteDaten.items, modus)];
+            const itemsUnten = [...getItemsUnten(changedChecklisteDaten.items, modus)];           
+            const appearence: ChecklisteAppearence = {...state.selectedCheckliste.appearence, itemsOben: itemsOben, itemsUnten:itemsUnten, anzahlItems: itemsUnten.length};
+            const neueCheckliste: Checkliste = {checkisteDaten: changedChecklisteDaten, appearence: appearence};
+            const checklistenMap: ChecklisteWithID[] = new ChecklistenMap(state.checklistenMap).merge(neueCheckliste);
+            return {...state, selectedCheckliste: neueCheckliste, checklistenMap: checklistenMap};
+ 
+        }
+
+        return {...state};
+    }
+
+    public mapToCheckliste(checklisteDaten: ChecklisteDaten): Checkliste {
+
+        let color = '';
+        
+        switch(checklisteDaten.typ) {
+            case 'EINKAUFSLISTE': color = 'bisque'; break;
+            case 'PACKLISTE': color = 'lavender'; break;
+            default: color = '#c6ffb3';
+        }
+
+        const kriterium: Filterkriterium = {
+            modus: 'EXECUTION',
+            position: 'VORSCHLAG'
+        };
+    
+        const anzahlItems = filterChecklisteItems(checklisteDaten.items, kriterium).length;
+        const checklisteAppearence: ChecklisteAppearence = {...initialChecklisteAppearence, modus: 'SCHROEDINGER', anzahlItems: anzahlItems, color: color};
+
+        return {
+            checkisteDaten: checklisteDaten,
+            appearence: checklisteAppearence
+        };
+    }
+
+    public undoChanges(state: ListenState): ListenState {
+
+        if (state.selectedCheckliste && state.checklisteCache) {
+            
+            const neueMap = new ChecklistenMap(state.checklistenMap).merge(state.checklisteCache);
+            return {...state, checklistenMap: neueMap, changesDiscarded: false, selectedCheckliste: {...state.checklisteCache}};            
+        }
+
+        return {...state, changesDiscarded: false};
+
+    }
+}
 

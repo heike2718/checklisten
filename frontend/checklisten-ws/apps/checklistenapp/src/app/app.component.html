@@ -1,13 +1,15 @@
 <div class="container-fluid">
   <chl-navbar></chl-navbar>
-  <!--<hewi-messages></hewi-messages>-->
-  <!--<chl-loading></chl-loading>-->
+  <chl-msg></chl-msg>
 
   <main>
     <div class="container-fluid">
       <router-outlet #routerOutlet="outlet"></router-outlet>
     </div>
   </main>
+
+  <chl-msg></chl-msg>
+  
   <footer class="border-top">
     <div class="row">
       <div class="col-md-4 text-md-left">&copy; Heike Winkelvo&szlig;</div>

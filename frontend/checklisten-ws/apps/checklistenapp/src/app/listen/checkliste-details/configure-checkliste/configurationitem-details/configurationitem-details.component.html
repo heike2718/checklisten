@@ -1,8 +1,25 @@
 <p *ngIf="showFilename">configurationitem-details.component.ts</p>
 
 
-<div *ngIf="position==='VORSCHLAG'" class="card mb-3" [ngStyle]="getStyles()" (click)="onClickEvent()">
+<div *ngIf="position==='VORSCHLAG'" class="card mb-3 item-btn" [ngStyle]="getStyles()" (click)="togglePosition()">
     <div class="card-body">
-      <p class="card-text"> {{checklistenItem.name}}</p>
+      <p class="card-text"> {{checklisteItem.name}}</p>
     </div>
+</div>
+
+<div *ngIf="position==='AUSGEWAEHLT'" class="card mb-3" [ngStyle]="getStyles()">
+  <div class="card-header">
+    <div class="row">
+      <div (click)="editItem()" class="col-md-6 btn-edit" title="ändern">
+        <i class="fa fa-edit"></i>
+      </div>
+      <div (click)="togglePosition()" class="col-md-6 btn-trash" title="doch nicht nötig">
+        <i class="fa fa-trash"></i>
+      </div>
+    </div>
+  </div>
+  <div class="card-body">
+    <p class="card-text"> {{checklisteItem.name}} <span *ngIf="checklisteItem.optional" class="badge bg-dark">optional</span></p>
+    <p *ngIf="checklisteItem.kommentar && checklisteItem.kommentar.trim().length > 0" class="text-muted">{{checklisteItem.kommentar}}</p>
+  </div>
 </div>

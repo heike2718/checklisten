@@ -1,6 +1,6 @@
 import { RouterReducerState,RouterStateSerializer } from '@ngrx/router-store';
 import { RouterStateSnapshot, Params } from '@angular/router';
-import { ChecklistenItem, Checklistentyp, Filterkriterium, ItemPosition, Modus } from './domain/checkliste';
+import { ChecklisteItem, Checklistentyp, Filterkriterium, ItemPosition, Modus } from './domain/checkliste';
 
 
 export interface RouterStateUrl {
@@ -43,7 +43,7 @@ export function getBackgroundColorByChecklistentyp(typ: Checklistentyp) {
 	return 'aqua';
 };
 
-export function getItemsOben(items: ChecklistenItem[], modus: Modus): ChecklistenItem[] {
+export function getItemsOben(items: ChecklisteItem[], modus: Modus): ChecklisteItem[] {
 
 	switch(modus) {
 		case 'CONFIGURATION':
@@ -54,7 +54,7 @@ export function getItemsOben(items: ChecklistenItem[], modus: Modus): Checkliste
 	return [];
 }
 
-export function getItemsUnten(items: ChecklistenItem[], modus: Modus): ChecklistenItem[] {
+export function getItemsUnten(items: ChecklisteItem[], modus: Modus): ChecklisteItem[] {
 
 	switch(modus) {
 		case 'CONFIGURATION':
@@ -65,7 +65,7 @@ export function getItemsUnten(items: ChecklistenItem[], modus: Modus): Checklist
 	return [];
 }
 
-export function filterChecklisteItems(items: ChecklistenItem[], filterkriterium: Filterkriterium): ChecklistenItem[] {
+export function filterChecklisteItems(items: ChecklisteItem[], filterkriterium: Filterkriterium): ChecklisteItem[] {
 
 	switch (filterkriterium.modus) {
 		case 'CONFIGURATION':
@@ -77,25 +77,25 @@ export function filterChecklisteItems(items: ChecklistenItem[], filterkriterium:
 }
 
 // === private functions ==/
-function getItemsObenFuerKonfiguration(items: ChecklistenItem[]): ChecklistenItem[] {
+function getItemsObenFuerKonfiguration(items: ChecklisteItem[]): ChecklisteItem[] {
 	return items.filter(it => !it.markiert);
 }
 
-function getItemsObenFuerAbarbeitung(items: ChecklistenItem[]): ChecklistenItem[] {
+function getItemsObenFuerAbarbeitung(items: ChecklisteItem[]): ChecklisteItem[] {
 	return items.filter(it => it.markiert);
 }
 
-function getItemsUntenFuerKonfiguration(items: ChecklistenItem[]): ChecklistenItem[] {
+function getItemsUntenFuerKonfiguration(items: ChecklisteItem[]): ChecklisteItem[] {
 	return items.filter(it => it.markiert && !it.erledigt);
 }
 
-function getItemsUntenFuerAbarbeitung(items: ChecklistenItem[]): ChecklistenItem[] {
+function getItemsUntenFuerAbarbeitung(items: ChecklisteItem[]): ChecklisteItem[] {
 	return items.filter(it => it.markiert && it.erledigt);
 }
 
 
 
-function getListeConfiguration(items: ChecklistenItem[], position: ItemPosition): ChecklistenItem[] {
+function getListeConfiguration(items: ChecklisteItem[], position: ItemPosition): ChecklisteItem[] {
 
 	if (!position) {
 		return [];
@@ -110,7 +110,7 @@ function getListeConfiguration(items: ChecklistenItem[], position: ItemPosition)
 	}
 }
 
-function getListeExecution(items: ChecklistenItem[], position: ItemPosition): ChecklistenItem[] {
+function getListeExecution(items: ChecklisteItem[], position: ItemPosition): ChecklisteItem[] {
 	if (!position) {
 		return [];
 	}

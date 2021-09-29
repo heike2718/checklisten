@@ -1,6 +1,6 @@
 <div class="card mb-3" [ngStyle]="getStyles()">
     <div class="card-header">
-        <div #trashButton class="trash" title="löschen">
+        <div #trashButton class="btn-trash" title="löschen" (click)="delete()" >
           <i class="fa fa-trash"></i>
         </div>
     </div>
@@ -20,3 +20,16 @@
         </div>
     </div>
 </div>
+
+<ng-template #dialogWirklichLoeschen let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Liste "{{checkliste.checkisteDaten.name}}" löschen</h4>
+    </div>
+    <div class="modal-body">
+        <p>Weg ist weg. Bist du dir sicher?</p>        
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-danger" (click)="modal.close('OK')">absolut!</button>
+        <button type="button" class="btn btn-outline-secondary" (click)="modal.close('CANCEL')">besser doch nicht</button>
+    </div>
+</ng-template>

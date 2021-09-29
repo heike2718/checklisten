@@ -1,5 +1,6 @@
-import { Component, Input, ModuleWithComponentFactories, OnInit } from '@angular/core';
+import { Component, Input, ViewChild, OnInit, TemplateRef } from '@angular/core';
 import { Router } from '@angular/router';
+import { NgbModal, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 import { environment } from 'apps/checklistenapp/src/environments/environment';
 import { ListenFacade } from '../listen.facade';
 import { Checkliste, initialCheckliste } from '../listen.model';
@@ -16,7 +17,18 @@ export class ChecklisteComponent implements OnInit {
 
   showFilename: boolean = !environment.production;
 
+    // das ! verhindert, dass eine sofortige Initialisierung verlangt wird, denn die ist hier nicht sinnvoll.
+  @ViewChild('dialogWirklichLoeschen')
+  dialogWirklichLoeschen!: TemplateRef<HTMLElement>;
+  
+  private modalOptions: NgbModalOptions = {
+    backdrop:'static',
+    centered:true,
+    ariaLabelledBy: 'modal-basic-title'
+  };
+
   constructor(private router: Router
+    , private modalService: NgbModal
     , private listenFacade: ListenFacade) { }
 
   ngOnInit(): void { }
@@ -29,12 +41,21 @@ export class ChecklisteComponent implements OnInit {
 	}
 
 	delete() {
-		this.listenFacade.deleteCheckliste(this.checkliste.checkisteDaten);
+    
+    this.modalService.open(this.dialogWirklichLoeschen, this.modalOptions).result.then((result) => {
+      if (result === 'OK') {
+       this.doDelete();
+      }
+		});
 	}
 
   getStyles() {
     return {
       'backgroundColor': this.checkliste.appearence.color
     };
+  }
+
+  private doDelete(): void {
+    this.listenFacade.deleteCheckliste(this.checkliste.checkisteDaten);
   }
 }

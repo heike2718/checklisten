@@ -1,6 +1,6 @@
 import { createAction, props } from '@ngrx/store';
-import { ChecklistenItemClickedPayload, Modus } from '../../shared/domain/checkliste';
-import { Checkliste, ChecklisteDaten } from '../listen.model';
+import { ChecklisteItem, ChecklisteItemClickedPayload, Modus } from '../../shared/domain/checkliste';
+import { Checkliste, ChecklisteDaten, SaveChecklisteContext } from '../listen.model';
 
 
 export const startLoading = createAction(
@@ -21,14 +21,50 @@ export const selectCheckliste = createAction(
     props<{checkliste: Checkliste, modus: Modus}>()
 );
 
+export const deselectCheckliste = createAction(
+    '[ListenFacade] deselectCheckliste'
+);
+
 export const checklisteItemClickedOnConfiguration = createAction(
     '[ListenFacade] handleChecklisteItemClicked modus CONFIGURATION',
-    props<{clickPayload: ChecklistenItemClickedPayload}>()
+    props<{checklisteName: string, clickPayload: ChecklisteItemClickedPayload}>()
 );
 
 export const checklisteItemClickedOnExecution = createAction(
     '[ListenFacade] handleChecklisteItemClicked modus EXECUTION',
-    props<{clickPayload: ChecklistenItemClickedPayload}>()
+    props<{checklisteName: string, clickPayload: ChecklisteItemClickedPayload}>()
+);
+
+export const checklisteItemAdded = createAction(
+    '[ListenFacade] addItem',
+    props<{checklisteName: string, checklisteItem: ChecklisteItem}>()
+);
+
+export const checklisteItemChanged = createAction(
+    '[ListenFacade] changeItem',
+    props<{checklisteName: string, checklisteItem: ChecklisteItem}>()
+);
+
+export const checklisteSaved = createAction(
+    '[ListenFacade] saveCheckliste success',
+    props<{saveChecklisteContext: SaveChecklisteContext}>()
+);
+
+export const errorOnSaveCheckliste = createAction(
+    '[ListenFacade] saveCheckliste error'
+);
+
+export const checklisteDeleted = createAction(
+    '[ListenFacade] deleteCheckliste success',
+    props<{checkliste: ChecklisteDaten}>()
+);
+
+export const errorOnDeleteCheckliste = createAction(
+    '[ListenFacade] deleteCheckliste error'
+);
+
+export const changesDiscarded = createAction(
+    '[ListenFacade] discardChanges'
 );
 
 export const resetModule = createAction(

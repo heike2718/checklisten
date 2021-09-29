@@ -9,7 +9,7 @@ export class MessageService {
 
 	private messageSubject = new BehaviorSubject<Message | any>(undefined);
 
-	message$: Observable<Message> = this.messageSubject.asObservable();
+	public message$: Observable<Message> = this.messageSubject.asObservable();
 
 	constructor() { }
 

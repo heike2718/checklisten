@@ -54,7 +54,7 @@ export class GlobalErrorHandlerService implements ErrorHandler {
 			if (error.stack) {
 				console.log(error.stack);
 			}
-			let msg = 'mkv-app: Unerwarteter Fehler: ' + error.message;
+			let msg = 'checklistenapp: Unerwarteter Fehler: ' + error.message;
 
 			const sessionSerialized = localStorage.getItem(STORAGE_KEY_USER_SESSION);
 
