@@ -80,7 +80,7 @@
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-outline-secondary" [disabled]="formDisabled()" (click)="modal.close('OK')">OK</button>
-        <button type="button" class="btn btn-outline-secondary" (click)="modal.close('NO')">doch nicht</button>
+        <button type="button" class="btn btn-danger" (click)="modal.close('NO')">doch nicht</button>
     </div>
 </ng-template>
 
@@ -93,7 +93,7 @@
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-outline-secondary" (click)="modal.close('STAY')">hier bleiben</button>
-        <button type="button" class="btn btn-outline-secondary" (click)="modal.close('DISCARD')">Änderungen verwerfen</button>
+        <button type="button" class="btn btn-danger" (click)="modal.close('DISCARD')">Änderungen verwerfen</button>
     </div>
 </ng-template>
 
