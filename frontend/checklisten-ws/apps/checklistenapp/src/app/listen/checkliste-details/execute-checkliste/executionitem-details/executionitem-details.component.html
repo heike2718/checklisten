@@ -1,6 +1,6 @@
 <div class="row row-cols-2" (click)="togglePosition()">
-   <div class="item-btn col" [ngStyle]="getStyles()">{{checklisteItem.name}} <span *ngIf="checklisteItem.optional" class="badge bg-dark">optional</span></div>
-   <div class="item-btn col">{{checklisteItem.kommentar}}</div>
+   <div class="item-btn col execution-item-left mb-2" [ngStyle]="getStyles()">{{checklisteItem.name}} <span *ngIf="checklisteItem.optional" class="badge bg-dark">optional</span></div>
+   <div class="item-btn col execution-item-right mb-2">{{checklisteItem.kommentar}}</div>
 </div>
 
 

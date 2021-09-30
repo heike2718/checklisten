@@ -2,7 +2,7 @@
 
 <div *ngIf="listenFacade.selectedCheckliste$ | async as checkliste else loading">
 
-    <h4>{{checkliste.checkisteDaten.name}} abarbeiten</h4>
+    <h4>Liste "{{checkliste.checkisteDaten.name}}" abarbeiten</h4>
 
     <h5 class="mt-2">vorgemerkt ({{checkliste.appearence.itemsOben.length}}):</h5>
 

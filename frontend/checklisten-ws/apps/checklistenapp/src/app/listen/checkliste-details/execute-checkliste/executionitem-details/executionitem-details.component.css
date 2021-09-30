@@ -1,7 +1,11 @@
-.row-fixed {
+.execution-item-left {
+    padding: 5px 10px 5px 10px;
     border: solid 1pt gray;
 }
 
-.row-fixed > .col-fixed {
-    flex: 0 0 344px;
+.execution-item-right {
+    padding: 5px 10px 5px 10px;
+    border-top: solid 1pt gray;
+    border-right: solid 1pt gray;
+    border-bottom: solid 1pt gray;
 }

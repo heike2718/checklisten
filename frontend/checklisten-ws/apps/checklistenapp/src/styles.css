@@ -28,31 +28,12 @@ footer {
   padding: 5px 10px 5px 10px;
 }
   
-.chl-container-elevated {
-  border: 1px solid gray;
-  border-radius: 4px;
-  background: white;
-  box-shadow: 0 1px 16px 0 rgba(0, 0, 0, 0.2), 0 2px 8px 0 rgba(0, 0, 0, 0.14), 0 4px 8px -1px rgba(0, 0, 0, 0.12);
-}
-  
 .chl-container {
   margin-top: 10px;
   align-content: center;
 }
   
 /* === Hintergrundfarben für Checklistentypen === */
-.typ-einkaufsliste {
-  background-color: bisque;
-}
-  
-.typ-packliste {
-  background-color: lavender;
-}
-  
-.typ-todos {
-  background-color: aqua;
-}
-
 .btn-checkliste-E {
   border: black 1pt solid;
   cursor: pointer;
@@ -87,23 +68,10 @@ footer {
   cursor: pointer;
 }
   
-.dialog {
-  border: 1px solid gray;
-  border-radius: 4px;
-  background: white;
-  box-shadow: 0 1px 16px 0 rgba(0, 0, 0, 0.2), 0 2px 8px 0 rgba(0, 0, 0, 0.14), 0 4px 8px -1px rgba(0, 0, 0, 0.12);
-}
-  
 .kleber {
   position: fixed;
   left: -1000px;
-}
-
-.conditionally-bordered {
-  border: 0px solid gray;
-  border-radius: 4px;
-}
- 
+} 
   
 /* ===== small devices ==== */
   
