@@ -22,6 +22,7 @@ import { LandingComponent } from './landing/landing.component';
 import { ListenModule } from './listen/listen.module';
 import { NotAuthorizedComponent } from './not-authorized/not-authorized.component';
 import { MessagesComponent } from './shared/messages/message.component';
+import { VorlagenModule } from './vorlagen/vorlagen.module';
 
 @NgModule({
   declarations: [
@@ -43,7 +44,8 @@ import { MessagesComponent } from './shared/messages/message.component';
 		production: environment.production,
 		loginSuccessUrl: '/checklisten'
 	}),
-	ListenModule,	
+	ListenModule,
+	VorlagenModule,	
 	StoreModule.forRoot(reducers, {
 			metaReducers,
 			runtimeChecks: {

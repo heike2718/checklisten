@@ -4,7 +4,7 @@ import { Checkliste, ChecklisteDaten, SaveChecklisteContext } from '../listen.mo
 
 
 export const startLoading = createAction(
-    '[ListenFacade] before service.loadChecklisten'
+    '[ListenFacade] before service.doSomething'
 );
 
 export const checklistenLoaded = createAction(

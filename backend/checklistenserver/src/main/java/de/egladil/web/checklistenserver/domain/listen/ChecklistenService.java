@@ -26,7 +26,7 @@ import de.egladil.web.checklistenserver.domain.auth.IUserDao;
 import de.egladil.web.checklistenserver.domain.error.AuthException;
 import de.egladil.web.checklistenserver.domain.error.ChecklistenRuntimeException;
 import de.egladil.web.checklistenserver.domain.error.LogmessagePrefixes;
-import de.egladil.web.checklistenserver.domain.vorlagen.ChecklistenTemplateProvider;
+import de.egladil.web.checklistenserver.domain.vorlagen.ChecklistenvorlageProvider;
 import de.egladil.web.commons_validation.payload.MessagePayload;
 import de.egladil.web.commons_validation.payload.ResponsePayload;
 
@@ -45,7 +45,7 @@ public class ChecklistenService {
 	IUserDao userDao;
 
 	@Inject
-	ChecklistenTemplateProvider checklistenTemplateProvider;
+	ChecklistenvorlageProvider checklistenTemplateProvider;
 
 	/**
 	 * @param  userUUID

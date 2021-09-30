@@ -1,10 +1,8 @@
 import { createReducer, Action, on } from '@ngrx/store';
-import { ChecklisteItem, ChecklisteItemClickedPayload, Filterkriterium, initialChecklisteItem, Modus } from '../../shared/domain/checkliste';
-import { SignUpPayload } from '../../shared/domain/signup-payload';
-import { filterChecklisteItems, getBackgroundColorByChecklistentyp, getItemsOben, getItemsUnten } from '../../shared/utils';
-import { Checkliste, ChecklisteAppearence, ChecklisteMerger, ChecklistenMap, ChecklisteWithID, initialCheckliste, initialChecklisteAppearence } from '../listen.model';
+import { ChecklisteItem, ChecklisteItemClickedPayload, initialChecklisteItem } from '../../shared/domain/checkliste';
+import { getItemsOben, getItemsUnten } from '../../shared/utils';
+import { Checkliste, ChecklisteMerger, ChecklistenMap, ChecklisteWithID } from '../listen.model';
 import * as ListenActions from './listen.actions';
-import { selectedCheckliste } from './listen.selectors';
 
 export const listenFeatureKey = 'checklistenapp-listen';
 
@@ -53,7 +51,7 @@ const listenReducer = createReducer(initialListenState,
         const itemsOben = [...getItemsOben(liste.checkisteDaten.items, modus)];
         const itemsUnten = [...getItemsUnten(liste.checkisteDaten.items, modus)];
 
-        liste = {...action.checkliste, appearence: {...action.checkliste.appearence, modus: action.modus, itemsOben: itemsOben, itemsUnten: itemsUnten}};
+        liste = {...action.checkliste, appearance: {...action.checkliste.appearance, modus: action.modus, itemsOben: itemsOben, itemsUnten: itemsUnten}};
         const checklistenMap: ChecklisteWithID[] = new ChecklistenMap(state.checklistenMap).merge(liste);
         return {...state, selectedCheckliste: liste, checklisteCache: {...liste}, checklistenMap: checklistenMap, changesDiscarded: false};
     }),
@@ -112,7 +110,7 @@ const listenReducer = createReducer(initialListenState,
         if (modus !== 'SCHROEDINGER') {
             const itemsOben = [...getItemsOben(checkliste.checkisteDaten.items, modus)];
             const itemsUnten = [...getItemsUnten(checkliste.checkisteDaten.items, modus)];
-            checkliste = {...checkliste, appearence: {...checkliste.appearence, modus: modus, itemsOben: itemsOben, itemsUnten: itemsUnten}}; 
+            checkliste = {...checkliste, appearance: {...checkliste.appearance, modus: modus, itemsOben: itemsOben, itemsUnten: itemsUnten}}; 
         } 
 
         const neueMap: ChecklisteWithID[] = new ChecklistenMap(state.checklistenMap).merge(checkliste);

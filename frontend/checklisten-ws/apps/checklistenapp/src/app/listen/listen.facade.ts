@@ -103,7 +103,7 @@ export class ListenFacade {
                 
                 const savedCheckliste: Checkliste = {
                     checkisteDaten: data,
-                    appearence: {anzahlItems: 0, color: color, itemsOben: [], itemsUnten: [], modus: 'SCHROEDINGER'}
+                    appearance: {anzahlItems: 0, color: color, itemsOben: [], itemsUnten: [], modus: 'SCHROEDINGER'}
                 };
                 
                 const neuerSaveContext: SaveChecklisteContext = {

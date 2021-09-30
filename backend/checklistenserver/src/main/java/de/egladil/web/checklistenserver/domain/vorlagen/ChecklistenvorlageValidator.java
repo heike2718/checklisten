@@ -17,25 +17,25 @@ import org.slf4j.LoggerFactory;
 import de.egladil.web.commons_validation.StringLatinValidator;
 
 /**
- * ChecklisteTemplateValidator
+ * ChecklistenvorlageValidator
  */
-public class ChecklisteTemplateValidator implements ConstraintValidator<ValidTemplate, ChecklisteTemplate> {
+public class ChecklistenvorlageValidator implements ConstraintValidator<ValidVorlage, Checklistenvorlage> {
 
-	private static final Logger LOG = LoggerFactory.getLogger(ChecklisteTemplateValidator.class);
+	private static final Logger LOG = LoggerFactory.getLogger(ChecklistenvorlageValidator.class);
 
 	private StringLatinValidator stringLatinValidator = new StringLatinValidator();
 
 	@Override
-	public boolean isValid(final ChecklisteTemplate value, final ConstraintValidatorContext context) {
+	public boolean isValid(final Checklistenvorlage value, final ConstraintValidatorContext context) {
 
 		if (value == null) {
 
 			return true;
 		}
 
-		List<ChecklisteTemplateItem> invalidItems = new ArrayList<>();
+		List<ChecklistenvorlageItem> invalidItems = new ArrayList<>();
 
-		for (ChecklisteTemplateItem item : value.getItems()) {
+		for (ChecklistenvorlageItem item : value.getItems()) {
 
 			boolean valid = stringLatinValidator.isValid(item.getName(), context);
 
@@ -49,10 +49,10 @@ public class ChecklisteTemplateValidator implements ConstraintValidator<ValidTem
 
 			if (invalidItems.size() == 1) {
 
-				context.buildConstraintViolationWithTemplate("ChecklisteTemplate.invalidItem");
+				context.buildConstraintViolationWithTemplate("Checklistenvorlage.invalidItem");
 			} else {
 
-				context.buildConstraintViolationWithTemplate("ChecklisteTemplate.invalidItems");
+				context.buildConstraintViolationWithTemplate("Checklistenvorlage.invalidItems");
 			}
 
 			LOG.error("Validierungsfehler: ungültige Einträge = {}", StringUtils.join(invalidItems, ","));

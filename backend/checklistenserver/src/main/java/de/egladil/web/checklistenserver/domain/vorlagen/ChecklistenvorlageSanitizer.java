@@ -7,16 +7,16 @@ package de.egladil.web.checklistenserver.domain.vorlagen;
 import java.util.function.Function;
 
 /**
- * ChecklisteTemplateSanitizer
+ * ChecklistenvorlageSanitizer
  */
-public class ChecklisteTemplateSanitizer implements Function<ChecklisteTemplate, ChecklisteTemplate> {
+public class ChecklistenvorlageSanitizer implements Function<Checklistenvorlage, Checklistenvorlage> {
 
 	@Override
-	public ChecklisteTemplate apply(final ChecklisteTemplate originalTemplate) {
+	public Checklistenvorlage apply(final Checklistenvorlage originalTemplate) {
 
-		final ChecklisteTemplateItemSanitizer itemSanitizer = new ChecklisteTemplateItemSanitizer();
+		final ChecklistenvorlageItemSanitizer itemSanitizer = new ChecklistenvorlageItemSanitizer();
 
-		ChecklisteTemplate result = ChecklisteTemplate.create(originalTemplate.getTyp());
+		Checklistenvorlage result = Checklistenvorlage.create(originalTemplate.getTyp());
 
 		originalTemplate.getItems().forEach(item -> result.addItem(itemSanitizer.apply(item)));
 

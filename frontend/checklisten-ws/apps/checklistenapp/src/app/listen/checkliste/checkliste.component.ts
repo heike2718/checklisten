@@ -52,7 +52,7 @@ export class ChecklisteComponent implements OnInit {
 
   getStyles() {
     return {
-      'backgroundColor': this.checkliste.appearence.color
+      'backgroundColor': this.checkliste.appearance.color
     };
   }
 

@@ -14,10 +14,10 @@ import javax.validation.constraints.Size;
 import de.egladil.web.checklistenserver.domain.Checklistentyp;
 
 /**
- * ChecklisteTemplate
+ * Checklistenvorlage
  */
-@ValidTemplate
-public class ChecklisteTemplate {
+@ValidVorlage
+public class Checklistenvorlage {
 
 	@NotNull
 	private Checklistentyp typ;
@@ -25,19 +25,19 @@ public class ChecklisteTemplate {
 	private long readTime;
 
 	@Size(max = 999)
-	private List<ChecklisteTemplateItem> items = new ArrayList<>();
+	private List<ChecklistenvorlageItem> items = new ArrayList<>();
 
-	public static final ChecklisteTemplate create(final Checklistentyp typ) {
+	public static final Checklistenvorlage create(final Checklistentyp typ) {
 
-		ChecklisteTemplate template = new ChecklisteTemplate();
+		Checklistenvorlage template = new Checklistenvorlage();
 		template.typ = typ;
 		return template;
 
 	}
 
-	public static final ChecklisteTemplate create(final Checklistentyp typ, final List<ChecklisteTemplateItem> items, final long timestamp) {
+	public static final Checklistenvorlage create(final Checklistentyp typ, final List<ChecklistenvorlageItem> items, final long timestamp) {
 
-		ChecklisteTemplate template = new ChecklisteTemplate();
+		Checklistenvorlage template = new Checklistenvorlage();
 		template.typ = typ;
 		template.items = items;
 		template.readTime = timestamp;
@@ -50,12 +50,12 @@ public class ChecklisteTemplate {
 		return typ;
 	}
 
-	public List<ChecklisteTemplateItem> getItems() {
+	public List<ChecklistenvorlageItem> getItems() {
 
 		return items;
 	}
 
-	public void addItem(final ChecklisteTemplateItem item) {
+	public void addItem(final ChecklistenvorlageItem item) {
 
 		if (!items.contains(item)) {
 
@@ -66,7 +66,7 @@ public class ChecklisteTemplate {
 
 	public void sortItems() {
 
-		Collections.sort(items, new ChecklisteTemplateItemComparator());
+		Collections.sort(items, new ChecklistenvorlageItemComparator());
 
 	}
 

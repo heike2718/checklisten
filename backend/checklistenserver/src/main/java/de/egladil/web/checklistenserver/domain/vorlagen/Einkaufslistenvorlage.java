@@ -21,7 +21,7 @@ public class Einkaufslistenvorlage extends AbstractListenvorlage {
 	String pathDirEinkaufslisten;
 
 	@Override
-	protected String getPathTemplateDir() {
+	protected String getPathVorlagenDir() {
 
 		return pathDirEinkaufslisten;
 	}

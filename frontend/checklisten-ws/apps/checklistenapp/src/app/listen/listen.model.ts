@@ -12,7 +12,7 @@ export interface ChecklisteDaten {
 	version: number;	
 };
 
-export interface ChecklisteAppearence {
+export interface ChecklisteAppearance {
     readonly anzahlItems: number;
     readonly color: string;
     readonly modus: Modus;
@@ -22,7 +22,7 @@ export interface ChecklisteAppearence {
 
 export interface Checkliste {
     checkisteDaten: ChecklisteDaten;
-    appearence: ChecklisteAppearence;
+    appearance: ChecklisteAppearance;
 };
 
 export interface ChecklisteWithID {
@@ -37,7 +37,7 @@ export interface SaveChecklisteContext {
 };
 
 
-export const initialChecklisteAppearence: ChecklisteAppearence = {
+export const initialChecklisteAppearance: ChecklisteAppearance = {
     anzahlItems: 0,
     color: 'bisque',
     modus: 'SCHROEDINGER',
@@ -57,7 +57,7 @@ const initialChecklisteDaten: ChecklisteDaten = {
 
 export const initialCheckliste: Checkliste = {
     checkisteDaten: initialChecklisteDaten,
-    appearence: initialChecklisteAppearence
+    appearance: initialChecklisteAppearance
 };
 
 
@@ -139,7 +139,7 @@ export class ChecklisteMerger {
 
         if (state.selectedCheckliste) {
 
-            const modus: Modus = state.selectedCheckliste.appearence.modus;
+            const modus: Modus = state.selectedCheckliste.appearance.modus;
 
             let neueItems: ChecklisteItem[] = [];
 
@@ -164,8 +164,8 @@ export class ChecklisteMerger {
             const changedChecklisteDaten = {...state.selectedCheckliste.checkisteDaten, items: neueItems, name: checklisteName};
             const itemsOben = [...getItemsOben(changedChecklisteDaten.items, modus)];
             const itemsUnten = [...getItemsUnten(changedChecklisteDaten.items, modus)];           
-            const appearence: ChecklisteAppearence = {...state.selectedCheckliste.appearence, itemsOben: itemsOben, itemsUnten:itemsUnten, anzahlItems: itemsUnten.length};
-            const neueCheckliste: Checkliste = {checkisteDaten: changedChecklisteDaten, appearence: appearence};
+            const appearance: ChecklisteAppearance = {...state.selectedCheckliste.appearance, itemsOben: itemsOben, itemsUnten:itemsUnten, anzahlItems: itemsUnten.length};
+            const neueCheckliste: Checkliste = {checkisteDaten: changedChecklisteDaten, appearance: appearance};
             const checklistenMap: ChecklisteWithID[] = new ChecklistenMap(state.checklistenMap).merge(neueCheckliste);
             return {...state, selectedCheckliste: neueCheckliste, checklistenMap: checklistenMap}; 
         }
@@ -189,11 +189,11 @@ export class ChecklisteMerger {
         };
     
         const anzahlItems = filterChecklisteItems(checklisteDaten.items, kriterium).length;
-        const checklisteAppearence: ChecklisteAppearence = {...initialChecklisteAppearence, modus: 'SCHROEDINGER', anzahlItems: anzahlItems, color: color};
+        const checklisteAppearance: ChecklisteAppearance = {...initialChecklisteAppearance, modus: 'SCHROEDINGER', anzahlItems: anzahlItems, color: color};
 
         return {
             checkisteDaten: checklisteDaten,
-            appearence: checklisteAppearence
+            appearance: checklisteAppearance
         };
     }
 
