@@ -29,11 +29,11 @@ export class ConfigurationitemDetailsComponent implements OnInit {
   }
 
   togglePosition(): void {
-    this.itemClicked.emit({checklisteItem: this.checklisteItem, position: this.position, action: 'TOGGLE'});
+    this.itemClicked.emit({checklisteItem: this.checklisteItem, position: this.position, action: 'TOGGLE', modus: 'CONFIGURATION'});
   }
 
   editItem(): void {
-    this.itemClicked.emit({checklisteItem: this.checklisteItem, position: this.position, action: 'EDIT'});
+    this.itemClicked.emit({checklisteItem: this.checklisteItem, position: this.position, action: 'EDIT', modus: 'CONFIGURATION'});
   }
 
   getStyles() {

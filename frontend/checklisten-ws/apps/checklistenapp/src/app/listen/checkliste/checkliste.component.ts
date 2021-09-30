@@ -36,6 +36,7 @@ export class ChecklisteComponent implements OnInit {
 	configure() {
 		this.listenFacade.startConfigureCheckliste(this.checkliste);
 	}
+  
 	execute() {
 		this.listenFacade.startExecuteCheckliste(this.checkliste);
 	}

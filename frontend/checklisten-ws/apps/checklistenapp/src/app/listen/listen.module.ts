@@ -10,6 +10,8 @@ import { FormsModule } from '@angular/forms';
 import { ConfigurationitemDetailsComponent } from './checkliste-details/configure-checkliste/configurationitem-details/configurationitem-details.component';
 import { ExecutionitemDetailsComponent } from './checkliste-details/execute-checkliste/executionitem-details/executionitem-details.component';
 import { DeactivateConfigurationNavigationGuard } from './checkliste-details/configure-checkliste/deactivate-configuration-navigation.guard';
+import { ExecuteChecklisteComponent } from './checkliste-details/execute-checkliste/execute-checkliste.component';
+import { DeactivateExecutionNavigationGuard } from './checkliste-details/execute-checkliste/deactivate-execution-navigation.guard';
 
 
 
@@ -19,7 +21,8 @@ import { DeactivateConfigurationNavigationGuard } from './checkliste-details/con
     ChecklisteComponent,
     ConfigureChecklisteComponent,
     ConfigurationitemDetailsComponent,
-    ExecutionitemDetailsComponent
+    ExecutionitemDetailsComponent,
+    ExecuteChecklisteComponent
   ],
   imports: [
     CommonModule,
@@ -30,7 +33,8 @@ import { DeactivateConfigurationNavigationGuard } from './checkliste-details/con
   exports: [
   ],
   providers: [
-    DeactivateConfigurationNavigationGuard
+    DeactivateConfigurationNavigationGuard,
+    DeactivateExecutionNavigationGuard
   ]
 })
 export class ListenModule { }
