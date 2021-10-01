@@ -41,7 +41,7 @@ import de.egladil.web.commons_validation.payload.ResponsePayload;
  * ChecklistenvorlageResource gibt Vorgabedetails für Checklisten zurück.
  */
 @RequestScoped
-@Path("templates")
+@Path("vorlagen")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public class ChecklistenvorlageResource {

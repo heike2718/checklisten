@@ -1,1 +1,11 @@
-<p>vorlageitem-details works!</p>
+<div class="card mb-3" [ngStyle]="getStyles()">
+    <div class="card-header">
+        <div #trashButton class="btn-trash" title="löschen" (click)="deleteItem()" >
+          <i class="fa fa-trash"></i>
+        </div>
+    </div>
+    <div class="card-body">
+      <p class="card-text"> {{item.name}}</p>
+      <p *ngIf="showFilename">vorlageitem-details.component.ts</p>
+    </div>
+  </div>

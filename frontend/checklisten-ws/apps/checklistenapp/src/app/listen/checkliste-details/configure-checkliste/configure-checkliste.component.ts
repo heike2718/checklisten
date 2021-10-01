@@ -15,8 +15,7 @@ import { Checkliste, SaveChecklisteContext } from '../../listen.model';
 })
 export class ConfigureChecklisteComponent implements OnInit, OnDestroy {
 
-  public unsavedChanges!: boolean;
-
+  private unsavedChanges = false;
   private cancelClicked = false;
   private saveClicked = false;
 
@@ -43,7 +42,7 @@ export class ConfigureChecklisteComponent implements OnInit, OnDestroy {
   private cachedName?: string;
 
   private checklisteSubscription: Subscription = new Subscription();
-  private unsavedChangesSubsciption: Subscription = new Subscription();
+  private unsavedChangesSubsrciption: Subscription = new Subscription();
   private cachedNameSubscription: Subscription = new Subscription();
 
   constructor(public listenFacade: ListenFacade
@@ -64,13 +63,13 @@ export class ConfigureChecklisteComponent implements OnInit, OnDestroy {
       }
     );
 
-    this.unsavedChangesSubsciption = this.listenFacade.unsavedChanges$.subscribe ( changes => this.unsavedChanges = changes);
+    this.unsavedChangesSubsrciption = this.listenFacade.unsavedChanges$.subscribe ( changes => this.unsavedChanges = changes);
     this.cachedNameSubscription = this.listenFacade.cachedChecklistenname$.subscribe( name => this.cachedName = name);
   }
 
   ngOnDestroy(): void {
     this.checklisteSubscription.unsubscribe();
-    this.unsavedChangesSubsciption.unsubscribe();
+    this.unsavedChangesSubsrciption.unsubscribe();
     this.cachedNameSubscription.unsubscribe();
   }
 
@@ -79,15 +78,18 @@ export class ConfigureChecklisteComponent implements OnInit, OnDestroy {
   }
 
   onItemClicked($event: any): void {
-    
-    const payload: ChecklisteItemClickedPayload = $event;
 
-    if (payload.modus === 'CONFIGURATION') {
-      switch(payload.action) {
-        case 'TOGGLE': this.listenFacade.handleChecklisteItemClicked(this.checklisteName.trim(), payload); break;
-        case 'EDIT': this.openDialogEditItem({...payload.checklisteItem}); break;
-      }   
-    } 
+    if ($event && $event.eventType === 'CHECKLISTEITEM_CLICKED') {
+    
+      const payload: ChecklisteItemClickedPayload = $event;
+
+      if (payload.modus === 'CONFIGURATION') {
+        switch(payload.action) {
+          case 'TOGGLE': this.listenFacade.handleChecklisteItemClicked(this.checklisteName.trim(), payload); break;
+          case 'EDIT': this.openDialogEditItem({...payload.checklisteItem}); break;
+        }   
+      } 
+    }
   }
 
   toggleDialogNewItemVisible(): void {

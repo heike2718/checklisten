@@ -43,11 +43,8 @@ export function getBackgroundColorByChecklistentyp(typ: Checklistentyp) {
 		case 'PACKLISTE':
 			return 'lavender';
 		case 'TODOS':
-			// return 'aqua';
 			return '#c6ffb3';
 	}
-
-	return 'aqua';
 };
 
 export function getItemsOben(items: ChecklisteItem[], modus: Modus): ChecklisteItem[] {

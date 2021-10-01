@@ -26,7 +26,7 @@ export class ExecutionitemDetailsComponent implements OnInit {
   }
 
   togglePosition(): void {
-    this.itemClicked.emit({checklisteItem: this.checklisteItem, position: this.position, action: 'TOGGLE', modus: 'EXECUTION'});
+    this.itemClicked.emit({eventType: 'CHECKLISTEITEM_CLICKED', checklisteItem: this.checklisteItem, position: this.position, action: 'TOGGLE', modus: 'EXECUTION'});
   }
 
   getStyles() {

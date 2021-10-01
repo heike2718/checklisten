@@ -1,4 +1,5 @@
-import { Checklistentyp } from "../shared/domain/checkliste";
+import { Checklistentyp, EventType } from "../shared/domain/checkliste";
+import { VorlagenState } from "./+state/vorlagen.reducer";
 
 export interface ChecklistenvorlageItem {
     readonly typ: Checklistentyp;
@@ -23,6 +24,23 @@ export interface ChecklistenvorlageWithID {
     readonly typ: Checklistentyp;
     readonly vorlage: ChecklistenVorlage;
 };
+
+export interface ChecklistenitemClickedPayload {
+    readonly eventType: EventType,
+    readonly item: ChecklistenvorlageItem
+};
+
+export const initialChecklistenvorlageItem: ChecklistenvorlageItem = {
+    typ: 'EINKAUFSLISTE',
+    name: ''
+};
+
+export const initialChecklistenVorlage: ChecklistenVorlage = {
+    vorlageDaten: {typ: 'EINKAUFSLISTE', items: []},
+    appearance: {color: 'red'}
+};
+
+
 
 
 export class VorlagenMap {
@@ -81,4 +99,82 @@ export class VorlagenMap {
 
         return result;
     }
+}
+
+export class VorlagenMerger {
+
+
+    public mapToVorlage(vorlageDaten: ChecklistenvorlageDaten): ChecklistenvorlageWithID {
+
+        let color = '';
+        
+        switch(vorlageDaten.typ) {
+            case 'EINKAUFSLISTE': color = 'bisque'; break;
+            case 'PACKLISTE': color = 'lavender'; break;
+            default: color = '#c6ffb3';
+        }
+
+        const vorlage: ChecklistenVorlage = {vorlageDaten: vorlageDaten, appearance: {color: color}}
+        return {typ: vorlageDaten.typ, vorlage};
+    }
+
+    public addVorlageItem(state: VorlagenState, neuesItem: ChecklistenvorlageItem): VorlagenState {
+
+        if (state.selectedVorlage) {
+
+            const neueItems: ChecklistenvorlageItem[] = [...state.selectedVorlage.vorlageDaten.items];
+            neueItems.push(neuesItem);
+            
+            const neueVorlage: ChecklistenVorlage = {...state.selectedVorlage, vorlageDaten: {...state.selectedVorlage.vorlageDaten, items: neueItems}};
+            const neueMap: ChecklistenvorlageWithID[] = new VorlagenMap(state.vorlagenMap).merge(neueVorlage);
+
+            return {...state, vorlagenMap: neueMap, selectedVorlage: neueVorlage};
+
+        }
+        return {...state};
+    }
+
+    public removeVorlageItem(state: VorlagenState, removedItem: ChecklistenvorlageItem): VorlagenState {
+
+        if (state.selectedVorlage) {
+
+            const neueItems: ChecklistenvorlageItem[] = state.selectedVorlage.vorlageDaten.items.filter(item => item.name !== removedItem.name);
+            const neueVorlage: ChecklistenVorlage = {...state.selectedVorlage, vorlageDaten: {...state.selectedVorlage.vorlageDaten, items: neueItems}};
+            const neueMap: ChecklistenvorlageWithID[] = new VorlagenMap(state.vorlagenMap).merge(neueVorlage);
+
+            return {...state, vorlagenMap: neueMap, selectedVorlage: neueVorlage};
+        }       
+
+        return {...state};
+    }
+}
+
+export function itemsEquals(item1: ChecklistenvorlageItem, item2: ChecklistenvorlageItem): boolean {
+
+	if (!item1 && !item2) {
+		return true;
+	}
+
+	if (!item1 && item2) {
+		return false;
+	}
+
+	if (item1 && !item2) {
+		return false;
+	}
+
+	if (item1.name !== item2.name) {
+		return false;	
+	}
+
+	return true;
+
+}
+
+export function sortItems(items: ChecklistenvorlageItem[]): ChecklistenvorlageItem[] {
+    return items.sort((left, right) => sort(left, right));
+}
+
+function sort(item1: ChecklistenvorlageItem, item2: ChecklistenvorlageItem): number {
+    return item1.name.localeCompare(item2.name);
 }

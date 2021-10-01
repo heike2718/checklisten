@@ -42,7 +42,7 @@ public class AuthorizationFilter implements ContainerRequestFilter {
 
 	private static final Logger LOG = LoggerFactory.getLogger(AuthorizationFilter.class);
 
-	private static final List<String> AUTHORIZED_PATHS = Arrays.asList(new String[] { "/checklisten", "/templates", "/signup" });
+	private static final List<String> AUTHORIZED_PATHS = Arrays.asList(new String[] { "/checklisten", "/vorlagen", "/signup" });
 
 	@Inject
 	ConfigService config;

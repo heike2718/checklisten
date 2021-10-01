@@ -8,7 +8,7 @@ export const startLoading = createAction(
 
 export const vorlagenLoaded = createAction(
     '[VorlagenFacade] loadVorlagen success',
-    props<{checklisten: ChecklistenvorlageDaten[]}>()
+    props<{vorlagen: ChecklistenvorlageDaten[]}>()
 );
 
 export const loadVorlagenFailed = createAction(
@@ -26,12 +26,12 @@ export const deslectVorlage = createAction(
 
 export const vorlageItemAdded = createAction(
     '[VorlagenFacade] addItem',
-    props<{typ: Checklistentyp, vorlageItem: ChecklistenvorlageItem}>()
+    props<{vorlageItem: ChecklistenvorlageItem}>()
 );
 
-export const vorlageItemChanged = createAction(
-    '[VorlagenFacade] changeItem',
-    props<{typ: Checklistentyp, vorlageItem: ChecklistenvorlageItem}>()
+export const vorlageItemRemoved = createAction(
+    '[VorlagenFacade] removeItem',
+    props<{vorlageItem: ChecklistenvorlageItem}>()
 );
 
 export const vorlageSaved = createAction(

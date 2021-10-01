@@ -8,6 +8,7 @@ import { VorlageitemDetailsComponent } from './vorlageitem-details/vorlageitem-d
 import { FormsModule } from '@angular/forms';
 import { VorlagenRoutingModule } from './vorlagen-routing.module';
 import * as VorlagenReducer from './+state/vorlagen.reducer';
+import { DeactivateEditVorlageNavigationGuard } from './edit-vorlage/deactivate-edit-vorlage-navigation.guard';
 
 
 
@@ -23,6 +24,9 @@ import * as VorlagenReducer from './+state/vorlagen.reducer';
     FormsModule,
     VorlagenRoutingModule,
     StoreModule.forFeature(VorlagenReducer.vorlagenFeatureKey, VorlagenReducer.reducer)
+  ],
+  providers: [
+    DeactivateEditVorlageNavigationGuard
   ]
 })
 export class VorlagenModule { }

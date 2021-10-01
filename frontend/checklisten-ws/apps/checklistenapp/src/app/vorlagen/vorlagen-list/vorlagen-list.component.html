@@ -4,5 +4,19 @@
     <h1>Listenvorlagen</h1>
     <p>Hier kannst Du Vorschläge für Deine Checklisten pflegen. Wähle eine Vorlage aus und trage dort Dinge ein, die Du
         häufig benötigst.</p>
-      <p>Immer wenn Du eine neue Checkliste erstellst, werden ab dann diese Dinge zum Auswählen angezeigt.</p>
+    <p>Immer wenn Du eine neue Checkliste erstellst, werden ab dann diese Dinge zum Auswählen angezeigt.</p>
 </div>
+
+<div class="chl-container" *ngIf="vorlagenFacade.vorlagen$| async as vorlagen else loading">
+  <h3>Anzahl Vorlagen: {{vorlagen.length}}</h3>
+
+  <div class="row">
+      <div *ngFor="let vorlage of vorlagen" class="col-sm-12 col-md-6">
+          <chl-vorlage [vorlage]="vorlage"></chl-vorlage>
+      </div>
+  </div>
+</div>
+
+<ng-template #loading>
+	Lade Vorlagen... <i class="fa fa-spinner fa-2x fa-spin" aria-hidden="true"></i>
+</ng-template>

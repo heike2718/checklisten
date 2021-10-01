@@ -2,6 +2,7 @@ export type Checklistentyp = 'EINKAUFSLISTE' | 'PACKLISTE' | 'TODOS';
 export type Modus = 'SCHROEDINGER' | 'CONFIGURATION' | 'EXECUTION';
 export type ItemPosition = 'VORSCHLAG' | 'AUSGEWAEHLT';
 export type ItemAction = 'EDIT' | 'TOGGLE';
+export type EventType = 'VORLAGEITEM_REMOVED' | 'CHECKLISTEITEM_CLICKED' | 'CHECKLISTE_REMOVED';
 
 
 export interface ChecklisteItem {
@@ -24,6 +25,7 @@ export interface ChecklisteTemplate {
 };
 
 export interface ChecklisteItemClickedPayload {
+	readonly eventType: EventType,
 	readonly checklisteItem: ChecklisteItem;
 	readonly position: ItemPosition;
 	readonly action: ItemAction;

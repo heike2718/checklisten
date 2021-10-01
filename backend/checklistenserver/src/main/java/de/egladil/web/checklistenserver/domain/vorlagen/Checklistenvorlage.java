@@ -11,6 +11,9 @@ import java.util.List;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import de.egladil.web.checklistenserver.domain.Checklistentyp;
 
 /**
@@ -20,11 +23,14 @@ import de.egladil.web.checklistenserver.domain.Checklistentyp;
 public class Checklistenvorlage {
 
 	@NotNull
+	@JsonProperty
 	private Checklistentyp typ;
 
+	@JsonIgnore
 	private long readTime;
 
 	@Size(max = 999)
+	@JsonProperty
 	private List<ChecklistenvorlageItem> items = new ArrayList<>();
 
 	public static final Checklistenvorlage create(final Checklistentyp typ) {
