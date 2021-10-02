@@ -122,8 +122,10 @@ export class VorlagenMerger {
 
             const neueItems: ChecklistenvorlageItem[] = [...state.selectedVorlage.vorlageDaten.items];
             neueItems.push(neuesItem);
+
+            const neueItemsSorted = sortItems(neueItems);
             
-            const neueVorlage: ChecklistenVorlage = {...state.selectedVorlage, vorlageDaten: {...state.selectedVorlage.vorlageDaten, items: neueItems}};
+            const neueVorlage: ChecklistenVorlage = {...state.selectedVorlage, vorlageDaten: {...state.selectedVorlage.vorlageDaten, items: neueItemsSorted}};
             const neueMap: ChecklistenvorlageWithID[] = new VorlagenMap(state.vorlagenMap).merge(neueVorlage);
 
             return {...state, vorlagenMap: neueMap, selectedVorlage: neueVorlage};

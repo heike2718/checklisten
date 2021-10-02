@@ -336,26 +336,48 @@ function getListeConfiguration(items: ChecklisteItem[], position: ItemPosition):
 		return [];
 	}
 
+    let unsortedResult: ChecklisteItem[] = [];
+
 	switch (position) {
 		case 'VORSCHLAG':
-			return items.filter(it => !it.markiert);
+			unsortedResult = items.filter(it => !it.markiert);
+            break;
 		case 'AUSGEWAEHLT':
-			return items.filter(it => it.markiert);
+			unsortedResult = items.filter(it => it.markiert);
+            break;
 		default: return [];
 	}
+
+    return unsortedResult.sort((left, right) => sortChecklisteItems(left, right));
+
 }
 
 function getListeExecution(items: ChecklisteItem[], position: ItemPosition): ChecklisteItem[] {
-	if (!position) {
+	
+    if (!position) {
 		return [];
 	}
+
+    let unsortedResult: ChecklisteItem[] = [];
+
 	switch (position) {
 		case 'VORSCHLAG':
-			return items.filter(it => it.markiert && !it.erledigt);
+			unsortedResult = items.filter(it => it.markiert && !it.erledigt);
+            break;
 		case 'AUSGEWAEHLT':
-			return items.filter(it => it.markiert && it.erledigt);
+			unsortedResult = items.filter(it => it.markiert && it.erledigt);
+            break;
 		default: return [];
 	}
+
+    return unsortedResult.sort((left, right) => sortChecklisteItems(left, right));
+}
+
+function sortChecklisteItems(item1: ChecklisteItem, item2: ChecklisteItem): number {
+
+    return item1.name.localeCompare(item2.name);
+
+
 }
 
 
