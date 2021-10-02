@@ -6,10 +6,11 @@ import * as ListenActions from './+state/listen.actions';
 import * as ListenSelectors from './+state/listen.selectors';
 import { Checkliste, ChecklisteDaten, SaveChecklisteContext } from './listen.model';
 import { GlobalErrorHandlerService } from '../infrastructure/global-error-handler.service';
-import { ChecklisteItem, ChecklisteItemClickedPayload, Checklistentyp, Modus } from '../shared/domain/checkliste';
+import { ChecklisteItem, ChecklisteItemClickedPayload } from './listen.model';
 import { Router } from '@angular/router';
 import { MessageService } from '../shared/messages/message.service';
 import { getBackgroundColorByChecklistentyp } from '../shared/utils';
+import { Checklistentyp } from '../shared/domain/constants';
 
 @Injectable({ providedIn: 'root' })
 export class ListenFacade {

@@ -2,9 +2,9 @@ import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { NgbModal, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 import { environment } from 'apps/checklistenapp/src/environments/environment';
 import { ListenFacade } from '../listen.facade';
-import { Checklistentyp } from '../../shared/domain/checkliste';
+import { Checklistentyp } from '../../shared/domain/constants';
 import { MessageService } from '../../shared/messages/message.service';
-import { modalOptions } from '../../shared/utils';
+import { modalOptions } from '../../shared/domain/constants';
 
 @Component({
   selector: 'chl-checklisten-list',

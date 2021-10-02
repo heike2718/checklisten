@@ -1,9 +1,8 @@
 import { Component, Input, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { environment } from 'apps/checklistenapp/src/environments/environment';
-import { modalOptions } from '../../shared/utils';
 import { VorlagenFacade } from '../vorlagen.facade';
-import { ChecklistenVorlage, ChecklistenvorlageItem, initialChecklistenVorlage, initialChecklistenvorlageItem } from '../vorlagen.model';
+import { ChecklistenVorlage, initialChecklistenVorlage } from '../vorlagen.model';
 
 @Component({
   selector: 'chl-vorlage',
@@ -22,8 +21,7 @@ export class VorlageComponent implements OnInit {
   vorlage: ChecklistenVorlage = initialChecklistenVorlage;
 
 
-  constructor(private vorlagenFacade: VorlagenFacade
-    , private modalService: NgbModal) { }
+  constructor(private vorlagenFacade: VorlagenFacade) { }
 
   ngOnInit(): void {
     this.dialogNeuesItemVisible = false;

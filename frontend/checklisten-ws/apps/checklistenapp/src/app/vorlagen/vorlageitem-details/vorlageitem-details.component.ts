@@ -2,7 +2,7 @@ import { Component, Input, OnInit, EventEmitter, Output, OnDestroy } from '@angu
 import { environment } from 'apps/checklistenapp/src/environments/environment';
 import { Subscription } from 'rxjs';
 import { VorlagenFacade } from '../vorlagen.facade';
-import { ChecklistenitemClickedPayload, ChecklistenvorlageItem, initialChecklistenvorlageItem } from '../vorlagen.model';
+import { VorlageItemClickedPayload, ChecklistenvorlageItem, initialChecklistenvorlageItem } from '../vorlagen.model';
 
 @Component({
   selector: 'chl-vorlageitem-details',
@@ -17,7 +17,7 @@ export class VorlageitemDetailsComponent implements OnInit, OnDestroy {
   item: ChecklistenvorlageItem = initialChecklistenvorlageItem;
 
   @Output()
-  vorlageItemDeleted: EventEmitter<ChecklistenitemClickedPayload> = new EventEmitter<ChecklistenitemClickedPayload>();
+  vorlageItemDeleted: EventEmitter<VorlageItemClickedPayload> = new EventEmitter<VorlageItemClickedPayload>();
 
   private color: string = 'white';
 

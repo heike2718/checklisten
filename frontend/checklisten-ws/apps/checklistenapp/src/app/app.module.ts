@@ -10,25 +10,23 @@ import { RouterStateSerializer, StoreRouterConnectingModule, RouterState} from "
 
 import { AppComponent } from './app.component';
 import { AboutComponent } from './about/about.component';
-import { JokeComponent } from './joke/joke.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { AppRoutingModule } from './app-routing.module';
 import { StoreDevModules } from './store-config/store-devtools';
 import { AuthModule } from './auth/auth.module';
 import { environment } from '../environments/environment';
 import { GlobalErrorHandlerService } from './infrastructure/global-error-handler.service';
-import { CustomRouterStateSerializer } from './shared/utils';
 import { LandingComponent } from './landing/landing.component';
 import { ListenModule } from './listen/listen.module';
 import { NotAuthorizedComponent } from './not-authorized/not-authorized.component';
 import { MessagesComponent } from './shared/messages/message.component';
 import { VorlagenModule } from './vorlagen/vorlagen.module';
+import { CustomRouterStateSerializer } from './shared/router-state';
 
 @NgModule({
   declarations: [
     AppComponent,
     AboutComponent,
-    JokeComponent,
     NavbarComponent,
     LandingComponent,
     NotAuthorizedComponent,

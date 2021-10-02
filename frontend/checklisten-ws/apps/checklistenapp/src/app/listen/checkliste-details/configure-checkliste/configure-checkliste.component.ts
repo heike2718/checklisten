@@ -3,9 +3,9 @@ import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { environment } from 'apps/checklistenapp/src/environments/environment';
 import { Subscription } from 'rxjs';
-import { ChecklisteItem, ChecklisteItemClickedPayload } from '../../../shared/domain/checkliste';
+import { ChecklisteItem, ChecklisteItemClickedPayload } from '../../listen.model';
 import { ListenFacade } from '../../listen.facade';
-import { modalOptions } from '../../../shared/utils';
+import { modalOptions } from '../../../shared/domain/constants';
 import { Checkliste, SaveChecklisteContext } from '../../listen.model';
 
 @Component({

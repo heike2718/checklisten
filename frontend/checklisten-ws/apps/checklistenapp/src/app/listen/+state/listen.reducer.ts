@@ -1,6 +1,5 @@
 import { createReducer, Action, on } from '@ngrx/store';
-import { ChecklisteItem, ChecklisteItemClickedPayload, initialChecklisteItem } from '../../shared/domain/checkliste';
-import { getItemsOben, getItemsUnten } from '../../shared/utils';
+import { getItemsOben, getItemsUnten, ChecklisteItem, ChecklisteItemClickedPayload, initialChecklisteItem } from '../listen.model';
 import { Checkliste, ChecklisteMerger, ChecklistenMap, ChecklisteWithID } from '../listen.model';
 import * as ListenActions from './listen.actions';
 

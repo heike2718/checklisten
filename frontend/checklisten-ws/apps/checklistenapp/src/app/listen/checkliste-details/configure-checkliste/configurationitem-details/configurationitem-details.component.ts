@@ -1,6 +1,7 @@
 import { Component, EmbeddedViewRef, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
-import { ChecklisteItem, ChecklisteItemClickedPayload, initialChecklisteItem, ItemPosition } from 'apps/checklistenapp/src/app/shared/domain/checkliste';
+import { ItemPosition } from 'apps/checklistenapp/src/app/shared/domain/constants';
 import { environment } from 'apps/checklistenapp/src/environments/environment';
+import { ChecklisteItem, ChecklisteItemClickedPayload, initialChecklisteItem } from '../../../listen.model';
 
 @Component({
   selector: 'chl-configurationitem-details',

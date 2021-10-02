@@ -3,10 +3,9 @@ import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { environment } from 'apps/checklistenapp/src/environments/environment';
 import { Subscription } from 'rxjs';
-import { Checklistentyp } from '../../shared/domain/checkliste';
-import { modalOptions } from '../../shared/utils';
+import { modalOptions } from '../../shared/domain/constants';
 import { VorlagenFacade } from '../vorlagen.facade';
-import { ChecklistenitemClickedPayload, ChecklistenVorlage, ChecklistenvorlageItem, initialChecklistenVorlage } from '../vorlagen.model';
+import { ChecklistenVorlage, ChecklistenvorlageItem, initialChecklistenVorlage, VorlageItemClickedPayload } from '../vorlagen.model';
 
 @Component({
   selector: 'chl-edit-vorlage',
@@ -116,7 +115,7 @@ export class EditVorlageComponent implements OnInit, OnDestroy {
 
     if ($event && $event.eventType === 'VORLAGEITEM_REMOVED' ) {
 
-      const payload: ChecklistenitemClickedPayload = $event;
+      const payload: VorlageItemClickedPayload = $event;
       this.vorlagenFacade.deleteVorlageItem(payload.item);
 
     }

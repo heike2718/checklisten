@@ -1,5 +1,4 @@
 import { createAction, props } from '@ngrx/store';
-import { Checklistentyp } from '../../shared/domain/checkliste';
 import { ChecklistenVorlage, ChecklistenvorlageDaten, ChecklistenvorlageItem } from '../vorlagen.model';
 
 export const startLoading = createAction(

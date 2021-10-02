@@ -1,4 +1,4 @@
-import { Checklistentyp, EventType } from "../shared/domain/checkliste";
+import { Checklistentyp, EventType } from "../shared/domain/constants";
 import { VorlagenState } from "./+state/vorlagen.reducer";
 
 export interface ChecklistenvorlageItem {
@@ -25,9 +25,9 @@ export interface ChecklistenvorlageWithID {
     readonly vorlage: ChecklistenVorlage;
 };
 
-export interface ChecklistenitemClickedPayload {
-    readonly eventType: EventType,
-    readonly item: ChecklistenvorlageItem
+export interface VorlageItemClickedPayload {
+    readonly eventType: EventType;
+    readonly item: ChecklistenvorlageItem;
 };
 
 export const initialChecklistenvorlageItem: ChecklistenvorlageItem = {
@@ -39,8 +39,6 @@ export const initialChecklistenVorlage: ChecklistenVorlage = {
     vorlageDaten: {typ: 'EINKAUFSLISTE', items: []},
     appearance: {color: 'red'}
 };
-
-
 
 
 export class VorlagenMap {
