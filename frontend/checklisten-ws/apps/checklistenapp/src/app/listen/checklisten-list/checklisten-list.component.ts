@@ -13,7 +13,7 @@ import { modalOptions } from '../../shared/domain/constants';
 })
 export class ChecklistenListComponent implements OnInit {
 
-  showFilename = !environment.production;
+  showFilename = environment.envName === 'DEV';
   dialogNeueChecklisteVisible = false;
 
   nameListe: string = '';

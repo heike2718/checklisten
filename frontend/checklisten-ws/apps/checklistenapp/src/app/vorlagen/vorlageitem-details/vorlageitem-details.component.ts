@@ -11,7 +11,7 @@ import { VorlageItemClickedPayload, ChecklistenvorlageItem, initialChecklistenvo
 })
 export class VorlageitemDetailsComponent implements OnInit, OnDestroy {
 
-  showFilename = !environment.production;
+  showFilename = environment.envName === 'DEV';
 
   @Input()
   item: ChecklistenvorlageItem = initialChecklistenvorlageItem;
