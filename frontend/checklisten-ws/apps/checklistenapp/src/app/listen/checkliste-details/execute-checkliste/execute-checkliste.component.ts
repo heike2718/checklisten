@@ -89,11 +89,7 @@ export class ExecuteChecklisteComponent implements OnInit, OnDestroy {
 
   saveDisabled(): boolean {
 
-    if (this.saveClicked) {
-      return true;
-    }
-
-    return false;
+    return this.saveClicked || !this.unsavedChanges;
   }
 
   submit(): void {

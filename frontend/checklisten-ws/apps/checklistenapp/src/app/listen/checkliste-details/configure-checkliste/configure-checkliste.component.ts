@@ -159,16 +159,7 @@ export class ConfigureChecklisteComponent implements OnInit, OnDestroy {
   }
 
   saveDisabled(): boolean {
-
-    if (this.saveClicked) {
-      return true;
-    }
-
-    if (this.checklisteName.trim().length === 0) {
-      return true;
-    }
-
-    return false;
+    return this.saveClicked || !this.unsavedChanges;
   }
 
   undoDisabled(): boolean {
