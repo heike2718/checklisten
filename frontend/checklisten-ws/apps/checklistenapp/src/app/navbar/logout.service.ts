@@ -5,6 +5,7 @@ import { AuthService } from '../auth/auth.service';
 import { STORAGE_KEY_USER_SESSION } from '../shared/domain/user';
 import { ListenFacade } from '../listen/listen.facade';
 import { VorlagenFacade } from '../vorlagen/vorlagen.facade';
+import { Observable } from 'rxjs';
 
 
 @Injectable({
@@ -22,9 +23,16 @@ export class LogoutService {
 
 	logout(): void {
 		this.messageService.clear();
-		this.authService.logOut();
 		this.listenFacade.reset();
 		this.vorlagenFacade.reset();
+		this.authService.logOut(false);		
 		this.router.navigateByUrl('/');
+	}
+
+	logoutAndRedirectToProfile(): void {
+		this.messageService.clear();
+		this.listenFacade.reset();
+		this.vorlagenFacade.reset();
+		this.authService.logOut(true);	
 	}
 }

@@ -52,8 +52,9 @@ export class NavbarComponent implements OnInit {
 
 	profile(): void {
 		if (this.userLoggedIn) {
-			this.logoutService.logout();
-		}
-		window.location.href = environment.profileUrl;
+			this.logoutService.logoutAndRedirectToProfile();
+		}	 else {
+      window.location.href = environment.profileUrl;
+    }	
 	}
 }

@@ -15,7 +15,7 @@ export class AppComponent implements OnInit {
   title = 'checklistenapp';
   version = environment.version;
 	envName = environment.envName;
-	showEnv = !environment.production;
+	showFilename = environment.envName === 'DEV';
 	api = environment.apiUrl;
 	logo = environment.assetsUrl + '/favicon-32x32.png'; 
 
