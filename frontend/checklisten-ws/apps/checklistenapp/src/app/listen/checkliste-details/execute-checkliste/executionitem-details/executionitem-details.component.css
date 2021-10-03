@@ -1,10 +1,10 @@
 .execution-item-left {
-    padding: 5px 10px 5px 10px;
+    padding: 10px 5px 10px 5px;
     border: solid 1pt gray;
 }
 
 .execution-item-right {
-    padding: 5px 10px 5px 10px;
+    padding: 10px 5px 10px 5px;
     border-top: solid 1pt gray;
     border-right: solid 1pt gray;
     border-bottom: solid 1pt gray;

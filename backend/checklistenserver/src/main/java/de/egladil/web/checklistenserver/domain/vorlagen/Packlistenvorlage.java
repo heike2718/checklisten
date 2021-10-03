@@ -21,7 +21,7 @@ public class Packlistenvorlage extends AbstractListenvorlage {
 	String pathDirPacklisten;
 
 	@Override
-	protected String getPathTemplateDir() {
+	protected String getPathVorlagenDir() {
 
 		return pathDirPacklisten;
 	}

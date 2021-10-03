@@ -1,5 +1,6 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
-import { ChecklisteItem, ChecklisteItemClickedPayload, ItemPosition } from 'apps/checklistenapp/src/app/shared/domain/checkliste';
+import { ItemPosition } from 'apps/checklistenapp/src/app/shared/domain/constants';
+import { ChecklisteItem, ChecklisteItemClickedPayload } from '../../../listen.model';
 
 @Component({
   selector: 'chl-executionitem-details',
@@ -26,7 +27,7 @@ export class ExecutionitemDetailsComponent implements OnInit {
   }
 
   togglePosition(): void {
-    this.itemClicked.emit({checklisteItem: this.checklisteItem, position: this.position, action: 'TOGGLE', modus: 'EXECUTION'});
+    this.itemClicked.emit({eventType: 'CHECKLISTEITEM_CLICKED', checklisteItem: this.checklisteItem, position: this.position, action: 'TOGGLE', modus: 'EXECUTION'});
   }
 
   getStyles() {

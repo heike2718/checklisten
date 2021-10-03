@@ -38,6 +38,4 @@ const listenRoutes: Routes = [
 		RouterModule
 	]
 })
-export class ListenRoutingModule {
-
-}
+export class ListenRoutingModule { }

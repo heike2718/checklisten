@@ -12,12 +12,12 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * ChecklisteTemplateItemComparator
+ * ChecklistenvorlageItemComparator
  */
-public class ChecklisteTemplateItemComparator implements Comparator<ChecklisteTemplateItem> {
+public class ChecklistenvorlageItemComparator implements Comparator<ChecklistenvorlageItem> {
 
 	@Override
-	public int compare(final ChecklisteTemplateItem o1, final ChecklisteTemplateItem o2) {
+	public int compare(final ChecklistenvorlageItem o1, final ChecklistenvorlageItem o2) {
 
 		if (o1 == o2) {
 

@@ -12,7 +12,7 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 
 import de.egladil.web.checklistenserver.domain.listen.ChecklistenItem;
-import de.egladil.web.checklistenserver.domain.vorlagen.ChecklistenTemplateProvider;
+import de.egladil.web.checklistenserver.domain.vorlagen.ChecklistenvorlageProvider;
 
 /**
  * ChecklistenTemplateProviderTest
@@ -23,7 +23,7 @@ public class ChecklistenTemplateProviderTest {
 	void mapFiltertNurNonBlankElements() {
 		// Arrange
 		String[] namen = new String[] { " ", "eins ", "eins", null, "", "zwei" };
-		ChecklistenTemplateProvider provider = new ChecklistenTemplateProvider();
+		ChecklistenvorlageProvider provider = new ChecklistenvorlageProvider();
 
 		// Act
 		List<ChecklistenItem> items = provider.mapToChecklistenItems(namen);
@@ -39,7 +39,7 @@ public class ChecklistenTemplateProviderTest {
 	void mapSortiertAlphabetisch() {
 		// Arrange
 		String[] namen = new String[] { "zwei", "äh", "ah" };
-		ChecklistenTemplateProvider provider = new ChecklistenTemplateProvider();
+		ChecklistenvorlageProvider provider = new ChecklistenvorlageProvider();
 
 		// Act
 		List<ChecklistenItem> items = provider.mapToChecklistenItems(namen);

@@ -2,8 +2,9 @@ import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { NgbModal, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 import { environment } from 'apps/checklistenapp/src/environments/environment';
 import { ListenFacade } from '../listen.facade';
-import { Checklistentyp } from '../../shared/domain/checkliste';
+import { Checklistentyp } from '../../shared/domain/constants';
 import { MessageService } from '../../shared/messages/message.service';
+import { modalOptions } from '../../shared/domain/constants';
 
 @Component({
   selector: 'chl-checklisten-list',
@@ -21,12 +22,6 @@ export class ChecklistenListComponent implements OnInit {
   @ViewChild('dialogNeueCheckliste')
 	dialogNeueCheckliste!: TemplateRef<HTMLElement>;
 
-  private modalOptions: NgbModalOptions = {
-    backdrop:'static',
-    centered:true,
-    ariaLabelledBy: 'modal-basic-title'
-  };
-
   constructor(public listenFacade: ListenFacade
     , private messageService: MessageService
     , private modalService: NgbModal) { }
@@ -38,7 +33,7 @@ export class ChecklistenListComponent implements OnInit {
         
   }
 
-  showDialogNeueChecklisteVisible(): void {
+  showDialogNeueCheckliste(): void {
     this.dialogNeueChecklisteVisible = !this.dialogNeueChecklisteVisible;
     this.openDialogNeueCheckliste();
   }
@@ -51,7 +46,7 @@ export class ChecklistenListComponent implements OnInit {
 
     this.nameListe = '';  
 
-    this.modalService.open(this.dialogNeueCheckliste, this.modalOptions).result.then((result) => {
+    this.modalService.open(this.dialogNeueCheckliste, modalOptions).result.then((result) => {
 
       this.dialogNeueChecklisteVisible = !this.dialogNeueChecklisteVisible;
 

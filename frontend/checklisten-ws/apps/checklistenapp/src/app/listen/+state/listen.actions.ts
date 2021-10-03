@@ -1,10 +1,11 @@
 import { createAction, props } from '@ngrx/store';
-import { ChecklisteItem, ChecklisteItemClickedPayload, Modus } from '../../shared/domain/checkliste';
+import { Modus } from '../../shared/domain/constants';
+import { ChecklisteItem, ChecklisteItemClickedPayload } from '../listen.model';
 import { Checkliste, ChecklisteDaten, SaveChecklisteContext } from '../listen.model';
 
 
 export const startLoading = createAction(
-    '[ListenFacade] before service.loadChecklisten'
+    '[ListenFacade] before service.doSomething'
 );
 
 export const checklistenLoaded = createAction(

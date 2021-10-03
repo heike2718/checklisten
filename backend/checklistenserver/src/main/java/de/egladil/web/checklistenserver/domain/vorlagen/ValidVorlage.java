@@ -19,8 +19,8 @@ import javax.validation.Payload;
 @Documented
 @Retention(RUNTIME)
 @Target({ TYPE, FIELD, PARAMETER })
-@Constraint(validatedBy = { ChecklisteTemplateValidator.class })
-public @interface ValidTemplate {
+@Constraint(validatedBy = { ChecklistenvorlageValidator.class })
+public @interface ValidVorlage {
 
 	String message() default "";
 

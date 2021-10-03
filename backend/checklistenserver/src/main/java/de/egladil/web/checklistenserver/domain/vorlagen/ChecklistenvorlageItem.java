@@ -11,9 +11,9 @@ import de.egladil.web.checklistenserver.domain.Checklistentyp;
 import de.egladil.web.commons_validation.annotations.StringLatin;
 
 /**
- * ChecklisteTemplateItem
+ * ChecklistenvorlageItem
  */
-public class ChecklisteTemplateItem {
+public class ChecklistenvorlageItem {
 
 	@NotNull
 	private Checklistentyp typ;
@@ -22,9 +22,9 @@ public class ChecklisteTemplateItem {
 	@NotBlank
 	private String name;
 
-	public static ChecklisteTemplateItem create(final String name, final Checklistentyp typ) {
+	public static ChecklistenvorlageItem create(final String name, final Checklistentyp typ) {
 
-		ChecklisteTemplateItem result = new ChecklisteTemplateItem();
+		ChecklistenvorlageItem result = new ChecklistenvorlageItem();
 		result.name = name;
 		result.typ = typ;
 		return result;
@@ -66,7 +66,7 @@ public class ChecklisteTemplateItem {
 
 			return false;
 		}
-		ChecklisteTemplateItem other = (ChecklisteTemplateItem) obj;
+		ChecklistenvorlageItem other = (ChecklistenvorlageItem) obj;
 
 		if (name == null) {
 

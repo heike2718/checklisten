@@ -27,14 +27,14 @@ public abstract class AbstractListenvorlage {
 	private static final Logger LOG = LoggerFactory.getLogger(AbstractListenvorlage.class);
 
 	/**
-	 * Gibt das template für die gegebene Gruppe zurück. Wenn es keins mit Präfix 'gruppe' gibt, wird ein leeres Array
+	 * Gibt die Vorlage für die gegebene Gruppe zurück. Wenn es keins mit Präfix 'gruppe' gibt, wird ein leeres Array
 	 * zurückggegeben.
 	 *
 	 * @param  gruppe
 	 *                String darf nicht null sein.
 	 * @return        String[]
 	 */
-	public String[] getListeTemplate(final String gruppe) {
+	public String[] getVorlage(final String gruppe) {
 
 		if (StringUtils.isBlank(gruppe)) {
 
@@ -43,7 +43,7 @@ public abstract class AbstractListenvorlage {
 			return new String[0];
 		}
 
-		String pathFile = getPathTemplateFile(gruppe);
+		String pathFile = getPathVorlageFile(gruppe);
 
 		Path path = Paths.get(pathFile);
 
@@ -66,12 +66,12 @@ public abstract class AbstractListenvorlage {
 		}
 	}
 
-	public String getPathTemplateFile(final String gruppe) {
+	public String getPathVorlageFile(final String gruppe) {
 
-		return getPathTemplateDir() + File.separator + gruppe + getSuffixFilename();
+		return getPathVorlagenDir() + File.separator + gruppe + getSuffixFilename();
 	}
 
-	protected abstract String getPathTemplateDir();
+	protected abstract String getPathVorlagenDir();
 
 	protected abstract String getSuffixFilename();
 
