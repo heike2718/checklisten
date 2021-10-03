@@ -16,7 +16,7 @@ import { Checkliste, SaveChecklisteContext } from '../../listen.model';
 export class ExecuteChecklisteComponent implements OnInit, OnDestroy {
 
   public unsavedChanges!: boolean;
-  showFilename = !environment.production;
+  showFilename = environment.envName === 'DEV';
 
   private cancelClicked = false;
   private saveClicked = false;

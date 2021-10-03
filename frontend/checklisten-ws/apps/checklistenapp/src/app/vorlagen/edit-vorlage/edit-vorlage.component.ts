@@ -14,7 +14,7 @@ import { ChecklistenVorlage, ChecklistenvorlageItem, initialChecklistenVorlage, 
 })
 export class EditVorlageComponent implements OnInit, OnDestroy {
 
-  showFilename = !environment.production;
+  showFilename = environment.envName === 'DEV';
 
   dialogNeuesItemVisible = false;
   

@@ -11,7 +11,7 @@ import { ChecklistenVorlage, initialChecklistenVorlage } from '../vorlagen.model
 })
 export class VorlageComponent implements OnInit {
 
-  showFilename = !environment.production;
+  showFilename = environment.envName === 'DEV';
 
   dialogNeuesItemVisible = false;
 

@@ -29,7 +29,7 @@ export class ConfigureChecklisteComponent implements OnInit, OnDestroy {
 
   checklisteName: string = '';
 
-  showFilename = !environment.production;
+  showFilename = environment.envName === 'DEV';
 
   dialogNewItemVisible = false;
   dialogTitle: string = '';

@@ -22,7 +22,7 @@ export class ConfigurationitemDetailsComponent implements OnInit {
   @Output()
   itemClicked: EventEmitter<ChecklisteItemClickedPayload> = new EventEmitter<ChecklisteItemClickedPayload>();  
 
-  showFilename = !environment.production;
+  showFilename = environment.envName === 'DEV';
 
   constructor() { }
 

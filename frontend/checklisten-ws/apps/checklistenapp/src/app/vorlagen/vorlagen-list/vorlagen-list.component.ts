@@ -10,7 +10,7 @@ import { VorlagenFacade } from '../vorlagen.facade';
 })
 export class VorlagenListComponent implements OnInit {
 
-  showFilename = !environment.production;
+  showFilename = environment.envName === 'DEV';
 
   constructor( public vorlagenFacade: VorlagenFacade
     , private messageService: MessageService) { }

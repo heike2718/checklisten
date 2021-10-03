@@ -1,7 +1,7 @@
 import * as moment_ from 'moment';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { map, publishLast, refCount } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
@@ -58,7 +58,7 @@ export class AuthService {
 			}));
 	}
 
-	logOut() {
+	logOut(redirectToProfileApp: boolean ): void {
 
 		let url = environment.apiUrl;
 
@@ -89,17 +89,16 @@ export class AuthService {
 			refCount()
 		).subscribe(
 			_payload => {
-				this.clearSession();
+				this.clearSession(redirectToProfileApp);
 			},
 			(_error => {
 				// ist nicht schlimm: die session bleibt auf dem Server
-				this.clearSession();
+				this.clearSession(redirectToProfileApp);
 			}));
 
 	}
 
-	parseHash(hash: string): AuthResult {
-		
+	parseHash(hash: string): AuthResult {		
 
 		const hashStr = hash.replace(/^#?\/?/, '');
 
@@ -162,7 +161,7 @@ export class AuthService {
 	public clearOrRestoreSession() {
 
 		if (this.sessionExpired()) {
-			this.clearSession();
+			this.clearSession(false);
 		} else {
 			this.initSessionFromStorage();
 		}
@@ -184,10 +183,14 @@ export class AuthService {
 
 
 
-	private clearSession() {
+	private clearSession(redirectToProfileApp: boolean) {
 
 		localStorage.removeItem(STORAGE_KEY_USER_SESSION);
 		this.store.dispatch(AuthActions.logout());
+
+		if (redirectToProfileApp) {
+			window.location.href = environment.profileUrl;
+		}
 	}
 
 	private initSessionFromStorage() {

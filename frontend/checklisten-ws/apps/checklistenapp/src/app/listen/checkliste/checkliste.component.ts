@@ -15,7 +15,7 @@ export class ChecklisteComponent implements OnInit {
   @Input()
   checkliste: Checkliste = initialCheckliste;
 
-  showFilename: boolean = !environment.production;
+  showFilename = environment.envName === 'DEV';
 
   // das ! verhindert, dass eine sofortige Initialisierung verlangt wird, denn die ist hier nicht sinnvoll.
   @ViewChild('dialogWirklichLoeschen')
