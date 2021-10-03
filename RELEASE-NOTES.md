@@ -2,8 +2,8 @@
 
 __Release 8.0.0__:
 
-[Nach dem Aufruf der Startseite kommt Serverfehler](https://github.com/heike2718/checklisten/issues/1)
-[Umstellung Frontend auf ngrx](https://github.com/heike2718/checklisten/issues/2)
+* [Nach dem Aufruf der Startseite kommt Serverfehler](https://github.com/heike2718/checklisten/issues/1)
+* [Umstellung Frontend auf ngrx](https://github.com/heike2718/checklisten/issues/2)
 
 __Release 7.1.1__:
 
