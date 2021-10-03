@@ -5,14 +5,13 @@
 export const environment = {
   production: false,
   envName: 'a300',
-  version: '7.2.0',
+  version: '8.0.0',
   assetsUrl: 'http://a300/checklistenapp/assets',
   apiUrl: 'http://a300/checklisten-api',
   profileUrl: 'http://a300/profil-app',
 	authUrl: 'http://a300/auth-app',
 	signupRedirectUrl: 'http://a300/checklistenapp',
 	loginRedirectUrl: 'http://a300/checklistenapp#/listen',
-	jokesAPI: 'https://official-joke-api.appspot.com/jokes/random',
 	consoleLogActive: true,
 	serverLogActive: false,
 	loglevel: 2

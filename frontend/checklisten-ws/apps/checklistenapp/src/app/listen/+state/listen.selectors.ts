@@ -1,6 +1,6 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { Checkliste, ChecklistenMap } from '../listen.model';
-import { ChecklisteItem, itemsEquals } from '../../shared/domain/checkliste';
+import { ChecklisteItem, itemsEquals } from '../listen.model';
 import * as fromListen from './listen.reducer';
 
 const listenState = createFeatureSelector<fromListen.ListenState>(fromListen.listenFeatureKey);

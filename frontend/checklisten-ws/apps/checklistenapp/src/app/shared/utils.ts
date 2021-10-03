@@ -1,33 +1,4 @@
-import { RouterReducerState,RouterStateSerializer } from '@ngrx/router-store';
-import { RouterStateSnapshot, Params } from '@angular/router';
-import { ChecklisteItem, Checklistentyp, Filterkriterium, ItemPosition, Modus } from './domain/checkliste';
-
-
-export interface RouterStateUrl {
-  url: string;
-  params: Params;
-  queryParams: Params;
-}
-
-export interface State {
-  router: RouterReducerState<RouterStateUrl>;
-}
-
-export class CustomRouterStateSerializer implements RouterStateSerializer<RouterStateUrl> {
-  serialize(routerState: RouterStateSnapshot): RouterStateUrl {
-
-	let route = routerState.root;
-
-    while (route.firstChild) {
-      route = route.firstChild;
-    }
-
-    const { url, root: { queryParams } } = routerState;
-	const { params } = route;
-
-    return { url, params, queryParams };
-  }
-};
+import { Checklistentyp } from './domain/constants';
 
 export function getBackgroundColorByChecklistentyp(typ: Checklistentyp) {
 	switch (typ) {
@@ -36,91 +7,57 @@ export function getBackgroundColorByChecklistentyp(typ: Checklistentyp) {
 		case 'PACKLISTE':
 			return 'lavender';
 		case 'TODOS':
-			// return 'aqua';
 			return '#c6ffb3';
 	}
-
-	return 'aqua';
 };
 
-export function getItemsOben(items: ChecklisteItem[], modus: Modus): ChecklisteItem[] {
 
-	switch(modus) {
-		case 'CONFIGURATION':
-			return getItemsObenFuerKonfiguration(items);
-	    case 'EXECUTION':
-			return getItemsObenFuerAbarbeitung(items);
-	}
-	return [];
-}
+export function stringsEqual(str1?: string, str2?: string): boolean {
 
-export function getItemsUnten(items: ChecklisteItem[], modus: Modus): ChecklisteItem[] {
-
-	switch(modus) {
-		case 'CONFIGURATION':
-			return getItemsUntenFuerKonfiguration(items);
-	    case 'EXECUTION':
-			return getItemsUntenFuerAbarbeitung(items);
-	}
-	return [];
-}
-
-export function filterChecklisteItems(items: ChecklisteItem[], filterkriterium: Filterkriterium): ChecklisteItem[] {
-
-	switch (filterkriterium.modus) {
-		case 'CONFIGURATION':
-			return getListeConfiguration(items, filterkriterium.position);
-		case 'EXECUTION':
-			return getListeExecution(items, filterkriterium.position);
-		default: return [];
-	}
-}
-
-// === private functions ==/
-function getItemsObenFuerKonfiguration(items: ChecklisteItem[]): ChecklisteItem[] {
-	return items.filter(it => !it.markiert);
-}
-
-function getItemsObenFuerAbarbeitung(items: ChecklisteItem[]): ChecklisteItem[] {
-	return items.filter(it => it.markiert);
-}
-
-function getItemsUntenFuerKonfiguration(items: ChecklisteItem[]): ChecklisteItem[] {
-	return items.filter(it => it.markiert && !it.erledigt);
-}
-
-function getItemsUntenFuerAbarbeitung(items: ChecklisteItem[]): ChecklisteItem[] {
-	return items.filter(it => it.markiert && it.erledigt);
-}
-
-
-
-function getListeConfiguration(items: ChecklisteItem[], position: ItemPosition): ChecklisteItem[] {
-
-	if (!position) {
-		return [];
+	if (str1 === null && str2 === null) {
+		return true;
 	}
 
-	switch (position) {
-		case 'VORSCHLAG':
-			return items.filter(it => !it.markiert);
-		case 'AUSGEWAEHLT':
-			return items.filter(it => it.markiert);
-		default: return [];
+	if (str1 === null && str2 === undefined) {
+		return true;
 	}
+
+	if (str1 === undefined && str2 === null) {
+		return true;
+	}
+
+	if (str1 === undefined && str2 === undefined) {
+		return true;
+	}
+
+	if (str1 === null && str2 !== null) {
+
+		if (str2?.trim().length === 0) {
+			return true;
+		}
+
+		return false;
+	}
+
+	if (str1 !== null && str2 === null) {
+
+		if (str1?.trim().length === 0) {
+			return true;
+		}
+
+		return false;
+	}
+
+	if (str1 === undefined && str2 !== undefined) {
+		return false;
+	}
+
+	if (str1 !== undefined && str2 === undefined) {
+		return false;
+	}
+
+	return str1 === str2;
 }
 
-function getListeExecution(items: ChecklisteItem[], position: ItemPosition): ChecklisteItem[] {
-	if (!position) {
-		return [];
-	}
-	switch (position) {
-		case 'VORSCHLAG':
-			return items.filter(it => it.markiert && !it.erledigt);
-		case 'AUSGEWAEHLT':
-			return items.filter(it => it.markiert && it.erledigt);
-		default: return [];
-	}
-}
 
 

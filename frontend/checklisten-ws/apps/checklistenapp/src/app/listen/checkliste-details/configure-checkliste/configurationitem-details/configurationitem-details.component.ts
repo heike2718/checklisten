@@ -1,6 +1,7 @@
 import { Component, EmbeddedViewRef, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
-import { ChecklisteItem, ChecklisteItemClickedPayload, initialChecklisteItem, ItemPosition } from 'apps/checklistenapp/src/app/shared/domain/checkliste';
+import { ItemPosition } from 'apps/checklistenapp/src/app/shared/domain/constants';
 import { environment } from 'apps/checklistenapp/src/environments/environment';
+import { ChecklisteItem, ChecklisteItemClickedPayload, initialChecklisteItem } from '../../../listen.model';
 
 @Component({
   selector: 'chl-configurationitem-details',
@@ -29,11 +30,11 @@ export class ConfigurationitemDetailsComponent implements OnInit {
   }
 
   togglePosition(): void {
-    this.itemClicked.emit({checklisteItem: this.checklisteItem, position: this.position, action: 'TOGGLE'});
+    this.itemClicked.emit({eventType: 'CHECKLISTEITEM_CLICKED', checklisteItem: this.checklisteItem, position: this.position, action: 'TOGGLE', modus: 'CONFIGURATION'});
   }
 
   editItem(): void {
-    this.itemClicked.emit({checklisteItem: this.checklisteItem, position: this.position, action: 'EDIT'});
+    this.itemClicked.emit({eventType: 'CHECKLISTEITEM_CLICKED', checklisteItem: this.checklisteItem, position: this.position, action: 'EDIT', modus: 'CONFIGURATION'});
   }
 
   getStyles() {

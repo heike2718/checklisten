@@ -1,0 +1,10 @@
+<div class="card mb-3 item-btn" [ngStyle]="getStyles()" (click)="startEdit()">
+    <div class="card-body">
+        <h4 class="card-title">{{vorlage.vorlageDaten.typ}}
+           <span class="ml-1 badge bg-dark">{{vorlage.vorlageDaten.items.length}}</span>
+        </h4>
+        <p *ngIf="showFilename">vorlage.component.ts (Input: vorlage)</p>
+        <p class="text-muted">zum Ändern clicken</p>
+    </div>
+</div>
+

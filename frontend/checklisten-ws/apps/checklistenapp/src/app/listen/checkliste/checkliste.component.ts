@@ -17,7 +17,7 @@ export class ChecklisteComponent implements OnInit {
 
   showFilename: boolean = !environment.production;
 
-    // das ! verhindert, dass eine sofortige Initialisierung verlangt wird, denn die ist hier nicht sinnvoll.
+  // das ! verhindert, dass eine sofortige Initialisierung verlangt wird, denn die ist hier nicht sinnvoll.
   @ViewChild('dialogWirklichLoeschen')
   dialogWirklichLoeschen!: TemplateRef<HTMLElement>;
   
@@ -36,6 +36,7 @@ export class ChecklisteComponent implements OnInit {
 	configure() {
 		this.listenFacade.startConfigureCheckliste(this.checkliste);
 	}
+  
 	execute() {
 		this.listenFacade.startExecuteCheckliste(this.checkliste);
 	}
@@ -51,7 +52,7 @@ export class ChecklisteComponent implements OnInit {
 
   getStyles() {
     return {
-      'backgroundColor': this.checkliste.appearence.color
+      'background-color': this.checkliste.appearance.color
     };
   }
 

@@ -1,6 +1,8 @@
-import { ChecklisteItem, Checklistentyp, Filterkriterium, Modus } from "../shared/domain/checkliste";
-import { filterChecklisteItems, getItemsOben, getItemsUnten } from "../shared/utils";
 import { ListenState } from "./+state/listen.reducer";
+import { stringsEqual } from "../shared/utils";
+import { Checklistentyp, EventType, ItemAction, ItemPosition, Modus } from "../shared/domain/constants";
+
+
 
 
 export interface ChecklisteDaten {
@@ -12,7 +14,7 @@ export interface ChecklisteDaten {
 	version: number;	
 };
 
-export interface ChecklisteAppearence {
+export interface ChecklisteAppearance {
     readonly anzahlItems: number;
     readonly color: string;
     readonly modus: Modus;
@@ -22,7 +24,7 @@ export interface ChecklisteAppearence {
 
 export interface Checkliste {
     checkisteDaten: ChecklisteDaten;
-    appearence: ChecklisteAppearence;
+    appearance: ChecklisteAppearance;
 };
 
 export interface ChecklisteWithID {
@@ -37,7 +39,7 @@ export interface SaveChecklisteContext {
 };
 
 
-export const initialChecklisteAppearence: ChecklisteAppearence = {
+export const initialChecklisteAppearance: ChecklisteAppearance = {
     anzahlItems: 0,
     color: 'bisque',
     modus: 'SCHROEDINGER',
@@ -57,7 +59,7 @@ const initialChecklisteDaten: ChecklisteDaten = {
 
 export const initialCheckliste: Checkliste = {
     checkisteDaten: initialChecklisteDaten,
-    appearence: initialChecklisteAppearence
+    appearance: initialChecklisteAppearance
 };
 
 
@@ -139,7 +141,7 @@ export class ChecklisteMerger {
 
         if (state.selectedCheckliste) {
 
-            const modus: Modus = 'CONFIGURATION';
+            const modus: Modus = state.selectedCheckliste.appearance.modus;
 
             let neueItems: ChecklisteItem[] = [];
 
@@ -164,11 +166,10 @@ export class ChecklisteMerger {
             const changedChecklisteDaten = {...state.selectedCheckliste.checkisteDaten, items: neueItems, name: checklisteName};
             const itemsOben = [...getItemsOben(changedChecklisteDaten.items, modus)];
             const itemsUnten = [...getItemsUnten(changedChecklisteDaten.items, modus)];           
-            const appearence: ChecklisteAppearence = {...state.selectedCheckliste.appearence, itemsOben: itemsOben, itemsUnten:itemsUnten, anzahlItems: itemsUnten.length};
-            const neueCheckliste: Checkliste = {checkisteDaten: changedChecklisteDaten, appearence: appearence};
+            const appearance: ChecklisteAppearance = {...state.selectedCheckliste.appearance, itemsOben: itemsOben, itemsUnten:itemsUnten, anzahlItems: itemsUnten.length};
+            const neueCheckliste: Checkliste = {checkisteDaten: changedChecklisteDaten, appearance: appearance};
             const checklistenMap: ChecklisteWithID[] = new ChecklistenMap(state.checklistenMap).merge(neueCheckliste);
-            return {...state, selectedCheckliste: neueCheckliste, checklistenMap: checklistenMap};
- 
+            return {...state, selectedCheckliste: neueCheckliste, checklistenMap: checklistenMap}; 
         }
 
         return {...state};
@@ -190,11 +191,11 @@ export class ChecklisteMerger {
         };
     
         const anzahlItems = filterChecklisteItems(checklisteDaten.items, kriterium).length;
-        const checklisteAppearence: ChecklisteAppearence = {...initialChecklisteAppearence, modus: 'SCHROEDINGER', anzahlItems: anzahlItems, color: color};
+        const checklisteAppearance: ChecklisteAppearance = {...initialChecklisteAppearance, modus: 'SCHROEDINGER', anzahlItems: anzahlItems, color: color};
 
         return {
             checkisteDaten: checklisteDaten,
-            appearence: checklisteAppearence
+            appearance: checklisteAppearance
         };
     }
 
@@ -210,4 +211,174 @@ export class ChecklisteMerger {
 
     }
 }
+
+
+export interface ChecklisteItem {
+	name: string;
+	markiert: boolean;
+	optional: boolean;
+	erledigt: boolean;
+	kommentar?: string;
+};
+
+export interface ChecklisteItemClickedPayload {
+	readonly eventType: EventType,
+	readonly checklisteItem: ChecklisteItem;
+	readonly position: ItemPosition;
+	readonly action: ItemAction;
+	readonly modus: Modus;
+};
+
+export const initialChecklisteItem: ChecklisteItem = {
+	name: '',
+	markiert: false,
+	optional: false,
+	erledigt: false,
+	kommentar: ''
+};
+
+export function itemsEquals(item1: ChecklisteItem, item2: ChecklisteItem): boolean {
+
+	if (!item1 && !item2) {
+		return true;
+	}
+
+	if (!item1 && item2) {
+		return false;
+	}
+
+	if (item1 && !item2) {
+		return false;
+	}
+
+	if (item1.name !== item2.name) {
+		return false;	
+	}
+
+	if (!stringsEqual(item1.kommentar, item2.kommentar)) {
+		return false;
+	}
+
+	if (item1.erledigt !== item2.erledigt) {
+		return false;
+	}
+
+	if (item1.markiert !== item2.markiert) {
+		return false;
+	}
+
+	if (item1.optional !== item2.optional) {
+		return false;
+	}
+	return true;
+
+}
+
+export function getItemsOben(items: ChecklisteItem[], modus: Modus): ChecklisteItem[] {
+
+	switch(modus) {
+		case 'CONFIGURATION':
+			return getItemsObenFuerKonfiguration(items);
+	    case 'EXECUTION':
+			return getItemsObenFuerAbarbeitung(items);
+	}
+	return [];
+}
+
+export function getItemsUnten(items: ChecklisteItem[], modus: Modus): ChecklisteItem[] {
+
+	switch(modus) {
+		case 'CONFIGURATION':
+			return getItemsUntenFuerKonfiguration(items);
+	    case 'EXECUTION':
+			return getItemsUntenFuerAbarbeitung(items);
+	}
+	return [];
+}
+
+export function filterChecklisteItems(items: ChecklisteItem[], filterkriterium: Filterkriterium): ChecklisteItem[] {
+
+	switch (filterkriterium.modus) {
+		case 'CONFIGURATION':
+			return getListeConfiguration(items, filterkriterium.position);
+		case 'EXECUTION':
+			return getListeExecution(items, filterkriterium.position);
+		default: return [];
+	}
+}
+
+// === private functions ==/
+interface Filterkriterium {
+	modus: Modus;
+	position: ItemPosition;
+};
+
+
+function getItemsObenFuerKonfiguration(items: ChecklisteItem[]): ChecklisteItem[] {
+	return items.filter(it => !it.markiert);
+}
+
+function getItemsObenFuerAbarbeitung(items: ChecklisteItem[]): ChecklisteItem[] {
+	return items.filter(it => it.markiert && !it.erledigt);
+}
+
+function getItemsUntenFuerKonfiguration(items: ChecklisteItem[]): ChecklisteItem[] {
+	return items.filter(it => it.markiert && !it.erledigt);
+}
+
+function getItemsUntenFuerAbarbeitung(items: ChecklisteItem[]): ChecklisteItem[] {
+	return items.filter(it => it.markiert && it.erledigt);
+}
+
+function getListeConfiguration(items: ChecklisteItem[], position: ItemPosition): ChecklisteItem[] {
+
+	if (!position) {
+		return [];
+	}
+
+    let unsortedResult: ChecklisteItem[] = [];
+
+	switch (position) {
+		case 'VORSCHLAG':
+			unsortedResult = items.filter(it => !it.markiert);
+            break;
+		case 'AUSGEWAEHLT':
+			unsortedResult = items.filter(it => it.markiert);
+            break;
+		default: return [];
+	}
+
+    return unsortedResult.sort((left, right) => sortChecklisteItems(left, right));
+
+}
+
+function getListeExecution(items: ChecklisteItem[], position: ItemPosition): ChecklisteItem[] {
+	
+    if (!position) {
+		return [];
+	}
+
+    let unsortedResult: ChecklisteItem[] = [];
+
+	switch (position) {
+		case 'VORSCHLAG':
+			unsortedResult = items.filter(it => it.markiert && !it.erledigt);
+            break;
+		case 'AUSGEWAEHLT':
+			unsortedResult = items.filter(it => it.markiert && it.erledigt);
+            break;
+		default: return [];
+	}
+
+    return unsortedResult.sort((left, right) => sortChecklisteItems(left, right));
+}
+
+function sortChecklisteItems(item1: ChecklisteItem, item2: ChecklisteItem): number {
+
+    return item1.name.localeCompare(item2.name);
+
+
+}
+
+
 

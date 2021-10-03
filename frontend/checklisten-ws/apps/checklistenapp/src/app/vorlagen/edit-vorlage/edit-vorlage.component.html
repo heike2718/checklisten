@@ -1,0 +1,82 @@
+<p *ngIf="showFilename">edit-vorlage.component.ts</p>
+
+<div class="chl-container" *ngIf="vorlagenFacade.selectedVorlage$| async as vorlage else loading">
+
+    <h4>Vorlage {{vorlage.vorlageDaten.typ}} ändern</h4>
+
+    <div class="row">
+
+        <div *ngFor="let item of vorlage.vorlageDaten.items" class="col-sm-12 col-md-4 col-lg-3">
+            <chl-vorlageitem-details [item]="item" (vorlageItemDeleted)="onItemDeleted($event)"></chl-vorlageitem-details>
+        </div>
+    </div>
+
+    <div *ngIf="!dialogNeuesItemVisible" class="row mb-3">
+        <div class="col-md-4">
+            <button class="col-md-12 btn btn-outline-dark" (click)="showDialogNeuesItem()">
+              <i class="fa fa-plus"></i> neues Teil </button>
+          </div>
+    </div>
+
+    <div class="d-none d-md-block">
+        <div class="d-flex flex-row hidden-xs" role="group">
+            <button class="btn btn-primary w-100 m-1" [disabled]="saveDisabled()" (click)="submit()" title="Änderungen speichern">speichern</button>
+            <button class="btn btn-primary w-100 m-1" [disabled]="undoDisabled()" (click)="undo()" title="Änderungen verwerfen">verwerfen</button>
+            <button class="btn btn-primary w-100 m-1" (click)="gotoVorlagen()" title="zurück zu den Vorlagen">alle Vorlagen</button>
+        </div>
+    </div>
+
+    <div class="d-md-none d-lg-none d-xl-none">
+        <div class="btn-group d-inline" role="group">
+            <button class="btn btn-primary w-100 m-1" [disabled]="saveDisabled()" (click)="submit()" title="Änderungen speichern">speichern</button>
+            <button class="btn btn-primary w-100 m-1" [disabled]="undoDisabled()" (click)="undo()" title="Änderungen verwerfen">verwerfen</button>
+            <button class="btn btn-primary w-100 m-1" (click)="gotoVorlagen()" title="zurück zu den Vorlagen">alle Vorlagen</button>
+        </div>
+    </div>
+
+</div>
+
+<ng-template #dialogNeuesItem let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Neues Teil</h4>
+    </div>
+    <div class="modal-body">
+        <form id="neueChecklisteForm">
+            <div class="group">
+                <label for="inputNameListe">Name*:</label>
+                <input type="text" class="form-control" id="inputNameListe" name="inputItemName" [(ngModel)]="neuesItemName"
+                  required aria-describedby="itemNameHelp" placeholder="Name">
+            </div>
+        </form>
+    </div>
+    <div class="d-none d-md-block">
+        <div class="d-flex flex-row hidden-xs" role="group">
+            <button class="btn btn-outline-secondary w-100 m-1" [disabled]="addItemDisabled()" (click)="modal.close('OK')">hinzufügen</button>
+            <button class="btn btn-outline-secondary w-100 m-1" (click)="modal.close('NO')">doch nicht</button>
+        </div>
+    </div>        
+    <div class="d-md-none d-lg-none d-xl-none">
+        <div class="btn-group d-inline" role="group">
+            <button class="btn btn-outline-secondary w-100 m-1" [disabled]="addItemDisabled()" (click)="modal.close('EINKAUFSLISTE')">hinzufügen</button>
+            <button class="btn btn-outline-secondary w-100 m-1" (click)="modal.close('NO')">doch nicht</button>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #dialogUnsavedChanges let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Du hast noch nicht gespeichert</h4>
+    </div>
+    <div class="modal-body">
+        <p>Bist du sicher, dass du weg willst?</p>        
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" (click)="modal.close('STAY')">hier bleiben</button>
+        <button type="button" class="btn btn-danger" (click)="modal.close('DISCARD')">Änderungen verwerfen</button>
+    </div>
+</ng-template>
+
+
+<ng-template #loading>
+	Lade Vorlage... <i class="fa fa-spinner fa-2x fa-spin" aria-hidden="true"></i>
+</ng-template>

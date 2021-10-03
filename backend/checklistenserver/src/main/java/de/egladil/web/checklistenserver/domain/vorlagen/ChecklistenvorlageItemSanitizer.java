@@ -9,14 +9,14 @@ import java.util.function.Function;
 import org.owasp.encoder.Encode;
 
 /**
- * ChecklisteTemplateItemSanitizer
+ * ChecklistenvorlageItemSanitizer
  */
-public class ChecklisteTemplateItemSanitizer implements Function<ChecklisteTemplateItem, ChecklisteTemplateItem> {
+public class ChecklistenvorlageItemSanitizer implements Function<ChecklistenvorlageItem, ChecklistenvorlageItem> {
 
 	@Override
-	public ChecklisteTemplateItem apply(final ChecklisteTemplateItem originalitem) {
+	public ChecklistenvorlageItem apply(final ChecklistenvorlageItem originalitem) {
 
-		ChecklisteTemplateItem result = ChecklisteTemplateItem.create(Encode.forHtml(originalitem.getName()),
+		ChecklistenvorlageItem result = ChecklistenvorlageItem.create(Encode.forHtml(originalitem.getName()),
 			originalitem.getTyp());
 		return result;
 	}
