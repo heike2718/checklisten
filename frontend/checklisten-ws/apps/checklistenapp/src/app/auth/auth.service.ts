@@ -60,6 +60,8 @@ export class AuthService {
 
 	logOut(redirectToProfileApp: boolean ): void {
 
+		this.store.dispatch(AuthActions.startLoggingOut());
+
 		let url = environment.apiUrl;
 
 		const sessionSerialized = localStorage.getItem(STORAGE_KEY_USER_SESSION);

@@ -19,7 +19,7 @@ export class AppComponent implements OnInit {
 	api = environment.apiUrl;
 	logo = environment.assetsUrl + '/favicon-32x32.png'; 
 
-  constructor(private authService: AuthService
+  constructor(public authService: AuthService
     , private logger: LogService) {
   }
 
