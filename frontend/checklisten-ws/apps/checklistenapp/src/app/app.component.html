@@ -4,6 +4,7 @@
 
   <main>
     <div class="container-fluid">
+      <p *ngIf="authService.onLoggingOut$ | async">Bitte warten... <i class="fa fa-spinner fa-2x fa-spin" aria-hidden="true"></i></p>
       <router-outlet #routerOutlet="outlet"></router-outlet>
     </div>
   </main>
