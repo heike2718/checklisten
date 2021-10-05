@@ -1,5 +1,10 @@
 # checklistenserver Release Notes
 
+__Release 8.0.1__:
+
+* [Dialog "neues Teil" ist beim zweiten Aufruf nicht leer](https://github.com/heike2718/checklisten/issues/10)
+* erleichterte Navigation fürs Smartphone
+
 __Release 8.0.0__:
 
 * [Nach dem Aufruf der Startseite kommt Serverfehler](https://github.com/heike2718/checklisten/issues/1)
