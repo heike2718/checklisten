@@ -76,11 +76,15 @@ footer {
 /* ===== small devices ==== */
   
   @media (max-width: 768px) {
+
+    body {
+      width: 100%;
+    }
   
-      .h4,
-      body {
-          font-size: 1rem;
-      }
+    .h4,
+    body {
+        font-size: 1rem;          
+    }
   
     h2
       .header-3,

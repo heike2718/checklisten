@@ -88,7 +88,10 @@ export class ChecklistenMap {
 
     public toArray(): Checkliste[] {
 
-        return [...this.checklisten.values()];
+        const result: Checkliste[] = [...this.checklisten.values()];
+
+        result.sort((c1,c2) => this.compareChecklisten(c1, c2));
+        return result;
     }
 
     public merge(checkliste: Checkliste): ChecklisteWithID[]  {
@@ -127,6 +130,10 @@ export class ChecklistenMap {
         result.sort((c1,c2) => this.compareChecklistenWithID(c1, c2));
         return result;
 
+    }
+
+    private compareChecklisten(checkliste1: Checkliste, checkliste2: Checkliste) : number {
+        return checkliste1.checkisteDaten.name.localeCompare(checkliste2.checkisteDaten.name);
     }
 
     private compareChecklistenWithID(checkliste1: ChecklisteWithID, checkliste2: ChecklisteWithID) : number {

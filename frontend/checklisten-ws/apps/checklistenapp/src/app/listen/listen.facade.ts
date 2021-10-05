@@ -4,7 +4,7 @@ import { AppState } from '../reducers';
 import { ListenService } from './listen.service';
 import * as ListenActions from './+state/listen.actions';
 import * as ListenSelectors from './+state/listen.selectors';
-import { Checkliste, ChecklisteDaten, SaveChecklisteContext } from './listen.model';
+import { Checkliste, ChecklisteDaten, initialChecklisteAppearance, SaveChecklisteContext } from './listen.model';
 import { GlobalErrorHandlerService } from '../infrastructure/global-error-handler.service';
 import { ChecklisteItem, ChecklisteItemClickedPayload } from './listen.model';
 import { Router } from '@angular/router';
@@ -114,6 +114,13 @@ export class ListenFacade {
                 };
 
                 this.store.dispatch(ListenActions.checklisteSaved({saveChecklisteContext: neuerSaveContext}));
+
+                const checkliste: Checkliste = {
+                    appearance: {...initialChecklisteAppearance, color: color},
+                    checkisteDaten: data
+                };
+
+                this.startConfigureCheckliste(checkliste);
             },
 			(error => {
 				this.store.dispatch(ListenActions.errorOnSaveCheckliste());
