@@ -121,6 +121,9 @@ export class ConfigureChecklisteComponent implements OnInit, OnDestroy {
   openDialogNewItem(): void {
 
     this.dialogTitle = 'Neues Teil';
+    this.itemName = '';
+    this.itemOptional = false;
+    this.itemKommentar = '';
 
     this.modalService.open(this.dialogEditItem, modalOptions).result.then((result) => {
 
