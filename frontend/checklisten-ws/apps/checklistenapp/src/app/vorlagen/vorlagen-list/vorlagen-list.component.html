@@ -5,16 +5,28 @@
     <p>Hier kannst Du Vorschläge für Deine Checklisten pflegen. Wähle eine Vorlage aus und trage dort Dinge ein, die Du
         häufig benötigst.</p>
     <p>Immer wenn Du eine neue Checkliste erstellst, werden ab dann diese Dinge zum Auswählen angezeigt.</p>
-</div>
 
-<div class="chl-container" *ngIf="vorlagenFacade.vorlagen$| async as vorlagen else loading">
-  <h3>Anzahl Vorlagen: {{vorlagen.length}}</h3>
 
-  <div class="row">
-      <div *ngFor="let vorlage of vorlagen" class="col-sm-12 col-md-6">
-          <chl-vorlage [vorlage]="vorlage"></chl-vorlage>
-      </div>
-  </div>
+    <div class="chl-container" *ngIf="vorlagenFacade.vorlagen$| async as vorlagen else loading">
+        <h3>Anzahl Vorlagen: {{vorlagen.length}}</h3>
+
+        <div class="row">
+            <div *ngFor="let vorlage of vorlagen" class="col-sm-12 col-md-6">
+                <chl-vorlage [vorlage]="vorlage"></chl-vorlage>
+            </div>
+    </div>
+
+    <div class="d-none d-md-block">
+        <div class="d-flex flex-row hidden-xs" role="group">
+            <button class="btn btn-secondary w-100 m-1" (click)="gotoChecklisten()" title="zu den Checklisten"><i class="fa fa-list-alt"></i> Checklisten </button>
+        </div>
+    </div>
+
+    <div class="d-md-none d-lg-none d-xl-none">
+        <div class="btn-group d-inline" role="group">
+            <button class="btn btn-secondary w-100 m-1" (click)="gotoChecklisten()" title="zu den Checklisten"><i class="fa fa-list-alt"></i> Checklisten </button>
+        </div>
+    </div>
 </div>
 
 <ng-template #loading>

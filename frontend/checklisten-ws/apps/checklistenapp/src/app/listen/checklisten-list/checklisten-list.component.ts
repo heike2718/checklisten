@@ -5,6 +5,7 @@ import { ListenFacade } from '../listen.facade';
 import { Checklistentyp } from '../../shared/domain/constants';
 import { MessageService } from '../../shared/messages/message.service';
 import { modalOptions } from '../../shared/domain/constants';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'chl-checklisten-list',
@@ -24,7 +25,8 @@ export class ChecklistenListComponent implements OnInit {
 
   constructor(public listenFacade: ListenFacade
     , private messageService: MessageService
-    , private modalService: NgbModal) { }
+    , private modalService: NgbModal
+    , private router: Router) { }
 
   ngOnInit(): void {
 
@@ -41,6 +43,10 @@ export class ChecklistenListComponent implements OnInit {
   addListeDisabled(): boolean {
 		return !this.nameListe || this.nameListe.trim().length <= 2;    
 	}
+
+  gotoVorlagen(): void {
+    this.router.navigateByUrl('/vorlagen');
+  }
 
   private openDialogNeueCheckliste(): void {
 

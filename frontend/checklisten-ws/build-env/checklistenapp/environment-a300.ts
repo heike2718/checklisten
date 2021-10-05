@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   envName: 'a300',
-  version: '8.0.0',
+  version: '8.0.1',
   assetsUrl: 'http://a300/checklistenapp/assets',
   apiUrl: 'http://a300/checklisten-api',
   profileUrl: 'http://a300/profil-app',

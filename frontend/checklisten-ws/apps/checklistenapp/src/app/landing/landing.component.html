@@ -1,3 +1,4 @@
+<div class="chl-container">
 <div class="row mt-5">
 	<div class="col-12 text-center">
 		<h2>Checklisten</h2>
@@ -10,10 +11,27 @@
 	</div>
 </div>
 
-<div class="chl-container">
+<div *ngIf="authService.isLoggedOut$ | async" class="row mt-3">
+	<div class="d-md-none d-lg-none d-xl-none">
+		<div class="btn-group d-inline" role="group">
+			<button class="btn btn-secondary w-100 m-1" (click)="logIn()"><i class="fa fa-sign-in"></i> einloggen </button>
+		</div>
+	</div>
+</div>
 
+<div *ngIf="authService.isLoggedIn$ | async" class="row mt-3">
+	<div class="d-md-none d-lg-none d-xl-none">
+		<div class="btn-group d-inline" role="group">
+			<button class="btn btn-secondary w-100 m-1" (click)="gotoChecklisten()"><i class="fa fa-list-alt"></i> Checklisten </button>
+			<button class="btn btn-secondary w-100 m-1" (click)="gotoVorlagen()"><i class="fa fa-gear"></i> Vorlagen </button>
+		</div>
+	</div>
+</div>
+
+<div class="chl-container">
 	<div class="col-md-12 mb-2 ml-0 pl-1 mt-5">
-		Aktuelle Version ist 8.0.0. Bitte einmal die Seite komplett neu laden (Strg + F5), falls die Fußleiste
+		Aktuelle Version ist 8.0.1. Bitte einmal die Seite komplett neu laden (Strg + F5), falls die Fußleiste
 		eine andere Version anzeigt.
 	</div>
+</div>
 </div>
