@@ -7,6 +7,7 @@ import { ChecklisteItem, ChecklisteItemClickedPayload } from '../../listen.model
 import { ListenFacade } from '../../listen.facade';
 import { modalOptions } from '../../../shared/domain/constants';
 import { Checkliste, SaveChecklisteContext } from '../../listen.model';
+import { MessageService } from '../../../shared/messages/message.service';
 
 @Component({
   selector: 'chl-configure',
@@ -47,7 +48,8 @@ export class ConfigureChecklisteComponent implements OnInit, OnDestroy {
 
   constructor(public listenFacade: ListenFacade
     , private router: Router
-    , private modalService: NgbModal) { }
+    , private modalService: NgbModal
+    , private messageService: MessageService) { }
 
   ngOnInit(): void {
 
@@ -98,6 +100,7 @@ export class ConfigureChecklisteComponent implements OnInit, OnDestroy {
 
   toggleDialogNewItemVisible(): void {
     
+    this.messageService.clear();
     this.dialogNewItemVisible = !this.dialogNewItemVisible;
     this.openDialogNewItem();
   }

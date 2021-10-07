@@ -78,20 +78,10 @@
               </div>
         </form>
     </div>
-
-    <div class="d-none d-md-block mt-2 mb-2">
-        <div class="d-flex flex-row hidden-xs" role="group">
-            <button class="btn btn-outline-dark w-100 m-1" [disabled]="formDisabled()" (click)="modal.close('OK')">OK</button>
-            <button class="btn btn-outline-dark w-100 m-1" (click)="modal.close('NO')">doch nicht</button>
-        </div>
-    </div>
-
-    <div class="d-md-none d-lg-none d-xl-none mt-2 mb-2">
-        <div class="btn-group d-inline" role="group">
-            <button class="btn btn-outline-dark w-100 m-1" [disabled]="formDisabled()" (click)="modal.close('OK')">OK</button>
-            <button class="btn btn-outline-dark w-100 m-1" (click)="modal.close('NO')">doch nicht</button>
-        </div>
-    </div>
+    <div class="modal-footer">
+        <button class="btn btn-outline-dark" [disabled]="formDisabled()" (click)="modal.close('OK')">hinzufügen</button>
+        <button class="btn btn-outline-dark" (click)="modal.close('NO')">doch nicht</button>
+    </div>    
 </ng-template>
 
 <ng-template #dialogUnsavedChanges let-modal>
@@ -103,7 +93,7 @@
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-outline-dark" (click)="modal.close('STAY')">hier bleiben</button>
-        <button type="button" class="btn btn-outline-danger" (click)="modal.close('DISCARD')">Änderungen verwerfen</button>
+        <button type="button" class="btn btn-outline-danger" (click)="modal.close('DISCARD')">verwerfen und weg</button>
     </div>
 </ng-template>
 

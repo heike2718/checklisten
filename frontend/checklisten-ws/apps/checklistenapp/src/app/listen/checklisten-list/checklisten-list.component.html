@@ -37,21 +37,21 @@
                   required aria-describedby="itemNameHelp" placeholder="Name">
             </div>
         </form>
-    </div>
-    <div class="d-none d-md-block">
-        <div class="d-flex flex-row hidden-xs" role="group">
-            <button class="btn btn-checkliste-E w-100 m-1" [disabled]="addListeDisabled()" (click)="modal.close('EINKAUFSLISTE')">Einkaufsliste</button>
-            <button class="btn btn-checkliste-P w-100 m-1" [disabled]="addListeDisabled()" (click)="modal.close('PACKLISTE')">Packliste</button>
-            <button class="btn btn-checkliste-T w-100 m-1" [disabled]="addListeDisabled()" (click)="modal.close('TODOS')">Todo</button>
-            <button class="btn btn-outline-secondary w-100 m-1" (click)="modal.close('NO')">doch nicht</button>
-        </div>
-    </div>        
-    <div class="d-md-none d-lg-none d-xl-none">
-        <div class="btn-group d-inline" role="group">
-            <button class="btn btn-checkliste-E w-100 m-1" [disabled]="addListeDisabled()" (click)="modal.close('EINKAUFSLISTE')">Einkaufsliste</button>
-            <button class="btn btn-checkliste-P w-100 m-1" [disabled]="addListeDisabled()" (click)="modal.close('PACKLISTE')">Packliste</button>
-            <button class="btn btn-checkliste-T w-100 m-1" [disabled]="addListeDisabled()" (click)="modal.close('TODOS')">Todo</button>
-            <button class="btn btn-outline-secondary w-100 m-1" (click)="modal.close('NO')">doch nicht</button>
+        <div class="d-none d-md-block mt-2">
+            <div class="btn-group d-inline hidden-xs" role="group">
+                <button class="btn btn-checkliste-E w-100 m-1" [disabled]="addListeDisabled()" (click)="modal.close('EINKAUFSLISTE')">Einkaufsliste</button>
+                <button class="btn btn-checkliste-P w-100 m-1" [disabled]="addListeDisabled()" (click)="modal.close('PACKLISTE')">Packliste</button>
+                <button class="btn btn-checkliste-T w-100 m-1" [disabled]="addListeDisabled()" (click)="modal.close('TODOS')">Todo</button>
+                <button class="btn btn-outline-secondary w-100 m-1" (click)="modal.close('NO')">doch nicht</button>
+            </div>
+        </div>        
+        <div class="d-md-none d-lg-none d-xl-none mt-2">
+            <div class="btn-group d-inline" role="group">
+                <button class="btn btn-checkliste-E w-100 m-1" [disabled]="addListeDisabled()" (click)="modal.close('EINKAUFSLISTE')">Einkaufsliste</button>
+                <button class="btn btn-checkliste-P w-100 m-1" [disabled]="addListeDisabled()" (click)="modal.close('PACKLISTE')">Packliste</button>
+                <button class="btn btn-checkliste-T w-100 m-1" [disabled]="addListeDisabled()" (click)="modal.close('TODOS')">Todo</button>
+                <button class="btn btn-outline-secondary w-100 m-1" (click)="modal.close('NO')">doch nicht</button>
+            </div>
         </div>
     </div>
 </ng-template>

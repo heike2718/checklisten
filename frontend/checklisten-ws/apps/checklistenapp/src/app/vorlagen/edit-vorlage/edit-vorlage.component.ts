@@ -4,6 +4,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { environment } from 'apps/checklistenapp/src/environments/environment';
 import { Subscription } from 'rxjs';
 import { modalOptions } from '../../shared/domain/constants';
+import { MessageService } from '../../shared/messages/message.service';
 import { VorlagenFacade } from '../vorlagen.facade';
 import { ChecklistenVorlage, ChecklistenvorlageItem, initialChecklistenVorlage, VorlageItemClickedPayload } from '../vorlagen.model';
 
@@ -42,7 +43,8 @@ export class EditVorlageComponent implements OnInit, OnDestroy {
 
   constructor( public vorlagenFacade: VorlagenFacade
     , private router: Router
-    , private modalService: NgbModal) { }
+    , private modalService: NgbModal
+    , private messageService: MessageService) { }
 
   ngOnInit(): void {
 
@@ -99,6 +101,7 @@ export class EditVorlageComponent implements OnInit, OnDestroy {
   }
 
   showDialogNeuesItem(): void {
+    this.messageService.clear();
     this.dialogNeuesItemVisible = true;
 
     this.neuesItemName = '';  
