@@ -54,6 +54,9 @@ export class EditVorlageComponent implements OnInit, OnDestroy {
 
         if (vorlage) {
           this.vorlage = vorlage;
+        } else {
+          this.cancelClicked = true;
+          this.router.navigateByUrl('/vorlagen');
         }
       }
     );

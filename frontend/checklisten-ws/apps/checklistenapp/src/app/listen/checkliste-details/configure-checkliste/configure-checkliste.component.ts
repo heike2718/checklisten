@@ -59,6 +59,10 @@ export class ConfigureChecklisteComponent implements OnInit, OnDestroy {
         if (liste) {
           this.checklisteName = liste.checkisteDaten.name;
           this.checkliste = {...liste};
+        } else {
+          this.unsavedChanges = false;
+          this.cancelClicked = true;
+          this.router.navigateByUrl('/listen');
         }
       }
     );
