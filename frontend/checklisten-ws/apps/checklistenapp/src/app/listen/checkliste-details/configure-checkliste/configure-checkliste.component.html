@@ -66,22 +66,22 @@
                 <input type="text" class="form-control" id="inputItemName" name="inputItemName" required
                   [(ngModel)]="itemName" required aria-describedby="itemKommentarHelp" placeholder="Name">
               </div>
-              <div class="group">
+              <div class="group mt-3">
               <label for="inputItemKommentar">Kommentar:</label>
               <input type="text" class="form-control" id="inputItemKommentar" name="inputItemKommentar"
                 [(ngModel)]="itemKommentar" required aria-describedby="itemKommentarHelp" placeholder="Kommentar">
             </div>
-            <div class="group">
-              <input type="checkbox" class="form-check-inline" id="inputItemOptional" name="inputItemOptional"
-                [(ngModel)]="itemOptional" required aria-describedby="itemKommentarOptional">
-              <label for="inputItemOptional">optional</label>
-            </div>
+            <div class="group mt-3">
+                <input type="checkbox" class="form-check-input" id="inputItemOptional" name="inputItemOptional"
+                    [(ngModel)]="itemOptional" required aria-describedby="itemKommentarOptional">
+                <label for="inputItemOptional" class="lbl-chk"> optional</label>
+              </div>
         </form>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-outline-secondary" [disabled]="formDisabled()" (click)="modal.close('OK')">OK</button>
-        <button type="button" class="btn btn-danger" (click)="modal.close('NO')">doch nicht</button>
-    </div>
+        <button class="btn btn-outline-dark" [disabled]="formDisabled()" (click)="modal.close('OK')">hinzufügen</button>
+        <button class="btn btn-outline-dark" (click)="modal.close('NO')">doch nicht</button>
+    </div>    
 </ng-template>
 
 <ng-template #dialogUnsavedChanges let-modal>
@@ -92,8 +92,8 @@
         <p>Bist du sicher, dass du weg willst?</p>        
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-outline-secondary" (click)="modal.close('STAY')">hier bleiben</button>
-        <button type="button" class="btn btn-danger" (click)="modal.close('DISCARD')">Änderungen verwerfen</button>
+        <button type="button" class="btn btn-outline-dark" (click)="modal.close('STAY')">hier bleiben</button>
+        <button type="button" class="btn btn-outline-danger" (click)="modal.close('DISCARD')">verwerfen und weg</button>
     </div>
 </ng-template>
 

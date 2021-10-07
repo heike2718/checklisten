@@ -1,6 +1,7 @@
 import { ListenState } from "./+state/listen.reducer";
 import { stringsEqual } from "../shared/utils";
 import { Checklistentyp, EventType, ItemAction, ItemPosition, Modus } from "../shared/domain/constants";
+import { UnaryOperator } from "@angular/compiler";
 
 
 
@@ -170,6 +171,8 @@ export class ChecklisteMerger {
                 }
             }
 
+            neueItems = neueItems.sort((left, right) => sortChecklisteItems(left, right));            
+
             const changedChecklisteDaten = {...state.selectedCheckliste.checkisteDaten, items: neueItems, name: checklisteName};
             const itemsOben = [...getItemsOben(changedChecklisteDaten.items, modus)];
             const itemsUnten = [...getItemsUnten(changedChecklisteDaten.items, modus)];           
@@ -283,35 +286,43 @@ export function itemsEquals(item1: ChecklisteItem, item2: ChecklisteItem): boole
 
 export function getItemsOben(items: ChecklisteItem[], modus: Modus): ChecklisteItem[] {
 
+    let unsortedResult: ChecklisteItem[] = [];
+
 	switch(modus) {
 		case 'CONFIGURATION':
-			return getItemsObenFuerKonfiguration(items);
+			unsortedResult = getItemsObenFuerKonfiguration(items); break;
 	    case 'EXECUTION':
-			return getItemsObenFuerAbarbeitung(items);
+			unsortedResult = getItemsObenFuerAbarbeitung(items); break;
 	}
-	return [];
+	return unsortedResult.sort((left, right) => sortChecklisteItems(left, right));
 }
 
 export function getItemsUnten(items: ChecklisteItem[], modus: Modus): ChecklisteItem[] {
 
-	switch(modus) {
+    let unsortedResult: ChecklisteItem[] = [];
+	
+    switch(modus) {
 		case 'CONFIGURATION':
-			return getItemsUntenFuerKonfiguration(items);
+			unsortedResult = getItemsUntenFuerKonfiguration(items); break;
 	    case 'EXECUTION':
-			return getItemsUntenFuerAbarbeitung(items);
+			unsortedResult = getItemsUntenFuerAbarbeitung(items); break;
 	}
-	return [];
+	return unsortedResult.sort((left, right) => sortChecklisteItems(left, right));
 }
 
 export function filterChecklisteItems(items: ChecklisteItem[], filterkriterium: Filterkriterium): ChecklisteItem[] {
 
+    let unsortedResult: ChecklisteItem[] = [];
+
 	switch (filterkriterium.modus) {
 		case 'CONFIGURATION':
-			return getListeConfiguration(items, filterkriterium.position);
+			unsortedResult = getListeConfiguration(items, filterkriterium.position); break;
 		case 'EXECUTION':
-			return getListeExecution(items, filterkriterium.position);
+			unsortedResult = getListeExecution(items, filterkriterium.position); break;
 		default: return [];
 	}
+
+    return unsortedResult.sort((left, right) => sortChecklisteItems(left, right));
 }
 
 // === private functions ==/
@@ -355,7 +366,8 @@ function getListeConfiguration(items: ChecklisteItem[], position: ItemPosition):
 		default: return [];
 	}
 
-    return unsortedResult.sort((left, right) => sortChecklisteItems(left, right));
+    // return unsortedResult.sort((left, right) => sortChecklisteItems(left, right));
+    return unsortedResult;
 
 }
 
@@ -377,7 +389,8 @@ function getListeExecution(items: ChecklisteItem[], position: ItemPosition): Che
 		default: return [];
 	}
 
-    return unsortedResult.sort((left, right) => sortChecklisteItems(left, right));
+    // return unsortedResult.sort((left, right) => sortChecklisteItems(left, right));
+    return unsortedResult;
 }
 
 function sortChecklisteItems(item1: ChecklisteItem, item2: ChecklisteItem): number {
