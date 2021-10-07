@@ -2,6 +2,11 @@
 
 __Release 8.0.1__:
 
+* [Detailansicht hängt sich beim Refresh auf](https://github.com/heike2718/checklisten/issues/12)
+
+
+__Release 8.0.1__:
+
 * [Dialog "neues Teil" ist beim zweiten Aufruf nicht leer](https://github.com/heike2718/checklisten/issues/10)
 * erleichterte Navigation fürs Smartphone
 * nach Anlegen einer neuen Checkliste sofortige Navigation in die Detailmaske / Modus Konfiguration
