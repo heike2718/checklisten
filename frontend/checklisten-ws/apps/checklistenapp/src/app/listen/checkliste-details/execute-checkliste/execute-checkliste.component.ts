@@ -42,7 +42,8 @@ export class ExecuteChecklisteComponent implements OnInit, OnDestroy {
         if (liste) {
           this.checkliste = {...liste};
         } else {
-          this.checkliste = undefined;
+          this.cancelClicked = true;
+          this.router.navigateByUrl('/listen');
         }
       }
     );
