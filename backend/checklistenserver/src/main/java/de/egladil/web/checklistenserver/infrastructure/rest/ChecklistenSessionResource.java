@@ -115,9 +115,11 @@ public class ChecklistenSessionResource {
 		String jwt = tokenExchangeService.exchangeTheOneTimeToken(oneTimeToken);
 
 		// Generierung eines lang laufenden Tokens für Tests: Doku siehe xwiki/wiki/heikeswiki/view/01%20Development/FAQ/
-		System.err.println("==========================");
-		System.err.println(jwt);
-		System.err.println("==========================");
+		/*
+		 * System.err.println("==========================");
+		 * System.err.println(jwt);
+		 * System.err.println("==========================");
+		 */
 
 		return this.createTheSessionWithJWT(jwt);
 
