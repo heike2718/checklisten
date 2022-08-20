@@ -7,7 +7,13 @@
 </div>
 <div class="row">
 	<div class="col-12 text-center">
-		<img src="https://opa-wetterwachs.de/checklistenapp/assets/favicon-96x96.png" alt="logo" aria-role="logo">
+		<img src="https://opa-wetterwachs.de/checklistenapp/assets/favicon-96x96.png" alt="logo" aria-role="logo">		
+	</div>
+</div>
+
+<div *ngIf="loadingIndicatorService.loading$ | async as isLoading" class="mt-4 mb-4 ml-5">
+	<div *ngIf="isLoading"><i class="fa fa-spinner fa-2x fa-spin"
+			aria-hidden="true"></i>
 	</div>
 </div>
 
@@ -28,10 +34,10 @@
 	</div>
 </div>
 
-<div class="chl-container">
+<div *ngIf="versionService.expectedVersion$| async as version" class="chl-container">
 	<div class="col-md-12 mb-2 ml-0 pl-1 mt-5">
-		Aktuelle Version ist 8.0.2. Bitte einmal die Seite komplett neu laden (Strg + F5 bzw. wisch nach unten), falls die Fußleiste
-		eine andere Version anzeigt.
+		Aktuelle Version ist {{version}}. Bitte einmal die Seite komplett neu laden (Strg+F5), falls in der
+			Fußleiste eine andere Version angezeigt wird.
 	</div>
 </div>
 </div>

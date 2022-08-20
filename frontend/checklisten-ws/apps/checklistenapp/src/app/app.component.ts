@@ -12,28 +12,23 @@ import { VersionService } from './shared/version.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
 })
-export class AppComponent implements OnInit, OnDestroy {
+export class AppComponent implements OnInit {
   
   title = 'checklistenapp';
-  version = '';// environment.version;
+  version = environment.version;
 	envName = environment.envName;
 	showFilename = environment.envName === 'DEV';
 	api = environment.apiUrl;
 	logo = environment.assetsUrl + '/favicon-32x32.png'; 
 
-  private versionSubscription: Subscription = new Subscription();
-
   constructor(public authService: AuthService
     , private logger: LogService
-    , private versionService: VersionService) {
+    , public versionService: VersionService) {
   }
 
   ngOnInit() {
 
-    this.versionSubscription = this.versionService.getServerVersion().subscribe(
-      message => this.version = message.message
-    );
-
+    this.versionService.ladeExpectedGuiVersion();
     this.authService.clearOrRestoreSession();
 
     const hash = window.location.hash;
@@ -43,9 +38,5 @@ export class AppComponent implements OnInit, OnDestroy {
 			const authResult = this.authService.parseHash(hash);
 			this.authService.createSession(authResult);
 		}
-  }
-
-  ngOnDestroy(): void {
-    this.versionSubscription.unsubscribe();
   }
 }

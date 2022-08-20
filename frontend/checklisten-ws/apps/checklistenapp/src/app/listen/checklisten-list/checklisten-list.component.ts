@@ -6,6 +6,7 @@ import { Checklistentyp } from '../../shared/domain/constants';
 import { MessageService } from '../../shared/messages/message.service';
 import { modalOptions } from '../../shared/domain/constants';
 import { Router } from '@angular/router';
+import { LoadingIndicatorService } from '../../shared/messages/loading-indicator.service';
 
 @Component({
   selector: 'chl-checklisten-list',
@@ -25,6 +26,7 @@ export class ChecklistenListComponent implements OnInit {
 
   constructor(public listenFacade: ListenFacade
     , private messageService: MessageService
+    , public loadingIndicatorService: LoadingIndicatorService
     , private modalService: NgbModal
     , private router: Router) { }
 

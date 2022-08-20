@@ -1,5 +1,5 @@
 // =====================================================
-// Project: checklistenserver
+// Project: mk-gateway
 // (c) Heike Winkelvoß
 // =====================================================
 package de.egladil.web.checklistenserver.infrastructure.rest;
@@ -17,21 +17,22 @@ import de.egladil.web.commons_validation.payload.MessagePayload;
 import de.egladil.web.commons_validation.payload.ResponsePayload;
 
 /**
- * VersionResource
+ * GuiVersionResource
  */
 @RequestScoped
-@Path("version")
+@Path("guiversion")
 @Produces(MediaType.APPLICATION_JSON)
-public class VersionResource {
+public class GuiVersionResource {
 
 	@ConfigProperty(name = "quarkus.application.version", defaultValue = "8.1.0")
 	String version;
 
 	@GET
-	public Response getVersion() {
+	public Response getExcpectedGuiVersion() {
 
-		return Response.ok(ResponsePayload.messageOnly(MessagePayload.info(version))).build();
+		String[] tokens = version.split("\\.");
+		String guiVersion = tokens[0] + "." + tokens[1] + "." + tokens[2];
 
+		return Response.ok().entity(ResponsePayload.messageOnly(MessagePayload.info(guiVersion))).build();
 	}
-
 }

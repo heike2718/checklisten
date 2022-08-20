@@ -1,7 +1,7 @@
 import * as moment_ from 'moment';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 import { map, publishLast, refCount } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
@@ -14,6 +14,7 @@ import { Store } from '@ngrx/store';
 import { AuthState } from './+state/auth.reducer';
 import { isLoggedIn, isLoggedOut, onLoggingOut } from './+state/auth.selectors';
 import * as AuthActions from './+state/auth.actions';
+import { LoadingIndicatorService } from '../shared/messages/loading-indicator.service';
 const moment = moment_;
 
 
@@ -27,11 +28,11 @@ export class AuthService {
 	isLoggedOut$ = this.store.select(isLoggedOut);
 	onLoggingOut$ = this.store.select(onLoggingOut);
 
-
 	constructor(private store: Store<AuthState>
 		, private httpClient: HttpClient
 		, private errorHandlerService: GlobalErrorHandlerService
 		, private logger: LogService
+		, private loadingIndicatorService: LoadingIndicatorService
 		, private router: Router) {
 	}
 
@@ -45,12 +46,15 @@ export class AuthService {
 
 		const url = environment.apiUrl + '/auth/login';
 
+		this.loadingIndicatorService.markLoading(true);
+
 		this.httpClient.get(url).pipe(
 			map(res => res as ResponsePayload),
 			publishLast(),
 			refCount()
 		).subscribe(
 			payload => {
+				this.loadingIndicatorService.markLoading(false);
 				window.location.href = payload.message.message;
 			},
 			(error => {
@@ -137,12 +141,15 @@ export class AuthService {
 
 		const url = environment.apiUrl + '/auth/session';
 
+		this.loadingIndicatorService.markLoading(true);
+
 		this.httpClient.post(url, authResult.idToken).pipe(
 			map(res => res as ResponsePayload),
 			publishLast(),
 			refCount()
 		).subscribe(
 			payload => {
+				this.loadingIndicatorService.markLoading(false);
 				if (payload.data) {
 					const userSession = payload.data as UserSession;
 					const serialized = JSON.stringify(userSession);
@@ -155,7 +162,7 @@ export class AuthService {
 					}
 				}
 			},
-			(error => {
+			(error => {				
 				this.errorHandlerService.handleError(error);
 			})
 		);

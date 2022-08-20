@@ -112,6 +112,8 @@ public class ChecklistenSessionResource {
 	@PermitAll
 	public Response getTheJwtAndCreateSession(final String oneTimeToken) {
 
+		// this.bremsen();
+
 		String jwt = tokenExchangeService.exchangeTheOneTimeToken(oneTimeToken);
 
 		// Generierung eines lang laufenden Tokens für Tests: Doku siehe xwiki/wiki/heikeswiki/view/01%20Development/FAQ/
@@ -169,5 +171,17 @@ public class ChecklistenSessionResource {
 		sessionService.invalidate(sessionId);
 
 		return Response.ok(ResponsePayload.messageOnly(MessagePayload.info("Sie haben sich erfolreich ausgeloggt"))).build();
+	}
+
+	void bremsen() {
+
+		try {
+
+			Thread.sleep(3000);
+		} catch (InterruptedException e) {
+
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
