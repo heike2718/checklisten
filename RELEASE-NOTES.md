@@ -1,5 +1,11 @@
 # checklistenserver Release Notes
 
+__Release 8.1.0__:
+
+* bumped quarkus to 2.11.1.Final
+* bumped angular to 13.3.9
+* looading indicator, wenn' mal wieder länger dauert
+
 __Release 8.0.1__:
 
 * [Detailansicht hängt sich beim Refresh auf](https://github.com/heike2718/checklisten/issues/12)
