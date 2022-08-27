@@ -11,7 +11,8 @@ import { Router } from '@angular/router';
 import { MessageService } from '../shared/messages/message.service';
 import { getBackgroundColorByChecklistentyp } from '../shared/utils';
 import { Checklistentyp } from '../shared/domain/constants';
-import { LoadingIndicatorService } from '../shared/messages/loading-indicator.service';
+import { LoadingIndicatorService } from '../shared/loading-indicator/loading-indicator.service';
+import { finalize, shareReplay } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class ListenFacade {
@@ -40,14 +41,15 @@ export class ListenFacade {
 
         if (!this.checklistenLoaded) {
 
-            this.loadingIndicatorService.markLoading(true)
-
+            this.loadingIndicatorService.loadingOn();
             this.store.dispatch(ListenActions.startLoading());
 
-            this.listenService.loadChecklisten().subscribe(
+            this.listenService.loadChecklisten().pipe(
+                shareReplay(),
+                finalize(() => this.loadingIndicatorService.loadingOff())
+            ).subscribe(
 
                 listen => {
-                    this.loadingIndicatorService.markLoading(false);
                     this.store.dispatch(ListenActions.checklistenLoaded({checklisten: listen}));
                 },
 				(error => {

@@ -1,16 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
 import { environment } from '../environments/environment';
 import { AuthService } from './auth/auth.service';
 import { LogService } from './infrastructure/logging/log.service';
-import { ListenFacade } from './listen/listen.facade';
-import { MessageService } from './shared/messages/message.service';
 import { VersionService } from './shared/version.service';
 
 @Component({
   selector: 'chl-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css'],
+  styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
   

@@ -30,6 +30,7 @@ import de.egladil.web.checklistenserver.domain.auth.TokenExchangeService;
 import de.egladil.web.checklistenserver.domain.auth.UserSession;
 import de.egladil.web.checklistenserver.domain.auth.client.ClientAccessTokenService;
 import de.egladil.web.checklistenserver.domain.error.AuthException;
+import de.egladil.web.checklistenserver.domain.util.DelayService;
 import de.egladil.web.commons_net.utils.CommonHttpUtils;
 import de.egladil.web.commons_validation.payload.MessagePayload;
 import de.egladil.web.commons_validation.payload.ResponsePayload;
@@ -43,6 +44,9 @@ import de.egladil.web.commons_validation.payload.ResponsePayload;
 public class ChecklistenSessionResource {
 
 	private static final Logger LOG = LoggerFactory.getLogger(ChecklistenSessionResource.class);
+
+	@Inject
+	DelayService delayService;
 
 	@ConfigProperty(name = "auth-app.url")
 	String authAppUrl;
@@ -70,6 +74,8 @@ public class ChecklistenSessionResource {
 	@PermitAll
 	public Response getSignupUrl() {
 
+		this.delayService.pause();
+
 		String accessToken = clientAccessTokenService.orderAccessToken();
 
 		if (StringUtils.isBlank(accessToken)) {
@@ -89,6 +95,8 @@ public class ChecklistenSessionResource {
 	@Path("/login")
 	@PermitAll
 	public Response getLoginUrl() {
+
+		this.delayService.pause();
 
 		String accessToken = clientAccessTokenService.orderAccessToken();
 
@@ -112,7 +120,7 @@ public class ChecklistenSessionResource {
 	@PermitAll
 	public Response getTheJwtAndCreateSession(final String oneTimeToken) {
 
-		// this.bremsen();
+		this.delayService.pause();
 
 		String jwt = tokenExchangeService.exchangeTheOneTimeToken(oneTimeToken);
 
@@ -171,17 +179,5 @@ public class ChecklistenSessionResource {
 		sessionService.invalidate(sessionId);
 
 		return Response.ok(ResponsePayload.messageOnly(MessagePayload.info("Sie haben sich erfolreich ausgeloggt"))).build();
-	}
-
-	void bremsen() {
-
-		try {
-
-			Thread.sleep(3000);
-		} catch (InterruptedException e) {
-
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 }

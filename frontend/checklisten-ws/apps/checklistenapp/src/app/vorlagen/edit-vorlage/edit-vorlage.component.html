@@ -1,6 +1,6 @@
 <p *ngIf="showFilename">edit-vorlage.component.ts</p>
 
-<div class="chl-container" *ngIf="vorlagenFacade.selectedVorlage$| async as vorlage else loading">
+<div class="chl-container" *ngIf="vorlagenFacade.selectedVorlage$| async as vorlage">
 
     <h4>Vorlage {{vorlage.vorlageDaten.typ}} ändern</h4>
 
@@ -66,9 +66,4 @@
         <button type="button" class="btn btn-outline-dark" (click)="modal.close('STAY')">hier bleiben</button>
         <button type="button" class="btn btn-outline-danger" (click)="modal.close('DISCARD')">verwerfen und weg</button>
     </div>
-</ng-template>
-
-
-<ng-template #loading>
-	Lade Vorlage... <i class="fa fa-spinner fa-2x fa-spin" aria-hidden="true"></i>
 </ng-template>

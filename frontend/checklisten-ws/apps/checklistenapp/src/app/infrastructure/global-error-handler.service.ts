@@ -8,7 +8,6 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { STORAGE_KEY_USER_SESSION, UserSession } from '../shared/domain/user';
 import { LogPublishersService } from './logging/log-publishers.service';
-import { LoadingIndicatorService } from '../shared/messages/loading-indicator.service';
 
 @Injectable(
 	{
@@ -20,7 +19,6 @@ export class GlobalErrorHandlerService implements ErrorHandler {
 	private errorMapper: ErrorMappingService;
 	private logger: LogService;
 	private messageService: MessageService;
-	private loadingIndicatorService: LoadingIndicatorService;
 	private router: Router;
 
 	constructor(private injector: Injector) {
@@ -38,18 +36,11 @@ export class GlobalErrorHandlerService implements ErrorHandler {
 		this.logger.info('logging initialized: loglevel=' + environment.loglevel);
 
 		this.messageService = this.injector.get(MessageService);
-		this.loadingIndicatorService = this.injector.get(LoadingIndicatorService);
-
 		this.router = this.injector.get(Router);
-
-
-
 	}
 
 
 	handleError(error: HttpErrorResponse | Error): void {
-
-		this.loadingIndicatorService.markLoading(false);
 
 		if (error instanceof HttpErrorResponse) {
 			const httpError = error as HttpErrorResponse;

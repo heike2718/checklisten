@@ -1,6 +1,6 @@
 <p *ngIf="showFilename">execute-checkliste.component.ts</p>
 
-<div class="chl-container" *ngIf="listenFacade.selectedCheckliste$ | async as checkliste else loading">
+<div class="chl-container" *ngIf="listenFacade.selectedCheckliste$ | async as checkliste">
 
     <h4>Liste "{{checkliste.checkisteDaten.name}}" abarbeiten</h4>
 
@@ -45,8 +45,4 @@
       <button type="button" class="btn btn-outline-secondary" (click)="modal.close('STAY')">hier bleiben</button>
       <button type="button" class="btn btn-danger" (click)="modal.close('DISCARD')">Änderungen verwerfen</button>
   </div>
-</ng-template>
-
-<ng-template #loading>
-	Lade Checkliste... <i class="fa fa-spinner fa-2x fa-spin" aria-hidden="true"></i>
 </ng-template>

@@ -27,10 +27,18 @@ public class AppLifecycleBean {
 	@ConfigProperty(name = "dir.packlisten")
 	String pathVorlagenPacklisten;
 
+	@ConfigProperty(name = "delay.milliseconds", defaultValue = "0")
+	long delayMillis = 0;
+
 	void onStartup(@Observes final StartupEvent ev) {
 
 		LOGGER.info(" ===========>  dir vorlagen einkaufslisten is {}", pathVorlagenEinkaufslisten);
 		LOGGER.info(" ===========>  dir vorlagen packlisten is {}", pathVorlagenPacklisten);
+
+		if (delayMillis > 0) {
+
+			LOGGER.warn("Achtung, der Service antwortet immer erst nach {} ms!!!", delayMillis);
+		}
 
 	}
 }
