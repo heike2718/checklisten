@@ -1,37 +1,40 @@
 <div class="chl-container">
-<div class="row mt-5">
-	<div class="col-12 text-center">
-		<h2>Checklisten</h2>
-		<p>(proudly presented by Opa Wetterwachs)</p>
-	</div>
-</div>
-<div class="row">
-	<div class="col-12 text-center">
-		<img src="https://opa-wetterwachs.de/checklistenapp/assets/favicon-96x96.png" alt="logo" aria-role="logo">
-	</div>
-</div>
-
-<div *ngIf="authService.isLoggedOut$ | async" class="row mt-3">
-	<div class="d-md-none d-lg-none d-xl-none">
-		<div class="btn-group d-inline" role="group">
-			<button class="btn btn-secondary w-100 m-1" (click)="logIn()"><i class="fa fa-sign-in"></i> einloggen </button>
+	<div class="row mt-5">
+		<div class="col-12 text-center">
+			<h2>Checklisten</h2>
+			<p>(proudly presented by Opa Wetterwachs)</p>
 		</div>
 	</div>
-</div>
-
-<div *ngIf="authService.isLoggedIn$ | async" class="row mt-3">
-	<div class="d-md-none d-lg-none d-xl-none">
-		<div class="btn-group d-inline" role="group">
-			<button class="btn btn-secondary w-100 m-1" (click)="gotoChecklisten()"><i class="fa fa-list-alt"></i> Checklisten </button>
-			<button class="btn btn-secondary w-100 m-1" (click)="gotoVorlagen()"><i class="fa fa-gear"></i> Vorlagen </button>
+	<div class="row">
+		<div class="col-12 text-center">
+			<img src="https://opa-wetterwachs.de/checklistenapp/assets/favicon-96x96.png" alt="logo" aria-role="logo">
 		</div>
 	</div>
-</div>
 
-<div class="chl-container">
-	<div class="col-md-12 mb-2 ml-0 pl-1 mt-5">
-		Aktuelle Version ist 8.0.2. Bitte einmal die Seite komplett neu laden (Strg + F5 bzw. wisch nach unten), falls die Fußleiste
-		eine andere Version anzeigt.
+	<div *ngIf="authService.isLoggedOut$ | async" class="row mt-3">
+		<div class="d-md-none d-lg-none d-xl-none">
+			<div class="btn-group d-inline" role="group">
+				<button class="btn btn-secondary w-100 m-1" (click)="logIn()"><i class="fa fa-sign-in"></i> einloggen
+				</button>
+			</div>
+		</div>
 	</div>
-</div>
+
+	<div *ngIf="authService.isLoggedIn$ | async" class="row mt-3">
+		<div class="d-md-none d-lg-none d-xl-none">
+			<div class="btn-group d-inline" role="group">
+				<button class="btn btn-secondary w-100 m-1" (click)="gotoChecklisten()"><i class="fa fa-list-alt"></i>
+					Checklisten </button>
+				<button class="btn btn-secondary w-100 m-1" (click)="gotoVorlagen()"><i class="fa fa-gear"></i> Vorlagen
+				</button>
+			</div>
+		</div>
+	</div>
+
+	<div *ngIf="versionService.expectedVersion$| async as version" class="chl-container">
+		<div class="col-md-12 mb-2 ml-0 pl-1 mt-5">
+			Aktuelle Version ist {{version}}. Bitte einmal die Seite komplett neu laden (Strg+F5), falls in der
+			Fußleiste eine andere Version angezeigt wird.
+		</div>
+	</div>
 </div>

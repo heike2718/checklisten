@@ -37,6 +37,7 @@ import de.egladil.web.checklistenserver.domain.error.AuthException;
 import de.egladil.web.checklistenserver.domain.listen.ChecklisteDaten;
 import de.egladil.web.checklistenserver.domain.listen.ChecklisteDatenSanitizer;
 import de.egladil.web.checklistenserver.domain.listen.ChecklistenService;
+import de.egladil.web.checklistenserver.domain.util.DelayService;
 import de.egladil.web.commons_validation.ValidationDelegate;
 import de.egladil.web.commons_validation.payload.MessagePayload;
 import de.egladil.web.commons_validation.payload.ResponsePayload;
@@ -51,6 +52,9 @@ import de.egladil.web.commons_validation.payload.ResponsePayload;
 public class ChecklistenResource {
 
 	private static final Logger LOG = LoggerFactory.getLogger(ChecklistenResource.class);
+
+	@Inject
+	DelayService delayService;
 
 	@Inject
 	ChecklistenService checklistenService;
@@ -73,6 +77,8 @@ public class ChecklistenResource {
 	public Response getChecklisten() {
 
 		LOG.debug("entering getChecklisten");
+
+		this.delayService.pause();
 
 		UserSession userSession = getUserSession();
 
@@ -98,6 +104,8 @@ public class ChecklistenResource {
 	public Response getCheckliste(@PathParam(
 		value = "kuerzel") final String kuerzel) {
 
+		this.delayService.pause();
+
 		UserSession userSession = getUserSession();
 		ChecklisteDaten checkliste = checklistenService.getCheckliste(kuerzel, userSession.getUuid());
 
@@ -109,6 +117,8 @@ public class ChecklistenResource {
 	@POST
 	@PermitAll
 	public Response checklisteAnlegen(final ChecklisteDaten daten) {
+
+		this.delayService.pause();
 
 		this.validationDelegate.check(daten, ChecklisteDaten.class);
 
@@ -138,6 +148,8 @@ public class ChecklistenResource {
 	public Response checklisteAendern(@PathParam(
 		value = "kuerzel") final String kuerzel, final ChecklisteDaten daten) {
 
+		this.delayService.pause();
+
 		UserSession userSession = getUserSession();
 
 		if (!kuerzel.equals(daten.getKuerzel())) {
@@ -163,6 +175,8 @@ public class ChecklistenResource {
 	@PermitAll
 	public Response checklisteLoeschen(@PathParam(value = "idRef") final String idRef, @PathParam(
 		value = "kuerzel") final String kuerzel) {
+
+		this.delayService.pause();
 
 		UserSession userSession = getUserSession();
 

@@ -5,7 +5,7 @@
 
 	<groupId>de.egladil.web</groupId>
 	<artifactId>checklistenserver</artifactId>
-	<version>8.0.2</version>
+	<version>8.1.0</version>
 	<packaging>jar</packaging>
 
 	<name>checklistenserver</name>
@@ -13,15 +13,12 @@
 	<description>Server für die Checklistenapp</description>
 
 	<properties>
-		<commons.version>1.7.1</commons.version>
+		<commons.version>1.7.7</commons.version>
 		<quarkus.platform.artifact-id>quarkus-universe-bom</quarkus.platform.artifact-id>
 		<quarkus.platform.group-id>io.quarkus</quarkus.platform.group-id>
-		<quarkus.platform.version>2.3.0.Final</quarkus.platform.version>
-		<dependency-check.version>6.3.2</dependency-check.version>
-		<surefire-plugin.version>2.22.0</surefire-plugin.version>
-		<slf4j.version>1.7.25</slf4j.version>
-		<log4j.version>2.13.3</log4j.version>
-		<mockito.version>3.1.0</mockito.version>
+		<quarkus.platform.version>2.11.1.Final</quarkus.platform.version>
+		<dependency-check.version>7.1.1</dependency-check.version>
+		<surefire-plugin.version>3.0.0-M5</surefire-plugin.version>
 		<maven.compiler.source>1.11</maven.compiler.source>
 		<maven.compiler.target>1.11</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

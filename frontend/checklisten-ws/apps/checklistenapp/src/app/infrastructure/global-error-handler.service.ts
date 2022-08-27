@@ -36,10 +36,7 @@ export class GlobalErrorHandlerService implements ErrorHandler {
 		this.logger.info('logging initialized: loglevel=' + environment.loglevel);
 
 		this.messageService = this.injector.get(MessageService);
-
 		this.router = this.injector.get(Router);
-
-
 	}
 
 

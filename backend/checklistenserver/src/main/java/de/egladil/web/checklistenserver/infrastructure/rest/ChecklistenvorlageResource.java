@@ -30,6 +30,7 @@ import de.egladil.web.checklistenserver.domain.Checklistentyp;
 import de.egladil.web.checklistenserver.domain.auth.UserSession;
 import de.egladil.web.checklistenserver.domain.error.AuthException;
 import de.egladil.web.checklistenserver.domain.error.ConcurrentUpdateException;
+import de.egladil.web.checklistenserver.domain.util.DelayService;
 import de.egladil.web.checklistenserver.domain.vorlagen.Checklistenvorlage;
 import de.egladil.web.checklistenserver.domain.vorlagen.ChecklistenvorlageProvider;
 import de.egladil.web.checklistenserver.domain.vorlagen.ChecklistenvorlageSanitizer;
@@ -52,6 +53,9 @@ public class ChecklistenvorlageResource {
 	SecurityContext securityContext;
 
 	@Inject
+	DelayService delayService;
+
+	@Inject
 	ChecklistenvorlageProvider vorlagenProvider;
 
 	private final ValidationDelegate validationDelegate = new ValidationDelegate();
@@ -62,6 +66,8 @@ public class ChecklistenvorlageResource {
 	public Response getAllVorlagen() {
 
 		LOG.debug("entering getChecklisten");
+
+		this.delayService.pause();
 
 		UserSession userSession = getUserSession();
 
@@ -85,6 +91,8 @@ public class ChecklistenvorlageResource {
 	@Path("/{typ}")
 	public Response getVorlageMitTypFuerGruppe(@PathParam("typ") final String typValue) {
 
+		this.delayService.pause();
+
 		try {
 
 			UserSession userSession = getUserSession();
@@ -105,6 +113,8 @@ public class ChecklistenvorlageResource {
 
 	@POST
 	public Response vorlageSpeichern(final Checklistenvorlage template) {
+
+		this.delayService.pause();
 
 		validationDelegate.check(template, Checklistenvorlage.class);
 

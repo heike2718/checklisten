@@ -1,16 +1,20 @@
 <div class="container-fluid">
   <chl-navbar></chl-navbar>
+  <chl-loading-indicator></chl-loading-indicator>
   <chl-msg></chl-msg>
 
+
   <main>
-    <div class="container-fluid">
-      <p *ngIf="authService.onLoggingOut$ | async">Bitte warten... <i class="fa fa-spinner fa-2x fa-spin" aria-hidden="true"></i></p>
+    <div class="container-fluid">     
+
+      <p *ngIf="authService.onLoggingOut$ | async">Bitte warten... <i class="fa fa-spinner fa-2x fa-spin"
+          aria-hidden="true"></i></p>
       <router-outlet #routerOutlet="outlet"></router-outlet>
     </div>
   </main>
 
   <chl-msg></chl-msg>
-  
+
   <footer class="border-top">
     <div class="row">
       <div class="col-md-4 text-md-left">&copy; Heike Winkelvo&szlig;</div>

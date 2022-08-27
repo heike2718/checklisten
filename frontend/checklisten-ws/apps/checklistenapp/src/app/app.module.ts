@@ -22,6 +22,7 @@ import { NotAuthorizedComponent } from './not-authorized/not-authorized.componen
 import { MessagesComponent } from './shared/messages/message.component';
 import { VorlagenModule } from './vorlagen/vorlagen.module';
 import { CustomRouterStateSerializer } from './shared/router-state';
+import { LoadingIndicatorComponent } from './shared/loading-indicator/loading-indicator.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { CustomRouterStateSerializer } from './shared/router-state';
     NavbarComponent,
     LandingComponent,
     NotAuthorizedComponent,
-    MessagesComponent
+    MessagesComponent,
+	LoadingIndicatorComponent
   ],
   imports: [
     BrowserModule,

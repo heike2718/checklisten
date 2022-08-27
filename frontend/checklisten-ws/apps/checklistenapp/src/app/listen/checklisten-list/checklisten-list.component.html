@@ -1,6 +1,8 @@
 <p *ngIf="showFilename">checklisten-list.component.ts</p>
 
+
 <div class="chl-container" *ngIf="listenFacade.checklisten$ | async as checklisten else loading">
+
     <h3>Anzahl Checklisten: {{checklisten.length}}</h3>
 
     <div class="row">
@@ -23,7 +25,6 @@
         </div>
     </div>
 </div>
-
 
 <ng-template #dialogNeueCheckliste let-modal>
     <div class="modal-header">

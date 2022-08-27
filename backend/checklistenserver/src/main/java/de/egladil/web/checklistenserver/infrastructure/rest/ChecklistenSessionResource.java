@@ -30,6 +30,7 @@ import de.egladil.web.checklistenserver.domain.auth.TokenExchangeService;
 import de.egladil.web.checklistenserver.domain.auth.UserSession;
 import de.egladil.web.checklistenserver.domain.auth.client.ClientAccessTokenService;
 import de.egladil.web.checklistenserver.domain.error.AuthException;
+import de.egladil.web.checklistenserver.domain.util.DelayService;
 import de.egladil.web.commons_net.utils.CommonHttpUtils;
 import de.egladil.web.commons_validation.payload.MessagePayload;
 import de.egladil.web.commons_validation.payload.ResponsePayload;
@@ -43,6 +44,9 @@ import de.egladil.web.commons_validation.payload.ResponsePayload;
 public class ChecklistenSessionResource {
 
 	private static final Logger LOG = LoggerFactory.getLogger(ChecklistenSessionResource.class);
+
+	@Inject
+	DelayService delayService;
 
 	@ConfigProperty(name = "auth-app.url")
 	String authAppUrl;
@@ -70,6 +74,8 @@ public class ChecklistenSessionResource {
 	@PermitAll
 	public Response getSignupUrl() {
 
+		this.delayService.pause();
+
 		String accessToken = clientAccessTokenService.orderAccessToken();
 
 		if (StringUtils.isBlank(accessToken)) {
@@ -89,6 +95,8 @@ public class ChecklistenSessionResource {
 	@Path("/login")
 	@PermitAll
 	public Response getLoginUrl() {
+
+		this.delayService.pause();
 
 		String accessToken = clientAccessTokenService.orderAccessToken();
 
@@ -112,7 +120,16 @@ public class ChecklistenSessionResource {
 	@PermitAll
 	public Response getTheJwtAndCreateSession(final String oneTimeToken) {
 
+		this.delayService.pause();
+
 		String jwt = tokenExchangeService.exchangeTheOneTimeToken(oneTimeToken);
+
+		// Generierung eines lang laufenden Tokens für Tests: Doku siehe xwiki/wiki/heikeswiki/view/01%20Development/FAQ/
+		/*
+		 * System.err.println("==========================");
+		 * System.err.println(jwt);
+		 * System.err.println("==========================");
+		 */
 
 		return this.createTheSessionWithJWT(jwt);
 
