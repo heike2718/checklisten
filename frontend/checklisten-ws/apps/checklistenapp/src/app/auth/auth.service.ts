@@ -2,7 +2,7 @@ import * as moment_ from 'moment';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { finalize, map, publishLast, refCount, shareReplay } from 'rxjs/operators';
+import { map, publishLast, refCount } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { LogService } from '../infrastructure/logging/log.service';
@@ -46,12 +46,8 @@ export class AuthService {
 
 		const url = environment.apiUrl + '/auth/login';
 
-		this.loadingIndicatorService.loadingOn();
-
-		this.httpClient.get(url).pipe(
-			map(res => res as ResponsePayload),
-			shareReplay(),
-			finalize(() => this.loadingIndicatorService.loadingOff())
+		this.loadingIndicatorService.showLoaderUntilCompleted(this.httpClient.get(url)).pipe(
+			map(res => res as ResponsePayload)
 		).subscribe(
 			payload => {
 				window.location.href = payload.message.message;
@@ -140,12 +136,8 @@ export class AuthService {
 
 		const url = environment.apiUrl + '/auth/session';
 
-		this.loadingIndicatorService.loadingOn();
-
-		this.httpClient.post(url, authResult.idToken).pipe(
-			map(res => res as ResponsePayload),
-			shareReplay(),
-			finalize(() => this.loadingIndicatorService.loadingOff())
+		this.loadingIndicatorService.showLoaderUntilCompleted(this.httpClient.post(url, authResult.idToken)).pipe(
+			map(res => res as ResponsePayload)
 		).subscribe(
 			payload => {
 				if (payload.data) {

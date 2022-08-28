@@ -10,7 +10,7 @@ export class LoadingIndicatorService {
     #loadingSubject: Subject<boolean> = new BehaviorSubject<boolean>(false);
 	loading$: Observable<boolean> = this.#loadingSubject.asObservable();
 
-     showLOaderUntilCompleted<T>(obs$: Observable<T>): Observable<T> {
+     showLoaderUntilCompleted<T>(obs$: Observable<T>): Observable<T> {
         // of(.) immediately emmits ist value
         // concatMap triggers the obs$ to emmit its values
 

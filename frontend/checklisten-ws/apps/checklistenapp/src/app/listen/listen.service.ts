@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { finalize, map, shareReplay } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { LoadingIndicatorService } from '../shared/loading-indicator/loading-indicator.service';
 import { ResponsePayload, Message } from '../shared/messages/messages.model';
@@ -17,13 +17,9 @@ export class ListenService {
 
         const url = environment.apiUrl + '/checklisten';
 
-        this.loadingIndicatorService.loadingOn();
-
-        return this.http.get(url).pipe(
+        return this.loadingIndicatorService.showLoaderUntilCompleted(this.http.get(url)).pipe(
             map(body => body as ResponsePayload),
-            map(rp => rp.data),
-            shareReplay(),
-            finalize(() => this.loadingIndicatorService.loadingOff())
+            map(rp => rp.data)
         );
     }
 
@@ -31,12 +27,8 @@ export class ListenService {
 
         const url = environment.apiUrl + '/checklisten/checkliste/' + checkliste.kuerzel;
 
-        this.loadingIndicatorService.loadingOn();
-
-        return this.http.put(url, checkliste).pipe(
-            map(res => res as ResponsePayload),
-            shareReplay(),
-            finalize(() => this.loadingIndicatorService.loadingOff())
+        return this.loadingIndicatorService.showLoaderUntilCompleted(this.http.put(url, checkliste)).pipe(
+            map(res => res as ResponsePayload)
         );
     }
 
@@ -44,12 +36,8 @@ export class ListenService {
 
         const url = environment.apiUrl + '/checklisten';
 
-        this.loadingIndicatorService.loadingOn();
-
-        return this.http.post(url, checkliste).pipe(
-			map(res => res as ResponsePayload),
-            shareReplay(),
-            finalize(() => this.loadingIndicatorService.loadingOff())
+        return this.loadingIndicatorService.showLoaderUntilCompleted(this.http.post(url, checkliste)).pipe(
+			map(res => res as ResponsePayload)
 		);
     }
 
@@ -57,13 +45,9 @@ export class ListenService {
 
         const url = environment.apiUrl + '/checklisten/checkliste/' + checkliste.kuerzel;
 
-        this.loadingIndicatorService.loadingOn();
-
-        return this.http.delete(url).pipe(
+        return this.loadingIndicatorService.showLoaderUntilCompleted(this.http.delete(url)).pipe(
 			map(res => res as ResponsePayload),
-            map(rp => rp.message),
-            shareReplay(),
-            finalize(() => this.loadingIndicatorService.loadingOff())
+            map(rp => rp.message)
         );
 
     }

@@ -1,7 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { finalize, map, shareReplay } from "rxjs/operators";
+import { map } from "rxjs/operators";
 import { environment } from "../../environments/environment";
 import { LoadingIndicatorService } from "../shared/loading-indicator/loading-indicator.service";
 import { ResponsePayload } from "../shared/messages/messages.model";
@@ -18,13 +18,9 @@ export class VorlagenService {
 
         const url = environment.apiUrl + '/vorlagen';
 
-        this.loadingIndicatorService.loadingOn();
-
-        return this.http.get(url).pipe(
+        return this.loadingIndicatorService.showLoaderUntilCompleted(this.http.get(url)).pipe(
             map ( body  => body as ResponsePayload),
-            map (rp => rp.data),
-            shareReplay(),
-            finalize(() => this.loadingIndicatorService.loadingOff())
+            map (rp => rp.data)
         );
     }
 
@@ -32,12 +28,8 @@ export class VorlagenService {
 
         const url = environment.apiUrl + '/vorlagen';
 
-        this.loadingIndicatorService.loadingOn();
-
-        return this.http.post(url, vorlage).pipe(
-            map( body => body as ResponsePayload),
-            shareReplay(),
-            finalize(() => this.loadingIndicatorService.loadingOff())
+        return this.loadingIndicatorService.showLoaderUntilCompleted(this.http.post(url, vorlage)).pipe(
+            map( body => body as ResponsePayload)
         );
     }
 }
