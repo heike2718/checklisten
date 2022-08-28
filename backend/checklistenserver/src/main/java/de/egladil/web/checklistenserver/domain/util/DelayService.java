@@ -1,3 +1,7 @@
+// =====================================================
+// Projekt: checklistenserver
+// (c) Heike Winkelvoß
+// =====================================================
 package de.egladil.web.checklistenserver.domain.util;
 
 import javax.enterprise.context.ApplicationScoped;
