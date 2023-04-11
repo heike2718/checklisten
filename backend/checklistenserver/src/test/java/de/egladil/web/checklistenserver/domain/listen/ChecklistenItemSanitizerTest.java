@@ -4,13 +4,10 @@
 // =====================================================
 package de.egladil.web.checklistenserver.domain.listen;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.junit.jupiter.api.Test;
-
-import de.egladil.web.checklistenserver.domain.listen.ChecklistenItem;
-import de.egladil.web.checklistenserver.domain.listen.ChecklistenItemSanitizer;
 
 /**
  * ChecklistenItemSanitizerTest

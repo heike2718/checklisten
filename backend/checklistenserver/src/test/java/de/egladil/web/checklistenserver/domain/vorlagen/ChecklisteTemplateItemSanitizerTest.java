@@ -4,13 +4,11 @@
 // =====================================================
 package de.egladil.web.checklistenserver.domain.vorlagen;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
 import de.egladil.web.checklistenserver.domain.Checklistentyp;
-import de.egladil.web.checklistenserver.domain.vorlagen.ChecklistenvorlageItem;
-import de.egladil.web.checklistenserver.domain.vorlagen.ChecklistenvorlageItemSanitizer;
 
 /**
  * ChecklisteTemplateItemSanitizerTest

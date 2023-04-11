@@ -1,18 +1,17 @@
-//=====================================================
+// =====================================================
 // Projekt: checklistenserver
 // (c) Heike Winkelvoß
-//=====================================================
+// =====================================================
 
 package de.egladil.web.checklistenserver.domain.vorlagen;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
 import de.egladil.web.checklistenserver.domain.listen.ChecklistenItem;
-import de.egladil.web.checklistenserver.domain.vorlagen.ChecklistenvorlageProvider;
 
 /**
  * ChecklistenTemplateProviderTest
@@ -21,6 +20,7 @@ public class ChecklistenTemplateProviderTest {
 
 	@Test
 	void mapFiltertNurNonBlankElements() {
+
 		// Arrange
 		String[] namen = new String[] { " ", "eins ", "eins", null, "", "zwei" };
 		ChecklistenvorlageProvider provider = new ChecklistenvorlageProvider();
@@ -37,6 +37,7 @@ public class ChecklistenTemplateProviderTest {
 
 	@Test
 	void mapSortiertAlphabetisch() {
+
 		// Arrange
 		String[] namen = new String[] { "zwei", "äh", "ah" };
 		ChecklistenvorlageProvider provider = new ChecklistenvorlageProvider();

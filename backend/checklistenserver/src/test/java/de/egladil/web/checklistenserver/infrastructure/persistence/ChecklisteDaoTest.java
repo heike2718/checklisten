@@ -1,23 +1,22 @@
-//=====================================================
+// =====================================================
 // Projekt: checklistenserver
 // (c) Heike Winkelvoß
-//=====================================================
+// =====================================================
 
 package de.egladil.web.checklistenserver.infrastructure.persistence;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-import de.egladil.web.checklistenserver.infrastructure.persistence.ChecklisteDao;
-
 /**
-* ChecklisteDaoTest
-*/
+ * ChecklisteDaoTest
+ */
 public class ChecklisteDaoTest {
 
 	@Test
 	void testUniqueIdentityQuery() {
+
 		// Arrange
 		String identifierName = "hühnchen";
 		ChecklisteDao dao = new ChecklisteDao();
@@ -30,7 +29,7 @@ public class ChecklisteDaoTest {
 	}
 
 	@Test
-	void testCountStatement()  {
+	void testCountStatement() {
 
 		// Act
 		String stmt = new ChecklisteDao().getCountStatement();
