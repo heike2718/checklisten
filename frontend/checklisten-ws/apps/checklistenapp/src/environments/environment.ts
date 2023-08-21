@@ -10,7 +10,7 @@ export const environment = {
 	authApiUrl: 'http://heikedeb:9000/authprovider',
 	authUrl: 'http://heikedeb/auth-app',
 	profileUrl: 'http://heikedeb/profil-app',
-	assetsUrl: 'https://opa-wetterwachs.de/checklistenapp/assets',
+	assetsUrl: 'https://mathe-jung-alt.de/checklistenapp/assets',
 	signupRedirectUrl: 'http://localhost:4200/checklistenapp',
 	loginRedirectUrl: 'http://localhost:4200/checklistenapp#/listen',
 	consoleLogActive: true,

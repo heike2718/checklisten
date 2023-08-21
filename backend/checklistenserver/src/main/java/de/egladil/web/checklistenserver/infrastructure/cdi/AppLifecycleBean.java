@@ -21,6 +21,12 @@ public class AppLifecycleBean {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(AppLifecycleBean.class);
 
+	@ConfigProperty(name = "de.egladil.web.checklistenserver.domain.auth.client.InitAccessTokenRestClient/mp-rest/url")
+	String authproviderUrl;
+
+	@ConfigProperty(name = "quarkus.http.cors.origins")
+	String corsAllowedOrigins;
+
 	@ConfigProperty(name = "dir.einkaufslisten")
 	String pathVorlagenEinkaufslisten;
 
@@ -32,6 +38,8 @@ public class AppLifecycleBean {
 
 	void onStartup(@Observes final StartupEvent ev) {
 
+		LOGGER.info(" ===========>  authproviderUrl={}", authproviderUrl);
+		LOGGER.info(" ===========>  quarkus.http.cors.origins={}", corsAllowedOrigins);
 		LOGGER.info(" ===========>  dir vorlagen einkaufslisten is {}", pathVorlagenEinkaufslisten);
 		LOGGER.info(" ===========>  dir vorlagen packlisten is {}", pathVorlagenPacklisten);
 

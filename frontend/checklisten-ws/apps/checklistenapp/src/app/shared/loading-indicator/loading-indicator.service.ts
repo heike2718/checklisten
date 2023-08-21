@@ -22,11 +22,11 @@ export class LoadingIndicatorService {
     }
 
 
-    private loadingOn(): void {
+    public loadingOn(): void {
         this.#loadingSubject.next(true);
     }
 
-    private loadingOff(): void {
+    public loadingOff(): void {
         this.#loadingSubject.next(false);
     }
 }
