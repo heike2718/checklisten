@@ -6,7 +6,7 @@ package de.egladil.web.checklistenserver.infrastructure.filters;
 
 import java.security.Principal;
 
-import javax.ws.rs.core.SecurityContext;
+import jakarta.ws.rs.core.SecurityContext;
 
 import de.egladil.web.checklistenserver.domain.auth.UserSession;
 

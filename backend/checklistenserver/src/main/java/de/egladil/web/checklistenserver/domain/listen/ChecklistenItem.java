@@ -7,8 +7,8 @@ package de.egladil.web.checklistenserver.domain.listen;
 
 import java.io.Serializable;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 import de.egladil.web.commons_validation.annotations.StringLatin;
 

@@ -15,9 +15,9 @@ import java.util.Date;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-import javax.ws.rs.core.NewCookie;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.ws.rs.core.NewCookie;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;

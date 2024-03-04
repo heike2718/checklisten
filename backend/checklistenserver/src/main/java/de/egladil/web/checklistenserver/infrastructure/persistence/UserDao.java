@@ -5,8 +5,8 @@
 
 package de.egladil.web.checklistenserver.infrastructure.persistence;
 
-import javax.enterprise.context.RequestScoped;
-import javax.persistence.EntityManager;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.persistence.EntityManager;
 
 import de.egladil.web.checklistenserver.domain.Checklistenentity;
 import de.egladil.web.checklistenserver.domain.auth.Checklistenuser;

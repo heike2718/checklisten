@@ -4,8 +4,8 @@
 // =====================================================
 package de.egladil.web.checklistenserver.domain.vorlagen;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import de.egladil.web.checklistenserver.domain.Checklistentyp;
 import de.egladil.web.commons_validation.annotations.StringLatin;

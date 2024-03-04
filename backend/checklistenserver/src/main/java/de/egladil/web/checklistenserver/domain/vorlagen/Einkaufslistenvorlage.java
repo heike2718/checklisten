@@ -5,7 +5,7 @@
 
 package de.egladil.web.checklistenserver.domain.vorlagen;
 
-import javax.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.ApplicationScoped;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
