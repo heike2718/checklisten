@@ -4,14 +4,13 @@
 // =====================================================
 package de.egladil.web.checklistenserver.infrastructure.cdi;
 
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.enterprise.event.Observes;
-
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.quarkus.runtime.StartupEvent;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.event.Observes;
 
 /**
  * AppLifecycleBean
@@ -21,7 +20,7 @@ public class AppLifecycleBean {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(AppLifecycleBean.class);
 
-	@ConfigProperty(name = "de.egladil.web.checklistenserver.domain.auth.client.InitAccessTokenRestClient/mp-rest/url")
+	@ConfigProperty(name = "authprovider.url")
 	String authproviderUrl;
 
 	@ConfigProperty(name = "quarkus.http.cors.origins")

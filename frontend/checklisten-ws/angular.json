@@ -54,7 +54,7 @@
               ],
               "outputHashing": "all"
             },
-            "a300": {
+            "heikeqs": {
               "budgets": [
                 {
                   "type": "initial",
@@ -70,11 +70,11 @@
               "fileReplacements": [
                 {
                   "replace": "apps/checklistenapp/src/app/store-config/store-devtools.ts",
-                  "with": "build-env/store-devtools.a300.ts"
+                  "with": "build-env/store-devtools.heikeqs.ts"
                 },
                 {
                   "replace": "apps/checklistenapp/src/environments/environment.ts",
-                  "with": "build-env/checklistenapp/environment-a300.ts"
+                  "with": "build-env/checklistenapp/environment-heikeqs.ts"
                 }
               ],
               "outputHashing": "all"

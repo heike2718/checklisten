@@ -13,10 +13,10 @@
 	<description>Server für die Checklistenapp</description>
 
 	<properties>
-		<commons.version>2.0.1</commons.version>
+		<commons.version>2.0.2</commons.version>
 		<quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
 		<quarkus.platform.group-id>io.quarkus</quarkus.platform.group-id>
-		<quarkus.platform.version>3.8.0</quarkus.platform.version>
+		<quarkus.platform.version>3.8.4</quarkus.platform.version>
 		<dependency-check.version>8.1.2</dependency-check.version>
 		<surefire-plugin.version>3.0.0-M5</surefire-plugin.version>
 		<maven.compiler.source>17</maven.compiler.source>

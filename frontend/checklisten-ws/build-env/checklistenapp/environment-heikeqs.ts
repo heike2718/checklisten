@@ -4,14 +4,14 @@
 
 export const environment = {
   production: false,
-  envName: 'a300',
+  envName: 'heikeqs',
   version: '8.1.1',
-  assetsUrl: 'http://a300/checklistenapp/assets',
-  apiUrl: 'http://a300/checklisten-api',
-  profileUrl: 'http://a300/profil-app',
-	authUrl: 'http://a300/auth-app',
-	signupRedirectUrl: 'http://a300/checklistenapp',
-	loginRedirectUrl: 'http://a300/checklistenapp#/listen',
+  assetsUrl: 'http://heikeqs/checklistenapp/assets',
+  apiUrl: 'http://heikeqs/checklisten-api',
+  profileUrl: 'http://heikeqs/profil-app',
+	authUrl: 'http://heikeqs/auth-app',
+	signupRedirectUrl: 'http://heikeqs/checklistenapp',
+	loginRedirectUrl: 'http://heikeqs/checklistenapp#/listen',
 	consoleLogActive: true,
 	serverLogActive: false,
 	loglevel: 2

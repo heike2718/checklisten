@@ -7,12 +7,6 @@ package de.egladil.web.checklistenserver.domain.auth;
 import java.util.Map;
 import java.util.UUID;
 
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
-import jakarta.ws.rs.ProcessingException;
-import jakarta.ws.rs.WebApplicationException;
-import jakarta.ws.rs.core.Response;
-
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.slf4j.Logger;
@@ -26,6 +20,11 @@ import de.egladil.web.checklistenserver.domain.error.LogmessagePrefixes;
 import de.egladil.web.commons_validation.payload.MessagePayload;
 import de.egladil.web.commons_validation.payload.OAuthClientCredentials;
 import de.egladil.web.commons_validation.payload.ResponsePayload;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.ws.rs.ProcessingException;
+import jakarta.ws.rs.WebApplicationException;
+import jakarta.ws.rs.core.Response;
 
 /**
  * TokenExchangeService
@@ -33,7 +32,7 @@ import de.egladil.web.commons_validation.payload.ResponsePayload;
 @ApplicationScoped
 public class TokenExchangeService {
 
-	private static final Logger LOG = LoggerFactory.getLogger(TokenExchangeService.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(TokenExchangeService.class);
 
 	@ConfigProperty(name = "auth.client-id")
 	String clientId;
@@ -55,25 +54,38 @@ public class TokenExchangeService {
 
 			Response response = tokenExchangeClient.exchangeOneTimeTokenWithJwt(oneTimeToken, clientCredentials);
 
+			LOGGER.info("response-status={}", response.getStatus());
 			ResponsePayload responsePayload = response.readEntity(ResponsePayload.class);
+
+			LOGGER.info("token={}", responsePayload.getMessage().getMessage());
 
 			return this.checkNonceAndExtractTheJwt(nonce, responsePayload);
 
 		} catch (WebApplicationException e) {
 
-			ResponsePayload responsePayload = e.getResponse().readEntity(ResponsePayload.class);
+			LOGGER.error("WebApplicationException beim Tausch des OTT: status={}, message=", e.getResponse().getStatus(),
+				e.getMessage());
 
-			MessagePayload messagePayload = responsePayload.getMessage();
+			try {
 
-			String message = "Konnte das oneTimeToken nicht gegen das JWT tauschen: " + messagePayload.getMessage();
+				ResponsePayload responsePayload = e.getResponse().readEntity(ResponsePayload.class);
 
-			LOG.error(message + e.getMessage(), e);
+				MessagePayload messagePayload = responsePayload.getMessage();
 
-			throw new ChecklistenRuntimeException(message + e.getMessage(), e);
+				String message = "Konnte das oneTimeToken nicht gegen das JWT tauschen: " + messagePayload.getMessage();
+
+				LOGGER.error(message + e.getMessage(), e);
+
+				throw new ChecklistenRuntimeException(message + e.getMessage(), e);
+			} catch (Exception ex) {
+
+				LOGGER.error("Konnte das oneTimeToken nicht gegen das JWT tauschen: {}, {}", e.getMessage(), ex.getMessage());
+				throw new ChecklistenRuntimeException("Konnte das oneTimeToken nicht gegen das JWT tauschen " + e.getMessage(), e);
+			}
 
 		} catch (ProcessingException processingException) {
 
-			LOG.error("endpoint authprovider ist nicht erreichbar");
+			LOGGER.error("endpoint authprovider ist nicht erreichbar");
 
 			throw new InaccessableEndpointException("Der Endpoint authprovider ist nicht erreichbar. ");
 		}
@@ -93,7 +105,7 @@ public class TokenExchangeService {
 
 				{
 
-					LOG.error(LogmessagePrefixes.BOT + "zurückgesendetes nonce stimmt nicht");
+					LOGGER.error(LogmessagePrefixes.BOT + "zurückgesendetes nonce stimmt nicht");
 					throw new ClientAuthException();
 				}
 			}
@@ -101,7 +113,7 @@ public class TokenExchangeService {
 			return dataMap.get("jwt");
 		} else {
 
-			LOG.error("Authentisierung des Clients hat nicht geklappt: {} - {}", messagePayload.getLevel(),
+			LOGGER.error("Authentisierung des Clients hat nicht geklappt: {} - {}", messagePayload.getLevel(),
 				messagePayload.getMessage());
 			throw new ClientAuthException();
 		}
