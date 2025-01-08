@@ -6,7 +6,7 @@
     "ng": "nx",
     "postinstall": "node ./decorate-angular-cli.js && ngcc --properties es2015 browser module main",
     "nx": "nx",
-    "start": "ng serve",
+    "start": "npx ng serve",
     "build:checklistenapp:local": "npx nx build auth-app -c heikedeb --base-href /auth-app --deploy-url auth-app/ --skip-nx-cache",
     "build:checklistenapp:heikeqs": "npx nx build checklistenapp -c heikeqs --output-hashing=all --base-href /checklistenapp --deploy-url checklistenapp/",
     "build:checklistenapp:prod": "npx nx build checklistenapp --configuration production --output-hashing=all --base-href /checklistenapp --deploy-url checklistenapp/",
