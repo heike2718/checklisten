@@ -12,7 +12,7 @@ import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.egladil.web.checklistenserver.domain.auth.client.TokenExchangeRestClient;
+import de.egladil.web.checklistenserver.domain.auth.client.AuthproviderRestClient;
 import de.egladil.web.checklistenserver.domain.error.ChecklistenRuntimeException;
 import de.egladil.web.checklistenserver.domain.error.ClientAuthException;
 import de.egladil.web.checklistenserver.domain.error.InaccessableEndpointException;
@@ -42,7 +42,7 @@ public class TokenExchangeService {
 
 	@Inject
 	@RestClient
-	TokenExchangeRestClient tokenExchangeClient;
+	AuthproviderRestClient authProviderRestClient;
 
 	public String exchangeTheOneTimeToken(final String oneTimeToken) {
 
@@ -52,7 +52,7 @@ public class TokenExchangeService {
 
 		try {
 
-			Response response = tokenExchangeClient.exchangeOneTimeTokenWithJwt(oneTimeToken, clientCredentials);
+			Response response = authProviderRestClient.exchangeOneTimeTokenWithJwt(oneTimeToken, clientCredentials);
 
 			LOGGER.info("response-status={}", response.getStatus());
 			ResponsePayload responsePayload = response.readEntity(ResponsePayload.class);

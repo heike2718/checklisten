@@ -22,8 +22,8 @@ import jakarta.transaction.Transactional.TxType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.egladil.web.checklistenserver.domain.Checklistenentity;
 import de.egladil.web.checklistenserver.domain.IBaseDao;
+import de.egladil.web.checklistenserver.domain.entities.Checklistenentity;
 import de.egladil.web.checklistenserver.domain.error.ChecklistenRuntimeException;
 import de.egladil.web.commons_validation.ValidationDelegate;
 

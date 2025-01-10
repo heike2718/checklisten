@@ -7,11 +7,6 @@ package de.egladil.web.checklistenserver.domain.auth.client;
 import java.util.Map;
 import java.util.UUID;
 
-import jakarta.enterprise.context.RequestScoped;
-import jakarta.inject.Inject;
-import jakarta.ws.rs.WebApplicationException;
-import jakarta.ws.rs.core.Response;
-
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.rest.client.RestClientDefinitionException;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
@@ -24,6 +19,10 @@ import de.egladil.web.checklistenserver.domain.error.LogmessagePrefixes;
 import de.egladil.web.commons_validation.payload.MessagePayload;
 import de.egladil.web.commons_validation.payload.OAuthClientCredentials;
 import de.egladil.web.commons_validation.payload.ResponsePayload;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
+import jakarta.ws.rs.WebApplicationException;
+import jakarta.ws.rs.core.Response;
 
 /**
  * ClientAccessTokenService
@@ -41,7 +40,7 @@ public class ClientAccessTokenService {
 
 	@Inject
 	@RestClient
-	InitAccessTokenRestClient initAccessTokenClient;
+	AuthproviderRestClient authProviderRestClient;
 
 	/**
 	 * Holt sich ein clientAccessToken beim authprovider.
@@ -56,7 +55,7 @@ public class ClientAccessTokenService {
 
 		try {
 
-			Response authResponse = initAccessTokenClient.authenticateClient(credentials);
+			Response authResponse = authProviderRestClient.authenticateClient(credentials);
 
 			ResponsePayload responsePayload = authResponse.readEntity(ResponsePayload.class);
 

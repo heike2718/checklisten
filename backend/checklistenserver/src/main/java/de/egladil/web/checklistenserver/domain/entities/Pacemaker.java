@@ -3,7 +3,7 @@
 // (c) Heike Winkelvoß
 // =====================================================
 
-package de.egladil.web.checklistenserver.domain.pacemaker;
+package de.egladil.web.checklistenserver.domain.entities;
 
 import java.util.Objects;
 
@@ -17,8 +17,6 @@ import jakarta.persistence.Transient;
 import jakarta.persistence.Version;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-
-import de.egladil.web.checklistenserver.domain.Checklistenentity;
 import de.egladil.web.commons_validation.payload.HateoasPayload;
 
 /**

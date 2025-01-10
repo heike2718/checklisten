@@ -3,7 +3,7 @@
 // (c) Heike Winkelvoß
 // =====================================================
 
-package de.egladil.web.checklistenserver.domain.auth;
+package de.egladil.web.checklistenserver.domain.entities;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -23,7 +23,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import de.egladil.web.checklistenserver.domain.Checklistenentity;
 import de.egladil.web.commons_validation.payload.HateoasPayload;
 
 /**

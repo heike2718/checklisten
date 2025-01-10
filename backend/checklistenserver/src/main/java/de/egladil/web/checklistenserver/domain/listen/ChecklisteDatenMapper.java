@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import de.egladil.web.checklistenserver.domain.entities.Checkliste;
 import de.egladil.web.checklistenserver.domain.error.ChecklistenRuntimeException;
 
 /**

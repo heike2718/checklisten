@@ -7,10 +7,9 @@ package de.egladil.web.checklistenserver.infrastructure.persistence;
 
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.persistence.EntityManager;
-
-import de.egladil.web.checklistenserver.domain.Checklistenentity;
-import de.egladil.web.checklistenserver.domain.auth.Checklistenuser;
 import de.egladil.web.checklistenserver.domain.auth.IUserDao;
+import de.egladil.web.checklistenserver.domain.entities.Checklistenentity;
+import de.egladil.web.checklistenserver.domain.entities.Checklistenuser;
 
 /**
  * UserDao

@@ -6,6 +6,7 @@
 package de.egladil.web.checklistenserver.domain.pacemaker;
 
 import de.egladil.web.checklistenserver.domain.IBaseDao;
+import de.egladil.web.checklistenserver.domain.entities.Pacemaker;
 
 /**
  * IPacemakerDao

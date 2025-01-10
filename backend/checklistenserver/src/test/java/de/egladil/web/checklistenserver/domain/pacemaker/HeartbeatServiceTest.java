@@ -12,6 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
+import de.egladil.web.checklistenserver.domain.entities.Pacemaker;
 import de.egladil.web.commons_validation.payload.ResponsePayload;
 
 /**

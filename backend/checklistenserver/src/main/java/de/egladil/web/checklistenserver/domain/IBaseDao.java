@@ -7,6 +7,8 @@ package de.egladil.web.checklistenserver.domain;
 import java.util.List;
 import java.util.Optional;
 
+import de.egladil.web.checklistenserver.domain.entities.Checklistenentity;
+
 /**
  * IBaseDao
  */

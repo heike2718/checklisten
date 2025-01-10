@@ -3,7 +3,7 @@
 // (c) Heike Winkelvoß
 // =====================================================
 
-package de.egladil.web.checklistenserver.domain.listen;
+package de.egladil.web.checklistenserver.domain.entities;
 
 import java.util.Date;
 
@@ -24,7 +24,6 @@ import jakarta.validation.constraints.Size;
 
 import org.apache.commons.lang3.StringUtils;
 
-import de.egladil.web.checklistenserver.domain.Checklistenentity;
 import de.egladil.web.checklistenserver.domain.Checklistentyp;
 import de.egladil.web.commons_validation.payload.HateoasPayload;
 

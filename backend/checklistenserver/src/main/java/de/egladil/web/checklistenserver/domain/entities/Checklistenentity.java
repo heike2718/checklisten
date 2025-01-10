@@ -3,7 +3,7 @@
 // (c) Heike Winkelvoß
 // =====================================================
 
-package de.egladil.web.checklistenserver.domain;
+package de.egladil.web.checklistenserver.domain.entities;
 
 import java.io.Serializable;
 

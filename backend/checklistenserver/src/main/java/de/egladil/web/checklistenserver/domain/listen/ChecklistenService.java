@@ -21,8 +21,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.egladil.web.checklistenserver.domain.Checklistentyp;
-import de.egladil.web.checklistenserver.domain.auth.Checklistenuser;
 import de.egladil.web.checklistenserver.domain.auth.IUserDao;
+import de.egladil.web.checklistenserver.domain.entities.Checkliste;
+import de.egladil.web.checklistenserver.domain.entities.Checklistenuser;
 import de.egladil.web.checklistenserver.domain.error.AuthException;
 import de.egladil.web.checklistenserver.domain.error.ChecklistenRuntimeException;
 import de.egladil.web.checklistenserver.domain.error.LogmessagePrefixes;
