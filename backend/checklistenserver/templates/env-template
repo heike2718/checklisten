@@ -13,10 +13,8 @@ QUARKUS_DATASOURCE_PASSWORD=ueberschreiben
 DIR_EINKAUFSLISTEN=/home/heike/git/checklistenserver/src/config/einkaufslisten
 DIR_PACKLISTEN=/home/heike/git/checklistenserver/src/config/packlisten
 
-AUTH-APP_URL=http://heiketux:80/auth-app
-AUTHPROVIDER_URL=heiketux:9000/authprovider
-AUTH_REDIRECT-URL_login=http://localhost:4200#/listen
-AUTH_REDIRECT-URL_SIGNUP=http://localhost:4200
+AUTH_REDIRECT_URL_login=http://localhost:4200#/listen
+AUTH_REDIRECT_URL_SIGNUP=http://localhost:4200
 
 TARGET_ORIGIN=localhost:4200,localhost:4300,heiketux:9300
 QUARKUS_HTTP_CORS_ORIGINS=http://heiketux:9000,http://localhost:9300,http://localhost:4200
@@ -46,3 +44,6 @@ QUARKUS_LOG_LEVEL=INFO
 
 QUARKUS_HTTP_ACCESS-LOG_ENABLED=false
 QUARKUS_HTTP_ACCESS-LOG_LOG-TO-FILE=false
+
+QUARKUS_LOG_CATEGORY__DE_EGLADIL_WEB_CHECKLISTENSERVER_INFRASTRUCTURE_FILTERS__LEVEL=INFO
+

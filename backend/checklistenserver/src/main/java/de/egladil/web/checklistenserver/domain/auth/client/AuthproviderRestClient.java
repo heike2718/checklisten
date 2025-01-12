@@ -23,7 +23,7 @@ import jakarta.ws.rs.core.Response;
  * InitAccessTokenRestClient
  */
 @RegisterRestClient(configKey = "authprovider")
-@Path("authprovider/api")
+@Path("api")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public interface AuthproviderRestClient {
@@ -34,7 +34,7 @@ public interface AuthproviderRestClient {
 
 	@PUT
 	@Path("token/exchange/{oneTimeToken}")
-	public Response exchangeOneTimeTokenWithJwt(@PathParam(
-		value = "oneTimeToken") final String oneTimeToken, final OAuthClientCredentials clientCredentials);
+	public Response exchangeOneTimeTokenWithJwt(@PathParam(value = "oneTimeToken")
+	final String oneTimeToken, final OAuthClientCredentials clientCredentials);
 
 }

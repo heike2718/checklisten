@@ -20,9 +20,6 @@ public class AppLifecycleBean {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(AppLifecycleBean.class);
 
-	@ConfigProperty(name = "authprovider.url")
-	String authproviderUrl;
-
 	@ConfigProperty(name = "quarkus.http.cors.origins")
 	String corsAllowedOrigins;
 
@@ -35,9 +32,17 @@ public class AppLifecycleBean {
 	@ConfigProperty(name = "delay.milliseconds", defaultValue = "0")
 	long delayMillis = 0;
 
-	void onStartup(@Observes final StartupEvent ev) {
+	@ConfigProperty(name = "quarkus.rest-client.authprovider.url")
+	String authproviderRESTUrl;
 
-		LOGGER.info(" ===========>  authproviderUrl={}", authproviderUrl);
+	@ConfigProperty(name = "auth-app.url")
+	String authAppUrl;
+
+	void onStartup(@Observes
+	final StartupEvent ev) {
+
+		LOGGER.info(" ===========>  authproviderUrl={}", authproviderRESTUrl);
+		LOGGER.info(" ===========>  authAppUrl={}", authAppUrl);
 		LOGGER.info(" ===========>  quarkus.http.cors.origins={}", corsAllowedOrigins);
 		LOGGER.info(" ===========>  dir vorlagen einkaufslisten is {}", pathVorlagenEinkaufslisten);
 		LOGGER.info(" ===========>  dir vorlagen packlisten is {}", pathVorlagenPacklisten);
