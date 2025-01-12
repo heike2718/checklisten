@@ -10,26 +10,26 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import jakarta.enterprise.context.RequestScoped;
-import jakarta.inject.Inject;
-import jakarta.persistence.PersistenceException;
-import jakarta.transaction.Transactional;
-import jakarta.ws.rs.NotFoundException;
-
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.egladil.web.checklistenserver.domain.Checklistentyp;
-import de.egladil.web.checklistenserver.domain.auth.IUserDao;
-import de.egladil.web.checklistenserver.domain.entities.Checkliste;
-import de.egladil.web.checklistenserver.domain.entities.Checklistenuser;
 import de.egladil.web.checklistenserver.domain.error.AuthException;
 import de.egladil.web.checklistenserver.domain.error.ChecklistenRuntimeException;
 import de.egladil.web.checklistenserver.domain.error.LogmessagePrefixes;
 import de.egladil.web.checklistenserver.domain.vorlagen.ChecklistenvorlageProvider;
+import de.egladil.web.checklistenserver.infrastructure.persistence.ChecklisteDao;
+import de.egladil.web.checklistenserver.infrastructure.persistence.UserDao;
+import de.egladil.web.checklistenserver.infrastructure.persistence.entities.Checkliste;
+import de.egladil.web.checklistenserver.infrastructure.persistence.entities.Checklistenuser;
 import de.egladil.web.commons_validation.payload.MessagePayload;
 import de.egladil.web.commons_validation.payload.ResponsePayload;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
+import jakarta.persistence.PersistenceException;
+import jakarta.transaction.Transactional;
+import jakarta.ws.rs.NotFoundException;
 
 /**
  * ChecklistenService
@@ -40,18 +40,17 @@ public class ChecklistenService {
 	private static final Logger LOG = LoggerFactory.getLogger(ChecklistenService.class);
 
 	@Inject
-	IChecklisteDao checklisteDao;
+	ChecklisteDao checklisteDao;
 
 	@Inject
-	IUserDao userDao;
+	UserDao userDao;
 
 	@Inject
 	ChecklistenvorlageProvider checklistenTemplateProvider;
 
 	/**
-	 * @param  userUUID
-	 *                  String die UUID des Users.
-	 * @return          List
+	 * @param userUUID String die UUID des Users.
+	 * @return List
 	 */
 	public List<ChecklisteDaten> loadChecklisten(final String userUUID) {
 
@@ -115,12 +114,9 @@ public class ChecklistenService {
 	/**
 	 * Legt für die Gruppe des Users eine neue Checkliste an.
 	 *
-	 * @param  typ
-	 *                  Checklistentyp darf nicht null sein.
-	 * @param  name
-	 *                  String name darf nicht blank sein
-	 * @param  userUUID
-	 *                  String darf nicht blank sein.
+	 * @param typ Checklistentyp darf nicht null sein.
+	 * @param name String name darf nicht blank sein
+	 * @param userUUID String darf nicht blank sein.
 	 * @return
 	 */
 	public ChecklisteDaten createCheckliste(final Checklistentyp typ, final String name, final String userUUID) {
@@ -162,10 +158,11 @@ public class ChecklistenService {
 	/**
 	 * Ändert die Daten oder den Namen.
 	 *
-	 * @param  daten
-	 * @return       ChecklisteDaten
+	 * @param daten
+	 * @return ChecklisteDaten
 	 */
-	public ResponsePayload changeAndSanitizeCheckliste(ChecklisteDaten daten, final String kuerzel, final String userUUID) throws AuthException {
+	public ResponsePayload changeAndSanitizeCheckliste(ChecklisteDaten daten, final String kuerzel, final String userUUID)
+		throws AuthException {
 
 		if (daten == null) {
 
@@ -236,8 +233,7 @@ public class ChecklistenService {
 	/**
 	 * Tja, löscht 'se halt.
 	 *
-	 * @param kuerzel
-	 *                String
+	 * @param kuerzel String
 	 */
 	@Transactional
 	public void deleteCheckliste(final String kuerzel, final String userUUID) {

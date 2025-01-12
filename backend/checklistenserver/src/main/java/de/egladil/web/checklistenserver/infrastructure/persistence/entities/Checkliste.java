@@ -3,10 +3,14 @@
 // (c) Heike Winkelvoß
 // =====================================================
 
-package de.egladil.web.checklistenserver.domain.entities;
+package de.egladil.web.checklistenserver.infrastructure.persistence.entities;
 
 import java.util.Date;
 
+import org.apache.commons.lang3.StringUtils;
+
+import de.egladil.web.checklistenserver.domain.Checklistentyp;
+import de.egladil.web.commons_validation.payload.HateoasPayload;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -14,6 +18,8 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.NamedQueries;
+import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -22,20 +28,18 @@ import jakarta.persistence.Version;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-import org.apache.commons.lang3.StringUtils;
-
-import de.egladil.web.checklistenserver.domain.Checklistentyp;
-import de.egladil.web.commons_validation.payload.HateoasPayload;
-
 /**
  * Checkliste
  */
 @Entity
 @Table(name = "CHECKLISTEN")
-public class Checkliste implements Checklistenentity {
+@NamedQueries({ @NamedQuery(name = Checkliste.FIND_WITH_GRUPPE, query = "select c from Checkliste c where gruppe = :gruppe"),
+	@NamedQuery(name = Checkliste.FIND_WITH_KUERZEL, query = "select c from Checkliste c where kuerzel = :kuerzel") })
+public class Checkliste {
 
-	/* serialVersionUID */
-	private static final long serialVersionUID = 1L;
+	public static final String FIND_WITH_GRUPPE = "Checkliste.FIND_WITH_GRUPPE";
+
+	public static final String FIND_WITH_KUERZEL = "Checkliste.FIND_WITH_KUERZEL";
 
 	public static Checkliste create(final Checklistentyp typ, final String name, final String kuerzel) {
 
@@ -86,7 +90,6 @@ public class Checkliste implements Checklistenentity {
 	@Transient
 	private HateoasPayload hateoasPayload;
 
-	@Override
 	public int hashCode() {
 
 		final int prime = 31;
@@ -95,7 +98,6 @@ public class Checkliste implements Checklistenentity {
 		return result;
 	}
 
-	@Override
 	public boolean equals(final Object obj) {
 
 		if (this == obj) {
@@ -127,7 +129,6 @@ public class Checkliste implements Checklistenentity {
 		return true;
 	}
 
-	@Override
 	public Long getId() {
 
 		return id;
@@ -193,19 +194,6 @@ public class Checkliste implements Checklistenentity {
 		this.kuerzel = kuerzel;
 	}
 
-	@Override
-	public HateoasPayload getHateoasPayload() {
-
-		return hateoasPayload;
-	}
-
-	@Override
-	public void setHateoasPayload(final HateoasPayload hateoasPayload) {
-
-		this.hateoasPayload = hateoasPayload;
-	}
-
-	@Override
 	public String toString() {
 
 		StringBuilder builder = new StringBuilder();

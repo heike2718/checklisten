@@ -8,9 +8,9 @@
 
 		<jta-data-source>jdbc/ChecklistenserviceDS</jta-data-source>
 
-		<class>de.egladil.web.checklistenserver.domain.entities.Checkliste</class>
-		<class>de.egladil.web.checklistenserver.domain.entities.Checklistenuser</class>
-		<class>de.egladil.web.checklistenserver.domain.entities.Pacemaker</class>
+		<class>de.egladil.web.checklistenserver.infrastructure.persistence.entities.Checkliste</class>
+		<class>de.egladil.web.checklistenserver.infrastructure.persistence.entities.Checklistenuser</class>
+		<class>de.egladil.web.checklistenserver.infrastructure.persistence.entities.Pacemaker</class>
 		<exclude-unlisted-classes>true</exclude-unlisted-classes>
 
 		<properties>

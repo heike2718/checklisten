@@ -5,15 +5,15 @@
 
 package de.egladil.web.checklistenserver.domain.pacemaker;
 
-import jakarta.enterprise.context.RequestScoped;
-import jakarta.inject.Inject;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.egladil.web.checklistenserver.domain.entities.Pacemaker;
+import de.egladil.web.checklistenserver.infrastructure.persistence.PacemakerDao;
+import de.egladil.web.checklistenserver.infrastructure.persistence.entities.Pacemaker;
 import de.egladil.web.commons_validation.payload.MessagePayload;
 import de.egladil.web.commons_validation.payload.ResponsePayload;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
 
 /**
  * HeartbeatService
@@ -26,7 +26,7 @@ public class HeartbeatService {
 	private static final Logger LOG = LoggerFactory.getLogger(HeartbeatService.class);
 
 	@Inject
-	IPacemakerDao pacemakerDao;
+	PacemakerDao pacemakerDao;
 
 	/**
 	 * Erzeugt eine Instanz von HeartbeatService
@@ -38,7 +38,8 @@ public class HeartbeatService {
 	/**
 	 * Erzeugt eine Instanz von HeartbeatService zum Testen ohne DB.
 	 */
-	public HeartbeatService(final IPacemakerDao iPacemakerDao) {
+	@Deprecated(forRemoval = true)
+	public HeartbeatService(final PacemakerDao iPacemakerDao) {
 
 		super();
 		this.pacemakerDao = iPacemakerDao;

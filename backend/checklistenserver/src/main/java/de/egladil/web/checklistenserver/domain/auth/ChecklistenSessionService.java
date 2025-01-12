@@ -12,12 +12,7 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Base64;
 import java.util.Date;
-import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
-
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
-import jakarta.ws.rs.core.NewCookie;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -39,7 +34,9 @@ import de.egladil.web.commons_crypto.JWTService;
 import de.egladil.web.commons_net.exception.SessionExpiredException;
 import de.egladil.web.commons_net.time.CommonTimeUtils;
 import de.egladil.web.commons_net.utils.CommonHttpUtils;
-import de.egladil.web.commons_validation.payload.HateoasPayload;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.ws.rs.core.NewCookie;
 
 /**
  * ChecklistenSessionService
@@ -69,14 +66,6 @@ public class ChecklistenSessionService {
 			DecodedJWT decodedJWT = jwtService.verify(jwt, getPublicKey());
 
 			String uuid = decodedJWT.getSubject();
-
-			Optional<HateoasPayload> opt = signupService.findUser(uuid);
-
-			if (opt.isEmpty()) {
-
-				signupService.signUpUser(uuid);
-				LOG.info("Neuen Checklistenuser mit UUID={} angelegt", StringUtils.abbreviate(uuid, 11));
-			}
 
 			Claim groupsClaim = decodedJWT.getClaim(Claims.groups.name());
 			String[] rolesArr = groupsClaim.asArray(String.class);
@@ -177,9 +166,8 @@ public class ChecklistenSessionService {
 	/**
 	 * Gibt die Session mit der gegebenen sessionId zurück.
 	 *
-	 * @param  sessionId
-	 *                   String
-	 * @return           UserSession oder null.
+	 * @param sessionId String
+	 * @return UserSession oder null.
 	 */
 	public UserSession getSession(final String sessionId) throws SessionExpiredException {
 
@@ -202,7 +190,7 @@ public class ChecklistenSessionService {
 
 	private long getSessionTimeout() {
 
-		return CommonTimeUtils.getInterval(CommonTimeUtils.now(), SESSION_IDLE_TIMEOUT_MINUTES,
-			ChronoUnit.MINUTES).getEndTime().getTime();
+		return CommonTimeUtils.getInterval(CommonTimeUtils.now(), SESSION_IDLE_TIMEOUT_MINUTES, ChronoUnit.MINUTES).getEndTime()
+			.getTime();
 	}
 }

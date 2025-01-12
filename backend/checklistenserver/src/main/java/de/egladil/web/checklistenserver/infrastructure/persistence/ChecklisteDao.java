@@ -6,91 +6,41 @@
 package de.egladil.web.checklistenserver.infrastructure.persistence;
 
 import java.util.List;
-
-import jakarta.enterprise.context.RequestScoped;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.Query;
-import jakarta.persistence.TypedQuery;
+import java.util.Optional;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.egladil.web.checklistenserver.domain.entities.Checkliste;
-import de.egladil.web.checklistenserver.domain.entities.Checklistenentity;
-import de.egladil.web.checklistenserver.domain.error.ChecklistenRuntimeException;
-import de.egladil.web.checklistenserver.domain.listen.IChecklisteDao;
+import de.egladil.web.checklistenserver.infrastructure.persistence.entities.Checkliste;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
+import jakarta.transaction.Transactional;
 
 /**
  * ChecklisteDao
  */
 @RequestScoped
-public class ChecklisteDao extends BaseDao implements IChecklisteDao {
+public class ChecklisteDao {
 
-	private static final Logger LOG = LoggerFactory.getLogger(ChecklisteDao.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(ChecklisteDao.class);
 
-	/**
-	 * Erzeugt eine Instanz von ChecklisteDao
-	 */
-	public ChecklisteDao() {
+	@Inject
+	EntityManager entityManager;
 
-	}
-
-	/**
-	 * Erzeugt eine Instanz von ChecklisteDao
-	 */
-	public ChecklisteDao(final EntityManager em) {
-
-		super(em);
-	}
-
-	@Override
+	@Transactional
 	public void delete(final Checkliste checkliste) {
 
-		// BalusC: falls die Transaktion nicht schon mit dem Suchen der Checkliste beginnt (siehe ChecklistenServivce), muss man es
+		// BalusC: falls die Transaktion nicht schon mit dem Suchen der Checkliste beginnt (siehe ChecklistenServivce),
+		// muss man es
 		// so machen. Es schadet aber nichts, wenn man es immer so macht.
-		EntityManager entityManager = getEm();
 		entityManager.remove(entityManager.contains(checkliste) ? checkliste : entityManager.merge(checkliste));
 		// getEm().remove(checkliste);
-		LOG.debug("deleted: {}", checkliste);
+		LOGGER.debug("deleted: {}", checkliste);
 	}
 
-	@Override
-	protected String getFindEntityByUniqueIdentifierQuery(final String queryParameterName) {
-
-		return "select c from Checkliste c where c.kuerzel=:" + queryParameterName;
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	protected <T extends Checklistenentity> Class<T> getEntityClass() {
-
-		return (Class<T>) Checkliste.class;
-	}
-
-	@Override
-	protected String getCountStatement() {
-
-		return "select count(*) from CHECKLISTEN";
-	}
-
-	@Override
-	public <T extends Checklistenentity> List<T> load() {
-
-		final String msg = "Methode load() ohne Argument ist für Checklisten verboten. Verwende Methode load(gruppe)";
-		LOG.error(msg);
-		throw new ChecklistenRuntimeException(msg);
-	}
-
-	@Override
-	public int getAnzahl() {
-
-		final String msg = "Methode getAnzahl() ohne Argument ist für Checklisten verboten. Verwende Methode getAnzahl(gruppe)";
-		LOG.error(msg);
-		throw new ChecklistenRuntimeException(msg);
-	}
-
-	@Override
 	public List<Checkliste> load(final String gruppe) {
 
 		if (StringUtils.isBlank(gruppe)) {
@@ -98,18 +48,14 @@ public class ChecklisteDao extends BaseDao implements IChecklisteDao {
 			throw new IllegalArgumentException("gruppe blank");
 		}
 
-		String stmt = "select c from Checkliste c where gruppe = :gruppe";
-		TypedQuery<Checkliste> query = getEm().createQuery(stmt, Checkliste.class);
-		query.setParameter("gruppe", gruppe);
+		List<Checkliste> trefferliste = entityManager.createNamedQuery(Checkliste.FIND_WITH_GRUPPE, Checkliste.class)
+			.setParameter("gruppe", gruppe).getResultList();
 
-		List<Checkliste> trefferliste = query.getResultList();
-
-		LOG.debug("Checkliste - Anzahl Treffer: {}", trefferliste.size());
+		LOGGER.debug("Checkliste - Anzahl Treffer: {}", trefferliste.size());
 
 		return trefferliste;
 	}
 
-	@Override
 	public int getAnzahl(final String gruppe) {
 
 		if (StringUtils.isBlank(gruppe)) {
@@ -118,9 +64,37 @@ public class ChecklisteDao extends BaseDao implements IChecklisteDao {
 		}
 
 		String stmt = "select count(*) from CHECKLISTEN where GRUPPE = :gruppe";
-		final Query query = getEm().createNativeQuery(stmt);
+		final Query query = entityManager.createNativeQuery(stmt);
 		query.setParameter("gruppe", gruppe);
 
-		return super.getCount(query).intValue();
+		return PersistenceUtils.getCount(query).intValue();
+	}
+
+	/**
+	 * @param kuerzel
+	 * @return
+	 */
+	public Optional<Checkliste> findByUniqueIdentifier(final String kuerzel) {
+
+		List<Checkliste> trefferliste = entityManager.createNamedQuery(Checkliste.FIND_WITH_KUERZEL, Checkliste.class)
+			.setParameter("kuerzel", kuerzel).getResultList();
+
+		return trefferliste.isEmpty() ? Optional.empty() : Optional.of(trefferliste.get(0));
+	}
+
+	/**
+	 * @param checkliste
+	 * @return
+	 */
+	@Transactional
+	public Checkliste save(final Checkliste checkliste) {
+
+		if (checkliste.getId() == null) {
+			entityManager.persist(checkliste);
+			LOGGER.debug("created: ID={}", checkliste.getId());
+			return checkliste;
+		} else {
+			return entityManager.merge(checkliste);
+		}
 	}
 }

@@ -7,14 +7,14 @@ package de.egladil.web.checklistenserver.domain.auth;
 
 import java.util.Optional;
 
-import jakarta.enterprise.context.RequestScoped;
-import jakarta.inject.Inject;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.egladil.web.checklistenserver.domain.entities.Checklistenuser;
+import de.egladil.web.checklistenserver.infrastructure.persistence.UserDao;
+import de.egladil.web.checklistenserver.infrastructure.persistence.entities.Checklistenuser;
 import de.egladil.web.commons_validation.payload.HateoasPayload;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
 
 @RequestScoped
 public class SignUpService {
@@ -22,12 +22,12 @@ public class SignUpService {
 	private static final Logger LOG = LoggerFactory.getLogger(SignUpService.class);
 
 	@Inject
-	IUserDao userDao;
+	UserDao userDao;
 
 	/**
 	 * Gibt den user zurück, falls er existiert, sonst ein leeres Optional.
 	 *
-	 * @param  uuid
+	 * @param uuid
 	 * @return
 	 */
 	public Optional<HateoasPayload> findUser(final String uuid) {
@@ -47,7 +47,7 @@ public class SignUpService {
 	 * Erzeugt das Teil, was für jemanden, der REST mit HATEOAS verwenden will, erforderlich ist, um die User-Resource
 	 * zu finden.
 	 *
-	 * @param  uuid
+	 * @param uuid
 	 * @return
 	 */
 	HateoasPayload createHateoasPayload(final String uuid) {
@@ -55,23 +55,4 @@ public class SignUpService {
 		HateoasPayload result = new HateoasPayload(uuid, "/users/" + uuid);
 		return result;
 	}
-
-	/**
-	 * Erzeugt einen neuen Checklistenuser mit der gegebenen uuid und der uuid als Gruppe.
-	 *
-	 * @param  uuid
-	 *              String
-	 * @return      Checklistenuser
-	 */
-	public HateoasPayload signUpUser(final String uuid) {
-
-		Checklistenuser user = new Checklistenuser();
-		user.setUuid(uuid);
-		user.setGruppe(uuid);
-
-		Checklistenuser persisted = userDao.save(user);
-		LOG.info("Checklistenuser mit uuid={} angelegt: id={}", uuid, persisted.getId());
-		return createHateoasPayload(uuid);
-	}
-
 }

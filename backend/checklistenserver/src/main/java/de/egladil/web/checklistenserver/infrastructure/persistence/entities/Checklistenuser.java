@@ -3,37 +3,38 @@
 // (c) Heike Winkelvoß
 // =====================================================
 
-package de.egladil.web.checklistenserver.domain.entities;
+package de.egladil.web.checklistenserver.infrastructure.persistence.entities;
 
 import java.util.HashSet;
 import java.util.Set;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
-import jakarta.persistence.Version;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 
 import org.apache.commons.lang3.StringUtils;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import de.egladil.web.commons_validation.payload.HateoasPayload;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.NamedQueries;
+import jakarta.persistence.NamedQuery;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
+import jakarta.persistence.Version;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 /**
  * Checklistenuser
  */
 @Entity
 @Table(name = "USERS")
-public class Checklistenuser implements Checklistenentity {
+@NamedQueries({ @NamedQuery(name = Checklistenuser.FIND_BY_UUID, query = "select u from Checklistenuser u where u.uuid=:uuid") })
+public class Checklistenuser {
 
-	/* serialVersionUID */
-	private static final long serialVersionUID = 1L;
+	public static final String FIND_BY_UUID = "Checklistenuser.FIND_BY_UUID";
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -70,7 +71,6 @@ public class Checklistenuser implements Checklistenentity {
 		roles.add("user");
 	}
 
-	@Override
 	public Long getId() {
 
 		return id;
@@ -101,18 +101,6 @@ public class Checklistenuser implements Checklistenentity {
 		this.version = version;
 	}
 
-	@Override
-	public HateoasPayload getHateoasPayload() {
-
-		return hateoasPayload;
-	}
-
-	@Override
-	public void setHateoasPayload(final HateoasPayload hateoasPayload) {
-
-		this.hateoasPayload = hateoasPayload;
-	}
-
 	/**
 	 * Rolle werden momentan konstant codiert und nicht in der DB abgelegt.
 	 *
@@ -123,7 +111,6 @@ public class Checklistenuser implements Checklistenentity {
 		return roles;
 	}
 
-	@Override
 	public String toString() {
 
 		StringBuilder builder = new StringBuilder();

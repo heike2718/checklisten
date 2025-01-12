@@ -5,63 +5,49 @@
 
 package de.egladil.web.checklistenserver.infrastructure.persistence;
 
-import jakarta.enterprise.context.RequestScoped;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.TypedQuery;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.egladil.web.checklistenserver.domain.entities.Checklistenentity;
-import de.egladil.web.checklistenserver.domain.entities.Pacemaker;
-import de.egladil.web.checklistenserver.domain.pacemaker.IPacemakerDao;
+import de.egladil.web.checklistenserver.infrastructure.persistence.entities.Pacemaker;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
+import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
 
 /**
  * PacemakerDao
  */
 @RequestScoped
-public class PacemakerDao extends BaseDao implements IPacemakerDao {
+public class PacemakerDao {
 
-	private static final Logger LOG = LoggerFactory.getLogger(PacemakerDao.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(PacemakerDao.class);
 
-	/**
-	 * Erzeugt eine Instanz von PacemakerDao
-	 */
-	public PacemakerDao() {
-	}
+	@Inject
+	EntityManager entityManager;
 
-	/**
-	 * Erzeugt eine Instanz von PacemakerDao
-	 */
-	public PacemakerDao(final EntityManager em) {
-		super(em);
-	}
-
-	@Override
 	public Pacemaker findByMonitorId(final String monitorId) {
-		LOG.debug("monitorId='{}'", monitorId);
+		LOGGER.debug("monitorId='{}'", monitorId);
 
-		String stmt = "select p from Pacemaker p where monitorId = :monitorId";
-		TypedQuery<Pacemaker> query = getEm().createQuery(stmt, Pacemaker.class);
-		query.setParameter("monitorId", monitorId);
-
-		return query.getSingleResult();
+		return entityManager.createNamedQuery(Pacemaker.FIND_BY_MONITOR_ID, Pacemaker.class).setParameter("monitorId", monitorId)
+			.getSingleResult();
 	}
 
-	@Override
-	protected String getFindEntityByUniqueIdentifierQuery(final String queryParameterName) {
-		return "select p from Pacemaker p where monitorId = :monitorId";
-	}
+	@Transactional
+	public Pacemaker save(final Pacemaker entity) {
 
-	@Override
-	protected String getCountStatement() {
-		return "select count(*) from PACEMAKERS";
-	}
+		Pacemaker persisted = null;
 
-	@SuppressWarnings("unchecked")
-	@Override
-	protected <T extends Checklistenentity> Class<T> getEntityClass() {
-		return (Class<T>) Pacemaker.class;
-	}
+		if (entity.getId() == null) {
 
+			entityManager.persist(entity);
+			persisted = entity;
+			LOGGER.debug("created: {}, ID={}", persisted, persisted.getId());
+		} else {
+
+			persisted = entityManager.merge(entity);
+			LOGGER.debug("updated: {}", persisted);
+		}
+
+		return persisted;
+	}
 }

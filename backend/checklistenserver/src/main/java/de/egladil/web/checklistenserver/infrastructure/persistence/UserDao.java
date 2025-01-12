@@ -5,44 +5,29 @@
 
 package de.egladil.web.checklistenserver.infrastructure.persistence;
 
+import java.util.List;
+import java.util.Optional;
+
+import de.egladil.web.checklistenserver.infrastructure.persistence.entities.Checklistenuser;
 import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
-import de.egladil.web.checklistenserver.domain.auth.IUserDao;
-import de.egladil.web.checklistenserver.domain.entities.Checklistenentity;
-import de.egladil.web.checklistenserver.domain.entities.Checklistenuser;
 
 /**
  * UserDao
  */
 @RequestScoped
-public class UserDao extends BaseDao implements IUserDao {
+public class UserDao {
 
-	/**
-	 * Erzeugt eine Instanz von UserDao
-	 */
-	public UserDao() {
-	}
+	@Inject
+	EntityManager entityManager;
 
-	/**
-	 * Erzeugt eine Instanz von UserDao
-	 */
-	public UserDao(final EntityManager em) {
-		super(em);
-	}
+	public Optional<Checklistenuser> findByUniqueIdentifier(final String identifier) {
 
-	@Override
-	protected String getFindEntityByUniqueIdentifierQuery(final String queryParameterName) {
-		return "select u from Checklistenuser u where u.uuid=:" + queryParameterName;
-	}
+		List<Checklistenuser> resultList = entityManager.createNamedQuery(Checklistenuser.FIND_BY_UUID, Checklistenuser.class)
+			.setParameter("uuid", identifier).getResultList();
 
-	@SuppressWarnings("unchecked")
-	@Override
-	protected <T extends Checklistenentity> Class<T> getEntityClass() {
-		return (Class<T>) Checklistenuser.class;
-	}
+		return resultList.isEmpty() ? Optional.empty() : Optional.of(resultList.get(0));
 
-	@Override
-	protected String getCountStatement() {
-		return "select count(*) from USER";
 	}
 }

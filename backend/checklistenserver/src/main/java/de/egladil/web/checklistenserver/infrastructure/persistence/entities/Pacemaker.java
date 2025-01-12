@@ -3,31 +3,34 @@
 // (c) Heike Winkelvoß
 // =====================================================
 
-package de.egladil.web.checklistenserver.domain.entities;
+package de.egladil.web.checklistenserver.infrastructure.persistence.entities;
 
 import java.util.Objects;
 
+import de.egladil.web.commons_validation.payload.HateoasPayload;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.NamedQueries;
+import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import jakarta.persistence.Version;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import de.egladil.web.commons_validation.payload.HateoasPayload;
 
 /**
  * Pacemaker (Herzschrittmacher) wird vom eigengebauten Monitor verwendet, um regelmäßige Zugriffe auf die DB zu machen.
  */
 @Entity
 @Table(name = "PACEMAKERS")
-public class Pacemaker implements Checklistenentity {
+@NamedQueries({
+	@NamedQuery(name = Pacemaker.FIND_BY_MONITOR_ID, query = "select p from Pacemaker p where monitorId = :monitorId") })
+public class Pacemaker {
 
-	/* serialVersionUID */
-	private static final long serialVersionUID = 1L;
+	public static final String FIND_BY_MONITOR_ID = "Pacemaker.FIND_BY_MONITOR_ID";
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -53,7 +56,6 @@ public class Pacemaker implements Checklistenentity {
 	@Transient
 	private HateoasPayload hateoasPayload;
 
-	@Override
 	public Long getId() {
 
 		return this.id;
@@ -84,7 +86,6 @@ public class Pacemaker implements Checklistenentity {
 		this.wert = wert;
 	}
 
-	@Override
 	public String toString() {
 
 		StringBuilder builder = new StringBuilder();
@@ -98,26 +99,22 @@ public class Pacemaker implements Checklistenentity {
 		return builder.toString();
 	}
 
-	@Override
 	public void setHateoasPayload(final HateoasPayload hateoasPayload) {
 
 		this.hateoasPayload = hateoasPayload;
 
 	}
 
-	@Override
 	public HateoasPayload getHateoasPayload() {
 
 		return hateoasPayload;
 	}
 
-	@Override
 	public int hashCode() {
 
 		return Objects.hash(monitorId);
 	}
 
-	@Override
 	public boolean equals(final Object obj) {
 
 		if (this == obj) {

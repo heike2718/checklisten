@@ -12,16 +12,23 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import de.egladil.web.checklistenserver.domain.entities.Pacemaker;
+import de.egladil.web.checklistenserver.infrastructure.persistence.PacemakerDao;
+import de.egladil.web.checklistenserver.infrastructure.persistence.entities.Pacemaker;
 import de.egladil.web.commons_validation.payload.ResponsePayload;
+import io.quarkus.test.InjectMock;
+import io.quarkus.test.junit.QuarkusTest;
+import jakarta.inject.Inject;
 
 /**
  * HeartbeatServiceTest
  */
+@QuarkusTest
 public class HeartbeatServiceTest {
 
-	private IPacemakerDao dao;
+	@InjectMock
+	private PacemakerDao dao;
 
+	@Inject
 	private HeartbeatService service;
 
 	private Pacemaker pacemaker;
@@ -29,8 +36,6 @@ public class HeartbeatServiceTest {
 	@BeforeEach
 	public void setUp() {
 
-		dao = Mockito.mock(IPacemakerDao.class);
-		service = new HeartbeatService(dao);
 		pacemaker = new Pacemaker();
 		pacemaker.setId(1l);
 		pacemaker.setMonitorId("checklisten-database");
