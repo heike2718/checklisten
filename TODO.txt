@@ -1,2 +1,0 @@
-
-JWT aus Frontend entfernen!!!
