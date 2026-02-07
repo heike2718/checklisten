@@ -5,40 +5,30 @@
 
 package de.egladil.web.checklistenserver.domain.vorlagen;
 
+import de.egladil.web.checklistenserver.domain.Checklistentyp;
+import de.egladil.web.checklistenserver.domain.error.ChecklistenRuntimeException;
+import de.egladil.web.checklistenserver.domain.error.ConcurrentUpdateException;
+import de.egladil.web.checklistenserver.domain.listen.ChecklisteDaten;
+import de.egladil.web.checklistenserver.domain.listen.ChecklistenItem;
+import de.egladil.web.checklistenserver.domain.listen.ChecklistenItemComparator;
+import de.egladil.web.checklistenserver.infrastructure.persistence.UserDao;
+import de.egladil.web.checklistenserver.infrastructure.persistence.entities.Checklistenuser;
+import de.egladil.web.commons_net.time.CommonTimeUtils;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.text.Collator;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
-
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import de.egladil.web.checklistenserver.domain.Checklistentyp;
-import de.egladil.web.checklistenserver.domain.error.ChecklistenRuntimeException;
-import de.egladil.web.checklistenserver.domain.error.ConcurrentUpdateException;
-import de.egladil.web.checklistenserver.domain.listen.ChecklisteDaten;
-import de.egladil.web.checklistenserver.domain.listen.ChecklisteDatenSanitizer;
-import de.egladil.web.checklistenserver.domain.listen.ChecklistenItem;
-import de.egladil.web.checklistenserver.infrastructure.persistence.UserDao;
-import de.egladil.web.checklistenserver.infrastructure.persistence.entities.Checklistenuser;
-import de.egladil.web.commons_net.time.CommonTimeUtils;
 
 /**
  * ChecklistenvorlageProvider
@@ -46,240 +36,219 @@ import de.egladil.web.commons_net.time.CommonTimeUtils;
 @ApplicationScoped
 public class ChecklistenvorlageProvider {
 
-	private static final Logger LOG = LoggerFactory.getLogger(ChecklistenvorlageProvider.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ChecklistenvorlageProvider.class);
 
-	@Inject
-	Einkaufslistenvorlage einkaufslistenvorlage;
+    @Inject
+    Einkaufslistenvorlage einkaufslistenvorlage;
 
-	@Inject
-	Packlistenvorlage packlistenvorlage;
+    @Inject
+    Packlistenvorlage packlistenvorlage;
 
-	@Inject
-	UserDao userDao;
+    @Inject
+    UserDao userDao;
 
-	public List<Checklistenvorlage> getTemplates(final String userUuid) {
+    public List<Checklistenvorlage> getTemplates(final String userUuid) {
 
-		Optional<Checklistenuser> optUser = userDao.findByUniqueIdentifier(userUuid);
+        Optional<Checklistenuser> optUser = userDao.findByUniqueIdentifier(userUuid);
 
-		if (optUser.isEmpty()) {
+        if (optUser.isEmpty()) {
 
-			throw new ChecklistenRuntimeException("An dieser Stelle müsste ein User mit uuid=" + userUuid + " vorhanden sein");
-		}
+            throw new ChecklistenRuntimeException("An dieser Stelle müsste ein User mit uuid=" + userUuid + " vorhanden sein");
+        }
 
-		final String gruppe = optUser.get().getGruppe();
+        List<Checklistenvorlage> result = new ArrayList<>();
 
-		List<Checklistenvorlage> result = new ArrayList<>();
+        for (Checklistentyp typ : Checklistentyp.values()) {
+            result.add(this.getVorlageMitTypFuerGruppe(typ, userUuid));
+        }
+        return result;
 
-		Arrays.stream(Checklistentyp.values()).filter(typ -> typ.hasTemplate()).forEach(typ -> {
+    }
 
-			List<ChecklistenItem> items = readFromFile(typ, gruppe);
+    /**
+     * Gibt das Checklistenvorlage des gegebenen Typs zurück.
+     *
+     * @param typ      Checklistentyp
+     * @param userUuid String Name der Gruppe
+     * @return Checklistenvorlage
+     */
+    Checklistenvorlage getVorlageMitTypFuerGruppe(final Checklistentyp typ, final String userUuid) {
 
-			Checklistenvorlage template = Checklistenvorlage.create(typ);
+        Optional<Checklistenuser> optUser = userDao.findByUniqueIdentifier(userUuid);
 
-			items.stream().forEach(item -> template.addItem(ChecklistenvorlageItem.create(item.getName(), typ)));
+        if (optUser.isEmpty()) {
 
-			template.sortItems();
+            throw new ChecklistenRuntimeException("An dieser Stelle müsste ein User mit uuid=" + userUuid + " vorhanden sein");
+        }
 
-			result.add(template);
-		});
+        final ChecklistenItemComparator comparator = new ChecklistenItemComparator();
 
-		return result;
+        List<ChecklistenItem> items = readFromFile(typ, optUser.get().getGruppe());
+        List<ChecklistenvorlageItem> vorlageItems =
+                items.stream().sorted(comparator).map(item -> ChecklistenvorlageItem.builder().typ(typ).name(item.getName()).build()).toList();
 
-	}
+        return Checklistenvorlage.builder().readTime(System.currentTimeMillis())
+                .items(vorlageItems).build();
+    }
 
-	/**
-	 * Gibt das Checklistenvorlage des gegebenen Typs zurück.
-	 *
-	 * @param  typ
-	 *                  Checklistentyp
-	 * @param  userUuid
-	 *                  String Name der Gruppe
-	 * @return          Checklistenvorlage
-	 */
-	public Checklistenvorlage getVorlageMitTypFuerGruppe(final Checklistentyp typ, final String userUuid) {
+    /**
+     * Gibt eine Standardvorauswahl für eine bestimmte Checkliste zurück. Diese Vorauswahl ist mit der Gruppe personalisiert (gruppe
+     * = präfix). Falls es kein personalisiertes Template gibt, wird ein default zurückgegeben.
+     *
+     * @param typ    Checklistentyp
+     * @param gruppe String Name der Gruppe
+     * @return ChecklisteDaten
+     */
+    public ChecklisteDaten getChecklisteMitTypFuerGruppe(final Checklistentyp typ, final String gruppe) {
 
-		Optional<Checklistenuser> optUser = userDao.findByUniqueIdentifier(userUuid);
+        ChecklisteDaten result = new ChecklisteDaten();
 
-		if (optUser.isEmpty()) {
+        result.setTyp(typ);
+        result.setKuerzel(UUID.randomUUID().toString());
+        List<ChecklistenItem> items = readFromFile(typ, gruppe);
+        result.setItems(items);
 
-			throw new ChecklistenRuntimeException("An dieser Stelle müsste ein User mit uuid=" + userUuid + " vorhanden sein");
-		}
+        return result;
+    }
 
-		final Checklistenvorlage result = Checklistenvorlage.create(typ);
-		List<ChecklistenItem> items = readFromFile(typ, optUser.get().getGruppe());
-		items.stream().forEach(item -> result.addItem(ChecklistenvorlageItem.create(item.getName(), typ)));
-		result.setReadTime(System.currentTimeMillis());
+    /**
+     * Überschreibt die Template-Datei mit den Item-Namen für diese Gruppe.
+     *
+     * @param vorlage  Checklistenvorlage
+     * @param userUuid String
+     */
+    public Checklistenvorlage vorlageSpeichern(final Checklistenvorlage vorlage, final String userUuid) throws ConcurrentUpdateException {
 
-		result.sortItems();
-		return result;
-	}
+        Optional<Checklistenuser> optUser = userDao.findByUniqueIdentifier(userUuid);
 
-	/**
-	 * Gibt eine Standardvorauswahl für eine bestimmte Checkliste zurück. Diese Vorauswahl ist mit der Gruppe personalisiert (gruppe
-	 * = präfix). Falls es kein personalisiertes Template gibt, wird ein default zurückgegeben.
-	 *
-	 * @param  typ
-	 *                Checklistentyp
-	 * @param  gruppe
-	 *                String Name der Gruppe
-	 * @return        ChecklisteDaten
-	 */
-	public ChecklisteDaten getChecklisteMitTypFuerGruppe(final Checklistentyp typ, final String gruppe) {
+        if (optUser.isEmpty()) {
 
-		ChecklisteDaten result = new ChecklisteDaten();
+            throw new ChecklistenRuntimeException("An dieser Stelle müsste ein User mit uuid=" + userUuid + " vorhanden sein");
+        }
 
-		result = new ChecklisteDatenSanitizer().apply(result);
+        switch (vorlage.getTyp()) {
 
-		result.setTyp(typ);
-		result.setKuerzel(UUID.randomUUID().toString());
-		List<ChecklistenItem> items = readFromFile(typ, gruppe);
-		result.setItems(items);
+            case EINKAUFSLISTE:
 
-		return result;
-	}
+                break;
 
-	/**
-	 * Überschreibt die Template-Datei mit den Item-Namen für diese Gruppe.
-	 *
-	 * @param vorlage
-	 * @param userSession
-	 */
-	public Checklistenvorlage vorlageSpeichern(final Checklistenvorlage vorlage, final String userUuid) throws ConcurrentUpdateException {
+            case PACKLISTE:
+                break;
 
-		Optional<Checklistenuser> optUser = userDao.findByUniqueIdentifier(userUuid);
+            default:
+                break;
+        }
 
-		if (optUser.isEmpty()) {
+        try {
 
-			throw new ChecklistenRuntimeException("An dieser Stelle müsste ein User mit uuid=" + userUuid + " vorhanden sein");
-		}
+            Checklistenvorlage persisted = this.writeToFile(vorlage.getTyp(), optUser.get(), vorlage.getItems());
+            return persisted;
 
-		switch (vorlage.getTyp()) {
+        } catch (IOException e) {
 
-		case EINKAUFSLISTE:
+            LOG.error("Fehler beim Speichern der Vorlage {}: {}", vorlage.getTyp(), e.getMessage());
 
-			break;
+            throw new ChecklistenRuntimeException("Konnte Template " + vorlage.getTyp() + " nicht speichern");
+        }
+    }
 
-		case PACKLISTE:
-			break;
+    /**
+     * Zu Testzwecken Sichtbarkeit package
+     *
+     * @param namen String[]
+     * @return List
+     */
+    List<ChecklistenItem> mapToChecklistenItems(final String[] namen) {
 
-		default:
-			break;
-		}
+        Set<String> gefilterteNamen = Stream.of(namen).filter(name -> StringUtils.isNotBlank(name)).map(name -> name.trim())
+                .collect(Collectors.toSet());
 
-		try {
+        ArrayList<String> namenliste = new ArrayList<>(gefilterteNamen);
 
-			Checklistenvorlage persisted = this.writeToFile(vorlage.getTyp(), optUser.get(), vorlage.getItems());
+        Collator coll = Collator.getInstance(Locale.GERMAN);
+        coll.setStrength(Collator.PRIMARY);
+        Collections.sort(namenliste, coll);
 
-			persisted = new ChecklistenvorlageSanitizer().apply(persisted);
-			return persisted;
+        List<ChecklistenItem> result = namenliste.stream().map(name -> ChecklistenItem.builder().name(name).build()).toList();
+        return result;
+    }
 
-		} catch (IOException e) {
+    private List<ChecklistenItem> readFromFile(final Checklistentyp typ, final String gruppe) {
 
-			LOG.error("Fehler beim Speichern der Vorlage {}: {}", vorlage.getTyp(), e.getMessage());
+        switch (typ) {
 
-			throw new ChecklistenRuntimeException("Konnte Template " + vorlage.getTyp() + " nicht speichern");
-		}
-	}
+            case EINKAUFSLISTE:
+                return mapToChecklistenItems(einkaufslistenvorlage.getVorlage(gruppe));
 
-	/**
-	 * Zu Testzwecken Sichtbarkeit package
-	 *
-	 * @param  namen
-	 *               String[]
-	 * @return       List
-	 */
-	List<ChecklistenItem> mapToChecklistenItems(final String[] namen) {
+            case PACKLISTE:
+                return mapToChecklistenItems(packlistenvorlage.getVorlage(gruppe));
 
-		Set<String> gefilterteNamen = Stream.of(namen).filter(name -> StringUtils.isNotBlank(name)).map(name -> name.trim())
-			.collect(Collectors.toSet());
+            default:
+                return new ArrayList<>();
+        }
+    }
 
-		ArrayList<String> namenliste = new ArrayList<>(gefilterteNamen);
+    private Checklistenvorlage writeToFile(final Checklistentyp typ, final Checklistenuser user, final List<ChecklistenvorlageItem> items) throws IOException, ConcurrentUpdateException {
 
-		Collator coll = Collator.getInstance(Locale.GERMAN);
-		coll.setStrength(Collator.PRIMARY);
-		Collections.sort(namenliste, coll);
+        String pathVorlagenFile = null;
 
-		List<ChecklistenItem> result = namenliste.stream().map(ChecklistenItem::fromName)
-			.collect(Collectors.toList());
-		return result;
-	}
+        switch (typ) {
 
-	private List<ChecklistenItem> readFromFile(final Checklistentyp typ, final String gruppe) {
+            case EINKAUFSLISTE:
+                pathVorlagenFile = einkaufslistenvorlage.getPathVorlageFile(user.getGruppe());
+                break;
 
-		switch (typ) {
+            case PACKLISTE:
+                pathVorlagenFile = packlistenvorlage.getPathVorlageFile(user.getGruppe());
+                break;
 
-		case EINKAUFSLISTE:
-			return mapToChecklistenItems(einkaufslistenvorlage.getVorlage(gruppe));
+            default:
+                break;
+        }
 
-		case PACKLISTE:
-			return mapToChecklistenItems(packlistenvorlage.getVorlage(gruppe));
+        if (pathVorlagenFile != null) {
 
-		default:
-			return new ArrayList<>();
-		}
-	}
+            File file = new File(pathVorlagenFile);
 
-	private Checklistenvorlage writeToFile(final Checklistentyp typ, final Checklistenuser user, final List<ChecklistenvorlageItem> items) throws IOException, ConcurrentUpdateException {
+            if (file.isFile()) {
 
-		String pathVorlagenFile = null;
+                long lastModified = java.nio.file.Files.getLastModifiedTime(Paths.get(pathVorlagenFile)).toMillis();
+                LocalDateTime timeLastModified = CommonTimeUtils.transformFromDate(new Date(lastModified));
 
-		switch (typ) {
+                if (LocalDateTime.now().isBefore(timeLastModified)) {
 
-		case EINKAUFSLISTE:
-			pathVorlagenFile = einkaufslistenvorlage.getPathVorlageFile(user.getGruppe());
-			break;
+                    Checklistenvorlage neueVorlage = getVorlageMitTypFuerGruppe(typ, user.getUuid());
 
-		case PACKLISTE:
-			pathVorlagenFile = packlistenvorlage.getPathVorlageFile(user.getGruppe());
-			break;
+                    ConcurrentUpdateException concurrentUpdateException = new ConcurrentUpdateException(
+                            "Listenvorlage " + typ + " wurde kürzlich durch jemand anderen geändert. Anbei die neue Version.");
+                    concurrentUpdateException.setActualData(neueVorlage);
+                    throw concurrentUpdateException;
+                }
+            }
 
-		default:
-			break;
-		}
+            // String pathBackupFile = pathTemplateFile + "-" + System.currentTimeMillis();
+            //
+            // java.nio.file.Files.move(Paths.get(pathTemplateFile), Paths.get(pathBackupFile),
+            // StandardCopyOption.REPLACE_EXISTING);
 
-		if (pathVorlagenFile != null) {
+            try (FileWriter fw = new FileWriter(file)) {
 
-			File file = new File(pathVorlagenFile);
+                for (int i = 0; i < items.size(); i++) {
 
-			if (file.isFile()) {
+                    String name = items.get(i).getName();
+                    fw.write(name);
 
-				long lastModified = java.nio.file.Files.getLastModifiedTime(Paths.get(pathVorlagenFile)).toMillis();
-				LocalDateTime timeLastModified = CommonTimeUtils.transformFromDate(new Date(lastModified));
+                    if (i < items.size() - 1) {
 
-				if (LocalDateTime.now().isBefore(timeLastModified)) {
+                        fw.write(System.lineSeparator());
+                    }
+                }
+                fw.flush();
+            }
 
-					Checklistenvorlage neueVorlage = getVorlageMitTypFuerGruppe(typ, user.getUuid());
+            return Checklistenvorlage.builder().typ(typ).readTime(System.currentTimeMillis()).build();
+        }
 
-					ConcurrentUpdateException concurrentUpdateException = new ConcurrentUpdateException(
-						"Listenvorlage " + typ + " wurde kürzlich durch jemand anderen geändert. Anbei die neue Version.");
-					concurrentUpdateException.setActualData(neueVorlage);
-					throw concurrentUpdateException;
-				}
-			}
-
-			// String pathBackupFile = pathTemplateFile + "-" + System.currentTimeMillis();
-			//
-			// java.nio.file.Files.move(Paths.get(pathTemplateFile), Paths.get(pathBackupFile),
-			// StandardCopyOption.REPLACE_EXISTING);
-
-			try (FileWriter fw = new FileWriter(file)) {
-
-				for (int i = 0; i < items.size(); i++) {
-
-					String name = items.get(i).getName();
-					fw.write(name);
-
-					if (i < items.size() - 1) {
-
-						fw.write(System.lineSeparator());
-					}
-				}
-				fw.flush();
-			}
-
-			return Checklistenvorlage.create(typ, items, System.currentTimeMillis());
-		}
-
-		return null;
-	}
+        return null;
+    }
 }

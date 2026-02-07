@@ -8,82 +8,36 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import de.egladil.web.checklistenserver.domain.Checklistentyp;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * Checklistenvorlage
  */
-@ValidVorlage
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Checklistenvorlage {
 
-	@NotNull
+	@NotNull(message = "typ ist erforderlich")
 	@JsonProperty
 	private Checklistentyp typ;
 
 	@JsonIgnore
 	private long readTime;
 
-	@Size(max = 999)
 	@JsonProperty
+	@Valid
+	@Builder.Default
 	private List<ChecklistenvorlageItem> items = new ArrayList<>();
-
-	public static final Checklistenvorlage create(final Checklistentyp typ) {
-
-		Checklistenvorlage template = new Checklistenvorlage();
-		template.typ = typ;
-		return template;
-
-	}
-
-	public static final Checklistenvorlage create(final Checklistentyp typ, final List<ChecklistenvorlageItem> items, final long timestamp) {
-
-		Checklistenvorlage template = new Checklistenvorlage();
-		template.typ = typ;
-		template.items = items;
-		template.readTime = timestamp;
-		return template;
-
-	}
-
-	public Checklistentyp getTyp() {
-
-		return typ;
-	}
-
-	public List<ChecklistenvorlageItem> getItems() {
-
-		return items;
-	}
-
-	public void addItem(final ChecklistenvorlageItem item) {
-
-		if (!items.contains(item)) {
-
-			items.add(item);
-		}
-
-	}
-
-	public void sortItems() {
-
-		Collections.sort(items, new ChecklistenvorlageItemComparator());
-
-	}
-
-	public long getReadTime() {
-
-		return readTime;
-	}
-
-	public void setReadTime(final long readTime) {
-
-		this.readTime = readTime;
-	}
-
 }

@@ -12,49 +12,25 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 /**
  * UserSession
  */
-public class UserSession implements Principal, Serializable {
+public class UserSession {
 
 	private static final long serialVersionUID = 1L;
 
 	private String sessionId;
 
-	@JsonIgnore
-	private String uuid;
-
-	private String idReference;
-
-	private String roles;
-
 	private long expiresAt;
 
-	public static UserSession create(final String uuid, final String sessionId, final String roles, final String idReference) {
+	private AuthenticatedUser user;
 
-		UserSession result = new UserSession();
-		result.uuid = uuid;
-		result.sessionId = sessionId;
-		result.roles = roles;
-		result.idReference = idReference;
-		return result;
+	public static UserSession createAnonymous(String sessionId) {
+		UserSession session = new UserSession();
+		session.sessionId = sessionId;
+		return session;
 	}
 
 	public String getSessionId() {
 
 		return sessionId;
-	}
-
-	public String getUuid() {
-
-		return uuid;
-	}
-
-	public String getIdReference() {
-
-		return idReference;
-	}
-
-	public String getRoles() {
-
-		return roles;
 	}
 
 	public long getExpiresAt() {
@@ -67,21 +43,16 @@ public class UserSession implements Principal, Serializable {
 		this.expiresAt = expiresAt;
 	}
 
-	@Override
-	public String toString() {
-
-		return "UserSession [roles=" + roles + ", expiresAt=" + expiresAt + ", uuid=" + uuid.substring(0, 8) + "]";
+	public boolean isAnonym() {
+		return this.user == null;
 	}
 
-	@Override
-	@JsonIgnore
-	public String getName() {
-
-		return this.uuid;
+	public AuthenticatedUser getUser() {
+		return user;
 	}
 
-	public void clearSessionId() {
-
-		this.sessionId = null;
+	public UserSession withUser(AuthenticatedUser user) {
+		this.user = user;
+		return this;
 	}
 }

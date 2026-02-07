@@ -41,7 +41,7 @@ public class ChecklistenvorlageItemComparator implements Comparator<Checklistenv
 			return 0;
 		}
 
-		List<String> items = Arrays.asList(new String[] { name1, name2 });
+		List<String> items = Arrays.asList(name1, name2);
 
 		Collator coll = Collator.getInstance(Locale.GERMAN);
 		coll.setStrength(Collator.PRIMARY);

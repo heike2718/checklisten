@@ -4,31 +4,32 @@
 // =====================================================
 package de.egladil.web.checklistenserver.domain.vorlagen;
 
+import de.egladil.web.checklistenserver.domain.validation.ChecklistenRegExps;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 import de.egladil.web.checklistenserver.domain.Checklistentyp;
-import de.egladil.web.commons_validation.annotations.StringLatin;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 
 /**
  * ChecklistenvorlageItem
  */
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class ChecklistenvorlageItem {
 
-	@NotNull
+	@NotNull(message = "typ ist erforderlich")
 	private Checklistentyp typ;
 
-	@StringLatin
-	@NotBlank
+	@Pattern(regexp = ChecklistenRegExps.VALID_INPUT, message = "name enthält ungültige Zeichen. " + ChecklistenRegExps.INVALID_INPUT_SUFFIX)
+	@NotBlank(message = "name ist erforderlich")
+	@Size(max = 100, message = "name ist zu lang (max {max} Zeichen)")
 	private String name;
-
-	public static ChecklistenvorlageItem create(final String name, final Checklistentyp typ) {
-
-		ChecklistenvorlageItem result = new ChecklistenvorlageItem();
-		result.name = name;
-		result.typ = typ;
-		return result;
-	}
 
 	public Checklistentyp getTyp() {
 
@@ -83,13 +84,6 @@ public class ChecklistenvorlageItem {
 
 	@Override
 	public String toString() {
-
 		return name;
 	}
-
-	public void setName(final String name) {
-
-		this.name = name;
-	}
-
 }

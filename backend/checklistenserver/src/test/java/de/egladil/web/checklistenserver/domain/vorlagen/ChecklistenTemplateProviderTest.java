@@ -5,50 +5,49 @@
 
 package de.egladil.web.checklistenserver.domain.vorlagen;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import de.egladil.web.checklistenserver.domain.listen.ChecklistenItem;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import org.junit.jupiter.api.Test;
-
-import de.egladil.web.checklistenserver.domain.listen.ChecklistenItem;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * ChecklistenTemplateProviderTest
  */
 public class ChecklistenTemplateProviderTest {
 
-	@Test
-	void mapFiltertNurNonBlankElements() {
+    @Test
+    void mapFiltertNurNonBlankElements() {
 
-		// Arrange
-		String[] namen = new String[] { " ", "eins ", "eins", null, "", "zwei" };
-		ChecklistenvorlageProvider provider = new ChecklistenvorlageProvider();
+        // Arrange
+        String[] namen = new String[]{" ", "eins ", "eins", null, "", "zwei"};
+        ChecklistenvorlageProvider provider = new ChecklistenvorlageProvider();
 
-		// Act
-		List<ChecklistenItem> items = provider.mapToChecklistenItems(namen);
+        // Act
+        List<ChecklistenItem> items = provider.mapToChecklistenItems(namen);
 
-		// Assert
-		assertEquals(2, items.size());
-		assertEquals(ChecklistenItem.fromName("eins"), items.get(0));
-		assertEquals(ChecklistenItem.fromName("zwei"), items.get(1));
+        // Assert
+        assertAll(() -> assertEquals(2, items.size()),
+                () -> assertEquals(ChecklistenItem.builder().name("eins").build(), items.get(0)),
+                () -> assertEquals(ChecklistenItem.builder().name("zwei").build(), items.get(1)));
+    }
 
-	}
+    @Test
+    void mapSortiertAlphabetisch() {
 
-	@Test
-	void mapSortiertAlphabetisch() {
+        // Arrange
+        String[] namen = new String[]{"zwei", "äh", "ah"};
+        ChecklistenvorlageProvider provider = new ChecklistenvorlageProvider();
 
-		// Arrange
-		String[] namen = new String[] { "zwei", "äh", "ah" };
-		ChecklistenvorlageProvider provider = new ChecklistenvorlageProvider();
+        // Act
+        List<ChecklistenItem> items = provider.mapToChecklistenItems(namen);
 
-		// Act
-		List<ChecklistenItem> items = provider.mapToChecklistenItems(namen);
-
-		// Assert
-		assertEquals(3, items.size());
-		assertEquals(ChecklistenItem.fromName("äh"), items.get(0));
-		assertEquals(ChecklistenItem.fromName("ah"), items.get(1));
-		assertEquals(ChecklistenItem.fromName("zwei"), items.get(2));
-	}
+        // Assert
+        assertAll(() -> assertEquals(3, items.size()),
+                () -> assertEquals(ChecklistenItem.builder().name("äh").build(), items.get(0)),
+                () -> assertEquals(ChecklistenItem.builder().name("ah").build(), items.get(1)),
+                () -> assertEquals(ChecklistenItem.builder().name("zwei").build(), items.get(1)));
+    }
 }

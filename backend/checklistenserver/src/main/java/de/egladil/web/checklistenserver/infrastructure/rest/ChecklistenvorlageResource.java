@@ -5,38 +5,29 @@
 
 package de.egladil.web.checklistenserver.infrastructure.rest;
 
-import java.security.Principal;
-import java.util.List;
-import java.util.stream.Collectors;
-
+import de.egladil.web.checklistenserver.domain.util.DelayService;
+import de.egladil.web.checklistenserver.domain.validation.ValidationErrorResponseDto;
+import de.egladil.web.checklistenserver.domain.vorlagen.Checklistenvorlage;
+import de.egladil.web.checklistenserver.domain.vorlagen.ChecklistenvorlageProvider;
+import de.egladil.web.commons_validation.payload.MessagePayload;
+import io.quarkus.security.Authenticated;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.Produces;
+import jakarta.validation.Valid;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.SecurityContext;
-
 import org.apache.commons.lang3.StringUtils;
+import org.eclipse.microprofile.openapi.annotations.Operation;
+import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
+import org.eclipse.microprofile.openapi.annotations.media.Content;
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import de.egladil.web.checklistenserver.domain.Checklistentyp;
-import de.egladil.web.checklistenserver.domain.auth.UserSession;
-import de.egladil.web.checklistenserver.domain.error.AuthException;
-import de.egladil.web.checklistenserver.domain.error.ConcurrentUpdateException;
-import de.egladil.web.checklistenserver.domain.util.DelayService;
-import de.egladil.web.checklistenserver.domain.vorlagen.Checklistenvorlage;
-import de.egladil.web.checklistenserver.domain.vorlagen.ChecklistenvorlageProvider;
-import de.egladil.web.checklistenserver.domain.vorlagen.ChecklistenvorlageSanitizer;
-import de.egladil.web.commons_validation.ValidationDelegate;
-import de.egladil.web.commons_validation.payload.MessagePayload;
-import de.egladil.web.commons_validation.payload.ResponsePayload;
+import java.util.List;
 
 /**
  * ChecklistenvorlageResource gibt Vorgabedetails für Checklisten zurück.
@@ -47,113 +38,60 @@ import de.egladil.web.commons_validation.payload.ResponsePayload;
 @Produces(MediaType.APPLICATION_JSON)
 public class ChecklistenvorlageResource {
 
-	private static final Logger LOG = LoggerFactory.getLogger(ChecklistenvorlageResource.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ChecklistenvorlageResource.class);
 
-	@Context
-	SecurityContext securityContext;
+    @Context
+    SecurityContext securityContext;
 
-	@Inject
-	DelayService delayService;
+    @Inject
+    DelayService delayService;
 
-	@Inject
-	ChecklistenvorlageProvider vorlagenProvider;
+    @Inject
+    ChecklistenvorlageProvider vorlagenProvider;
 
-	private final ValidationDelegate validationDelegate = new ValidationDelegate();
+    @GET
+    @Authenticated
+    @Operation(operationId = "loadVorlagen", summary = "Gibt alle Checklistenvorlagen für den gegebenen User zurück.")
+    @APIResponse(name = "OKResponse", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(type = SchemaType.ARRAY,
+            implementation = Checklistenvorlage.class)))
+    @APIResponse(name = "NotAuthorized", responseCode = "401", content = @Content(mediaType = "application/json"))
+    @APIResponse(name = "Forbidden", description = "kann auch vorkommen, wenn mod_security zuschlägt", responseCode = "403", content = @Content(mediaType = "application/json"))
+    @APIResponse(name = "ServerError", description = "server error", responseCode = "500", content = @Content(mediaType = "application/json", schema = @Schema(implementation = MessagePayload.class)))
+    public Response loadVorlagen() {
 
-	private final ChecklistenvorlageSanitizer checklistenvorlageSanitizer = new ChecklistenvorlageSanitizer();
+        LOGGER.debug("entering getChecklisten");
 
-	@GET
-	public Response getAllVorlagen() {
+        this.delayService.pause();
 
-		LOG.debug("entering getChecklisten");
+        String userUuid = securityContext.getUserPrincipal().getName();
 
-		this.delayService.pause();
+        LOGGER.debug("Alles gut: session vorhanden");
 
-		UserSession userSession = getUserSession();
+        List<Checklistenvorlage> vorlagen = vorlagenProvider.getTemplates(userUuid);
 
-		LOG.debug("Alles gut: session vorhanden");
+        LOGGER.debug("{}: vorlagen geladen", StringUtils.abbreviate(userUuid, 11));
 
-		List<Checklistenvorlage> vorlagen = vorlagenProvider.getTemplates(userSession.getUuid());
+        return Response.ok().entity(vorlagen).build();
 
-		List<Checklistenvorlage> sanitizedVorlagen = vorlagen.stream()
-			.map(template -> checklistenvorlageSanitizer.apply(template)).collect(Collectors.toList());
+    }
 
-		ResponsePayload payload = new ResponsePayload(MessagePayload.info("OK: Anzahl Vorlagen: " + sanitizedVorlagen.size()),
-			sanitizedVorlagen);
+    @POST
+    @Authenticated
+    @Operation(operationId = "vorlageSpeichern", summary = "Speichert eine neue Version der Vorlage")
+    @APIResponse(name = "OKResponse", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(type = SchemaType.ARRAY,
+            implementation = Checklistenvorlage.class)))
+    @APIResponse(name = "BadRequest", responseCode = "400", content = @Content(mediaType = "application/json", schema = @Schema(type = SchemaType.ARRAY, implementation = ValidationErrorResponseDto.class)))
+    @APIResponse(name = "NotAuthorized", responseCode = "401", content = @Content(mediaType = "application/json"))
+    @APIResponse(name = "Forbidden", description = "kann auch vorkommen, wenn mod_security zuschlägt", responseCode = "403", content = @Content(mediaType = "application/json"))
+    @APIResponse(name = "ServerError", description = "server error", responseCode = "500", content = @Content(mediaType = "application/json", schema = @Schema(implementation = MessagePayload.class)))
+    public Response vorlageSpeichern(@Valid final Checklistenvorlage template) {
 
-		LOG.debug("{}: vorlagen geladen", StringUtils.abbreviate(userSession.getUuid(), 11));
+        this.delayService.pause();
 
-		return Response.ok().entity(payload).build();
+        String userUuid = securityContext.getUserPrincipal().getName();
 
-	}
-
-	@GET
-	@Path("/{typ}")
-	public Response getVorlageMitTypFuerGruppe(@PathParam("typ") final String typValue) {
-
-		this.delayService.pause();
-
-		try {
-
-			UserSession userSession = getUserSession();
-
-			Checklistentyp typ = Checklistentyp.valueOf(typValue.trim().toUpperCase());
-			Checklistenvorlage vorlage = vorlagenProvider.getVorlageMitTypFuerGruppe(typ, userSession.getUuid());
-
-			Checklistenvorlage sanitized = checklistenvorlageSanitizer.apply(vorlage);
-			ResponsePayload payload = new ResponsePayload(MessagePayload.info("Bitteschön"), sanitized);
-			return Response.ok().entity(payload).build();
-		} catch (IllegalArgumentException e) {
-
-			LOG.error("Falscher Parameter [typ={}]", typValue);
-			return Response.status(404)
-				.entity(ResponsePayload.messageOnly(MessagePayload.error("Gib einen korrekten Checklistentyp an"))).build();
-		}
-	}
-
-	@POST
-	public Response vorlageSpeichern(final Checklistenvorlage template) {
-
-		this.delayService.pause();
-
-		validationDelegate.check(template, Checklistenvorlage.class);
-
-		UserSession userSession = getUserSession();
-
-		try {
-
-			Checklistenvorlage persisted = vorlagenProvider.vorlageSpeichern(template, userSession.getUuid());
-
-			Checklistenvorlage sanitized = checklistenvorlageSanitizer.apply(persisted);
-
-			LOG.info("Template {} durch {} geändert.", template.getTyp(), StringUtils.abbreviate(userSession.getUuid(), 11));
-
-			String msg = "Listenvorlage für " + template.getTyp() + " erfolgreich gespeichert";
-
-			ResponsePayload payload = new ResponsePayload(MessagePayload.info(msg), sanitized);
-			return Response.ok(payload).build();
-		} catch (ConcurrentUpdateException e) {
-
-			Checklistenvorlage neues = (Checklistenvorlage) e.getActualData();
-
-			Checklistenvorlage sanitized = checklistenvorlageSanitizer.apply(neues);
-			ResponsePayload payload = new ResponsePayload(MessagePayload.warn(e.getMessage()), sanitized);
-			return Response.ok(payload).build();
-		}
-	}
-
-	private UserSession getUserSession() {
-
-		Principal userPrincipal = securityContext.getUserPrincipal();
-
-		if (userPrincipal != null) {
-
-			LOG.debug("UserPrincipal gefunden: {}", userPrincipal);
-
-			return (UserSession) userPrincipal;
-		}
-
-		LOG.error("keine UserSession für Principal vorhanden");
-		throw new AuthException("keine Berechtigung");
-	}
+        Checklistenvorlage persisted = vorlagenProvider.vorlageSpeichern(template, userUuid);
+        LOGGER.info("Template {} durch {} geändert.", template.getTyp(), StringUtils.abbreviate(userUuid, 11));
+        return Response.ok(persisted).build();
+    }
 }

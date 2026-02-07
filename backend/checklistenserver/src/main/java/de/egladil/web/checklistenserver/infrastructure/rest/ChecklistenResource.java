@@ -5,42 +5,34 @@
 
 package de.egladil.web.checklistenserver.infrastructure.rest;
 
-import java.net.URI;
-import java.security.Principal;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import jakarta.annotation.security.PermitAll;
+import de.egladil.web.checklistenserver.domain.listen.ChecklisteDaten;
+import de.egladil.web.checklistenserver.domain.listen.ChecklistenService;
+import de.egladil.web.checklistenserver.domain.util.DelayService;
+import de.egladil.web.checklistenserver.domain.validation.ChecklistenRegExps;
+import de.egladil.web.checklistenserver.domain.validation.ValidationErrorResponseDto;
+import de.egladil.web.commons_validation.payload.MessagePayload;
+import de.egladil.web.commons_validation.payload.ResponsePayload;
+import io.quarkus.security.Authenticated;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.DELETE;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.PUT;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.core.Context;
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.core.SecurityContext;
-import jakarta.ws.rs.core.UriInfo;
-
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Pattern;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.*;
 import org.apache.commons.lang3.StringUtils;
+import org.eclipse.microprofile.openapi.annotations.Operation;
+import org.eclipse.microprofile.openapi.annotations.enums.ParameterIn;
+import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
+import org.eclipse.microprofile.openapi.annotations.media.Content;
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
+import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
+import org.eclipse.microprofile.openapi.annotations.parameters.Parameters;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.egladil.web.checklistenserver.domain.auth.ChecklistenSessionService;
-import de.egladil.web.checklistenserver.domain.auth.UserSession;
-import de.egladil.web.checklistenserver.domain.error.AuthException;
-import de.egladil.web.checklistenserver.domain.listen.ChecklisteDaten;
-import de.egladil.web.checklistenserver.domain.listen.ChecklisteDatenSanitizer;
-import de.egladil.web.checklistenserver.domain.listen.ChecklistenService;
-import de.egladil.web.checklistenserver.domain.util.DelayService;
-import de.egladil.web.commons_validation.ValidationDelegate;
-import de.egladil.web.commons_validation.payload.MessagePayload;
-import de.egladil.web.commons_validation.payload.ResponsePayload;
+import java.net.URI;
+import java.util.List;
 
 /**
  * ChecklistenResource
@@ -51,163 +43,138 @@ import de.egladil.web.commons_validation.payload.ResponsePayload;
 @Produces(MediaType.APPLICATION_JSON)
 public class ChecklistenResource {
 
-	private static final Logger LOG = LoggerFactory.getLogger(ChecklistenResource.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ChecklistenResource.class);
 
-	@Inject
-	DelayService delayService;
+    @Inject
+    DelayService delayService;
 
-	@Inject
-	ChecklistenService checklistenService;
+    @Inject
+    ChecklistenService checklistenService;
 
-	@Inject
-	ChecklistenSessionService _sessionService;
+    @Context
+    UriInfo uriInfo;
 
-	@Context
-	UriInfo uriInfo;
+    @Context
+    SecurityContext securityContext;
 
-	@Context
-	SecurityContext securityContext;
+    @GET
+    @Authenticated
+    @Operation(operationId = "loadChecklisten", summary = "Gibt alle Checklisten für den gegebenen User zurück.")
+    @APIResponse(name = "OKResponse", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(type = SchemaType.ARRAY,
+            implementation = ChecklisteDaten.class)))
+    @APIResponse(name = "NotAuthorized", responseCode = "401", content = @Content(mediaType = "application/json"))
+    @APIResponse(name = "Forbidden", description = "kann auch vorkommen, wenn mod_security zuschlägt", responseCode = "403", content = @Content(mediaType = "application/json"))
+    @APIResponse(name = "ServerError", description = "server error", responseCode = "500", content = @Content(mediaType = "application/json", schema = @Schema(implementation = MessagePayload.class)))
+    public Response loadChecklisten() {
 
-	private final ValidationDelegate validationDelegate = new ValidationDelegate();
+        LOGGER.debug("entering getChecklisten");
 
-	private final ChecklisteDatenSanitizer checklisteDatenSanitizer = new ChecklisteDatenSanitizer();
+        this.delayService.pause();
 
-	@GET
-	@PermitAll
-	public Response getChecklisten() {
+        LOGGER.debug("Alles gut: session vorhanden");
 
-		LOG.debug("entering getChecklisten");
+        String userUuid = securityContext.getUserPrincipal().getName();
 
-		this.delayService.pause();
+        List<ChecklisteDaten> checklisten = checklistenService.loadChecklisten(userUuid);
 
-		UserSession userSession = getUserSession();
+        LOGGER.debug("{}: checklisten geladen", getStringAbbreviated(userUuid));
 
-		LOG.debug("Alles gut: session vorhanden");
+        return Response.ok().entity(checklisten).build();
+    }
 
-		List<ChecklisteDaten> checklisten = checklistenService.loadChecklisten(userSession.getUuid());
+    @POST
+    @Authenticated
+    @Operation(operationId = "checklisteAnlegen", summary = "Erzeugt eine neue Checkliste.")
+    @APIResponse(name = "OKResponse", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(type = SchemaType.ARRAY,
+            implementation = ChecklisteDaten.class)))
+    @APIResponse(name = "BadRequest", responseCode = "400", content = @Content(mediaType = "application/json", schema = @Schema(type = SchemaType.ARRAY, implementation = ValidationErrorResponseDto.class)))
+    @APIResponse(name = "NotAuthorized", responseCode = "401", content = @Content(mediaType = "application/json"))
+    @APIResponse(name = "Forbidden", description = "kann auch vorkommen, wenn mod_security zuschlägt", responseCode = "403", content = @Content(mediaType = "application/json"))
+    @APIResponse(name = "ServerError", description = "server error", responseCode = "500", content = @Content(mediaType = "application/json", schema = @Schema(implementation = MessagePayload.class)))
+    public Response checklisteAnlegen(@Valid final ChecklisteDaten daten) {
 
-		List<ChecklisteDaten> sanitized = checklisten.stream().map(daten -> checklisteDatenSanitizer.apply(daten))
-			.collect(Collectors.toList());
+        this.delayService.pause();
 
-		ResponsePayload payload = new ResponsePayload(MessagePayload.info("OK: Anzahl Checklisten: " + sanitized.size()),
-			sanitized);
+        String userUuid = securityContext.getUserPrincipal().getName();
 
-		LOG.debug("{}: checklisten geladen", getStringAbbreviated(userSession.getUuid()));
+        ChecklisteDaten result = checklistenService.createCheckliste(daten.getTyp(), daten.getName(), userUuid);
 
-		return Response.ok().entity(payload).build();
-		// return Response.status(500).entity(ResponsePayload.messageOnly(MessagePayload.error("Das ist ein Testfehler"))).build();
-	}
+        LOGGER.info("{}: checkliste angelegt: {}", getStringAbbreviated(userUuid),
+                getStringAbbreviated(result.getKuerzel()));
 
-	@GET
-	@Path("/checkliste/{kuerzel}")
-	@PermitAll
-	public Response getCheckliste(@PathParam(
-		value = "kuerzel") final String kuerzel) {
+        URI uri = uriInfo.getBaseUriBuilder()
+                .path(ChecklistenResource.class)
+                .path(ChecklistenResource.class, "getCheckliste")
+                .build(result.getKuerzel());
 
-		this.delayService.pause();
+        return Response.created(uri)
+                .entity(result)
+                .build();
+    }
 
-		UserSession userSession = getUserSession();
-		ChecklisteDaten checkliste = checklistenService.getCheckliste(kuerzel, userSession.getUuid());
+    @PUT
+    @Path("/checkliste/{kuerzel}")
+    @Authenticated
+    @Operation(operationId = "checklisteAendern", summary = "Ändert die gegebene Checkliste.")
+    @Parameters({
+            @Parameter(in = ParameterIn.PATH, name = "kuerzel", description = "UUID der Checkliste, die geändert werden soll", example = "a4c4d45e-4a81-4bde-a6a3-54464801716d", required = true)})
+    @APIResponse(name = "OKResponse", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(type = SchemaType.ARRAY,
+            implementation = ChecklisteDaten.class)))
+    @APIResponse(name = "BadRequest", responseCode = "400", content = @Content(mediaType = "application/json", schema = @Schema(type = SchemaType.ARRAY, implementation = ValidationErrorResponseDto.class)))
+    @APIResponse(name = "NotAuthorized", responseCode = "401", content = @Content(mediaType = "application/json"))
+    @APIResponse(name = "Forbidden", description = "kann auch vorkommen, wenn mod_security zuschlägt", responseCode = "403", content = @Content(mediaType = "application/json"))
+    @APIResponse(name = "ServerError", description = "server error", responseCode = "500", content = @Content(mediaType = "application/json", schema = @Schema(implementation = MessagePayload.class)))
+    public Response checklisteAendern(@Pattern(regexp = ChecklistenRegExps.VALID_KUERZEL) @PathParam(
+            value = "kuerzel") final String kuerzel, final ChecklisteDaten daten) {
 
-		ChecklisteDaten sanitized = checklisteDatenSanitizer.apply(checkliste);
+        this.delayService.pause();
+        String userUuid = securityContext.getUserPrincipal().getName();
 
-		return Response.ok(sanitized).build();
-	}
+        if (!kuerzel.equals(daten.getKuerzel())) {
+            LOGGER.error("{}: Konflikt: kuerzel= '{}', daten.kuerzel = '{}'",
+                    getStringAbbreviated(userUuid), kuerzel, daten.getKuerzel());
+            ResponsePayload payload = ResponsePayload.messageOnly(MessagePayload.error("Precondition Failed"));
+            return Response.status(412)
+                    .entity(payload)
+                    .build();
+        }
 
-	@POST
-	@PermitAll
-	public Response checklisteAnlegen(final ChecklisteDaten daten) {
+        ChecklisteDaten payload = checklistenService.changeCheckliste(daten, kuerzel, userUuid);
+        LOGGER.info("{}: checkliste {} geändert", getStringAbbreviated(userUuid),
+                getStringAbbreviated(kuerzel));
+        return Response.ok(payload).build();
+    }
 
-		this.delayService.pause();
+    @DELETE
+    @Path("/checkliste/{kuerzel}")
+    @Authenticated
+    @Operation(operationId = "checklisteLoeschen", summary = "Löscht die gegebene Checkliste")
+    @Parameters({
+            @Parameter(in = ParameterIn.PATH, name = "kuerzel", description = "UUID der Checkliste, die geändert werden soll", example = "a4c4d45e-4a81-4bde-a6a3-54464801716d", required = true)})
+    @APIResponse(name = "OKResponse", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(type = SchemaType.ARRAY,
+            implementation = MessagePayload.class)))
+    @APIResponse(name = "BadRequest", responseCode = "400", content = @Content(mediaType = "application/json", schema = @Schema(type = SchemaType.ARRAY, implementation = ValidationErrorResponseDto.class)))
+    @APIResponse(name = "NotAuthorized", responseCode = "401", content = @Content(mediaType = "application/json"))
+    @APIResponse(name = "Forbidden", description = "kann auch vorkommen, wenn mod_security zuschlägt", responseCode = "403", content = @Content(mediaType = "application/json"))
+    @APIResponse(name = "ServerError", description = "server error", responseCode = "500", content = @Content(mediaType = "application/json", schema = @Schema(implementation = MessagePayload.class)))
+    public Response checklisteLoeschen(@PathParam(value = "idRef") final String idRef, @PathParam(
+            value = "kuerzel") final String kuerzel) {
 
-		this.validationDelegate.check(daten, ChecklisteDaten.class);
+        this.delayService.pause();
 
-		UserSession userSession = getUserSession();
+        checklistenService.deleteCheckliste(kuerzel, securityContext.getUserPrincipal().getName());
 
-		ChecklisteDaten result = checklistenService.createCheckliste(daten.getTyp(), daten.getName(), userSession.getUuid());
+        ResponsePayload payload = ResponsePayload.messageOnly(MessagePayload.info("erfolgreich gelöscht"));
 
-		result = checklisteDatenSanitizer.apply(result);
+        LOGGER.info("{} - {}: checkliste {} gelöscht", getStringAbbreviated(securityContext.getUserPrincipal().getName()), getStringAbbreviated(kuerzel));
+        return Response.ok()
+                .entity(payload)
+                .build();
+    }
 
-		LOG.info("{}: checkliste angelegt: {}", getStringAbbreviated(userSession.getUuid()),
-			getStringAbbreviated(result.getKuerzel()));
+    private String getStringAbbreviated(final String string) {
 
-		URI uri = uriInfo.getBaseUriBuilder()
-			.path(ChecklistenResource.class)
-			.path(ChecklistenResource.class, "getCheckliste")
-			.build(result.getKuerzel());
-
-		ResponsePayload payload = new ResponsePayload(MessagePayload.info("erfolgreich angelegt"), result);
-		return Response.created(uri)
-			.entity(payload)
-			.build();
-	}
-
-	@PUT
-	@Path("/checkliste/{kuerzel}")
-	@PermitAll
-	public Response checklisteAendern(@PathParam(
-		value = "kuerzel") final String kuerzel, final ChecklisteDaten daten) {
-
-		this.delayService.pause();
-
-		UserSession userSession = getUserSession();
-
-		if (!kuerzel.equals(daten.getKuerzel())) {
-
-			LOG.error("{}: Konflikt: kuerzel= '{}', daten.kuerzel = '{}'",
-				getStringAbbreviated(userSession.getUuid()), kuerzel, daten.getKuerzel());
-			ResponsePayload payload = ResponsePayload.messageOnly(MessagePayload.error("Precondition Failed"));
-			return Response.status(412)
-				.entity(payload)
-				.build();
-		}
-
-		this.validationDelegate.check(daten, ChecklisteDaten.class);
-
-		ResponsePayload payload = checklistenService.changeAndSanitizeCheckliste(daten, kuerzel, userSession.getUuid());
-		LOG.info("{}: checkliste {} geändert", getStringAbbreviated(userSession.getUuid()),
-			getStringAbbreviated(kuerzel));
-		return Response.ok(payload).build();
-	}
-
-	@DELETE
-	@Path("/checkliste/{kuerzel}")
-	@PermitAll
-	public Response checklisteLoeschen(@PathParam(value = "idRef") final String idRef, @PathParam(
-		value = "kuerzel") final String kuerzel) {
-
-		this.delayService.pause();
-
-		UserSession userSession = getUserSession();
-
-		checklistenService.deleteCheckliste(kuerzel, userSession.getUuid());
-
-		ResponsePayload payload = ResponsePayload.messageOnly(MessagePayload.info("erfolgreich gelöscht"));
-
-		LOG.info("{} - {}: checkliste {} gelöscht", getStringAbbreviated(userSession.getUuid()), getStringAbbreviated(kuerzel));
-		return Response.ok()
-			.entity(payload)
-			.build();
-	}
-
-	private UserSession getUserSession() {
-
-		Principal userPrincipal = securityContext.getUserPrincipal();
-
-		if (userPrincipal != null) {
-
-			LOG.debug("UserPrincipal gefunden: {}", userPrincipal);
-
-			return (UserSession) userPrincipal;
-		}
-
-		LOG.error("keine UserSession für Principal vorhanden");
-		throw new AuthException("keine Berechtigung");
-	}
-
-	private String getStringAbbreviated(final String string) {
-
-		return StringUtils.abbreviate(string, 11);
-	}
+        return StringUtils.abbreviate(string, 11);
+    }
 
 }

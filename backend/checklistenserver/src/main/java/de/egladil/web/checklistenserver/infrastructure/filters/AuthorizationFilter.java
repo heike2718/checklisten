@@ -82,7 +82,7 @@ public class AuthorizationFilter implements ContainerRequestFilter {
 					throw new SessionExpiredException("keine gültige Session vorhanden");
 				}
 
-				UserSession refrehedSession = sessionService.refresh(sessionId);
+				UserSession refrehedSession = sessionService.getAndRefreshSessionIfValid(sessionId);
 				ChecklistenSecurityContext securityContext = new ChecklistenSecurityContext(refrehedSession);
 				requestContext.setSecurityContext(securityContext);
 

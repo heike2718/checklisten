@@ -23,8 +23,6 @@ import de.egladil.web.checklistenserver.infrastructure.persistence.ChecklisteDao
 import de.egladil.web.checklistenserver.infrastructure.persistence.UserDao;
 import de.egladil.web.checklistenserver.infrastructure.persistence.entities.Checkliste;
 import de.egladil.web.checklistenserver.infrastructure.persistence.entities.Checklistenuser;
-import de.egladil.web.commons_validation.payload.MessagePayload;
-import de.egladil.web.commons_validation.payload.ResponsePayload;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.PersistenceException;
@@ -54,8 +52,10 @@ public class ChecklistenService {
 	 */
 	public List<ChecklisteDaten> loadChecklisten(final String userUUID) {
 
+		// TODO: muss ein Filter übernehmen.
 		Optional<Checklistenuser> optUser = userDao.findByUniqueIdentifier(userUUID);
 
+		// TODO umschreiben, analog zu mk-gateway im Filter. Dann kann die uuid aus dem SecurityContext geholt werden
 		if (!optUser.isPresent()) {
 
 			LOG.warn("Kein user mit UUID={} vorhanden. Gebe leere Liste zurück.", userUUID);
@@ -69,46 +69,6 @@ public class ChecklistenService {
 		List<ChecklisteDaten> result = checklisten.stream().map(chl -> ChecklisteDatenMapper.deserialize(chl))
 			.filter(daten -> daten != null).collect(Collectors.toList());
 		return result;
-	}
-
-	public ChecklisteDaten getCheckliste(final String kuerzel, final String userUUID) {
-
-		if (kuerzel == null) {
-
-			throw new ChecklistenRuntimeException("Lesen gescheitert: kein kuerzel");
-		}
-
-		Optional<Checklistenuser> optUser = userDao.findByUniqueIdentifier(userUUID);
-
-		if (!optUser.isPresent()) {
-
-			LOG.warn("Kein user mit UUID={} vorhanden. AuthException", userUUID);
-			throw new AuthException("Nö, keine Berechtigung.");
-		}
-
-		Optional<Checkliste> opt = checklisteDao.findByUniqueIdentifier(kuerzel);
-
-		if (!opt.isPresent()) {
-
-			LOG.error("Checkliste mit kuerzel '{}' nicht gefunden", kuerzel);
-			throw new NotFoundException();
-		}
-
-		Checklistenuser user = optUser.get();
-
-		Checkliste checkliste = opt.get();
-
-		authorizeUserForCheckliste(user, checkliste, "sehen");
-
-		ChecklisteDaten daten = ChecklisteDatenMapper.deserialize(opt.get());
-
-		if (daten == null) {
-
-			// die Message wurde bereits gelogged
-			throw new ChecklistenRuntimeException("");
-		}
-
-		return daten;
 	}
 
 	/**
@@ -161,7 +121,7 @@ public class ChecklistenService {
 	 * @param daten
 	 * @return ChecklisteDaten
 	 */
-	public ResponsePayload changeAndSanitizeCheckliste(ChecklisteDaten daten, final String kuerzel, final String userUUID)
+	public ChecklisteDaten changeCheckliste(ChecklisteDaten daten, final String kuerzel, final String userUUID)
 		throws AuthException {
 
 		if (daten == null) {
@@ -204,11 +164,9 @@ public class ChecklistenService {
 			daten.setVersion(checkliste.getVersion() + 1);
 			checkliste.setName(daten.getName());
 
-			daten = new ChecklisteDatenSanitizer().apply(daten);
-
 			checkliste.setDaten(ChecklisteDatenMapper.serialize(daten, "Ändern gescheitert"));
 			checklisteDao.save(checkliste);
-			return new ResponsePayload(MessagePayload.info("erfolgreich geändert"), daten);
+			return daten;
 		} catch (PersistenceException e) {
 
 			String msg = "Ändern gescheitert (Fehler beim Speichern)";
@@ -218,7 +176,7 @@ public class ChecklistenService {
 
 	}
 
-	private ResponsePayload handleConcurrentUpdate(final Checkliste checkliste) {
+	private ChecklisteDaten handleConcurrentUpdate(final Checkliste checkliste) {
 
 		LOG.debug("konkurrierendes Update: erzeuge neues Payload mit geänderten Daten");
 
@@ -226,8 +184,7 @@ public class ChecklistenService {
 			"Ändern gescheitert (konkurrierendes Update konnte nicht verarbeitet werden: Fehler beim deJSONisieren)" });
 		// nur zur Sicherheit.
 		geaenderteDaten.setVersion(checkliste.getVersion());
-		return new ResponsePayload(MessagePayload.warn("Jemand anderes hat die Daten geändert. Anbei die neue Version"),
-			geaenderteDaten);
+		return geaenderteDaten;
 	}
 
 	/**
